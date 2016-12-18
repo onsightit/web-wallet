@@ -1,0 +1,39 @@
+<div id="history-container" class="container" data-bind="with: history">
+
+    <!-- HISTORY -->
+    <div class="well">
+        <h1 class="text-primary"><span class="fa fa-calendar"></span> Your <span data-bind="text: wallet.settings().coinName"></span> Transaction History</h1>
+		<table class="table table-hover table-striped table-bordered">
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Category</th>
+					<th>Address</th>
+					<th>Comment</th>
+					<th>Amount</th>
+				</tr>
+			</thead>
+			<tbody data-bind="foreach: transactions">
+				<tr>
+					<td class="history-timereceived" data-bind="text: timeReceived"></td>
+					<td class="history-type" data-bind="text: category"></td>
+					<td class="history-address" data-bind="text: (account !== '' ? account : address)"></td>
+					<td class="history-txcomment" data-bind="text: txcomment"></td>
+					<td class="history-ammount" data-bind="numericText: $data.amount + $data.fee, precision: 5"></td>
+				</tr>
+			</tbody>
+		</table>
+		<div aria-label="Page navigation">
+		  <ul class="pagination">
+			<li>
+				<button type="button" class="btn btn-primary btn-lg" data-bind="disable: !$data.pagePrev(), click: firstPage">|&laquo;</button>
+				<button type="button" class="btn btn-primary btn-lg" data-bind="disable: !$data.pagePrev(), click: prevPage">&laquo;</button>
+				<button type="button" class="btn btn-primary btn-lg" data-bind="disable: true"><span data-bind="text: page"></span></button>
+				<button type="button" class="btn btn-primary btn-lg" data-bind="disable: !$data.pageNext(), click: nextPage">&raquo;</button>
+				<!-- TODO: button type="button" class="btn btn-primary" data-bind="disable: !$data.pageNext(), click: lastPage">&raquo;|</button-->
+			</li>
+		  </ul>
+		</div>
+	    <h3 align="center" data-bind="text:statusMessage"></h3>
+	</div>
+</div>

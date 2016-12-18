@@ -1,0 +1,86 @@
+<div class="container" <span data-bind="with:profile">
+
+	<!-- PROFILE -->
+	<div class="well">
+		<h1 class="text-primary"><span class="fa fa-user"></span> Your <span data-bind="text: wallet.settings().coinName"></span> Profile <span style="float: right" data-bind="text: 'Credits: ' + creditFmt()"></span></h1>
+        <form class="form-horizontal" role="form">
+            <div class="form-group">
+				<!-- Personal data -->
+                <label class="control-label col-sm-2" for="name">Name</label>
+                <div class="col-sm-10">
+	                <p><input class="form-control" type="text" id="name" data-bind="text, textInput: name" placeholder="Enter your full name."></input></p>
+	            </div>
+                <label class="control-label col-sm-2" for="email">Email</label>
+                <div class="col-sm-10">
+	                <p><input class="form-control" type="email" id="email" data-bind="email, textInput: email" placeholder="Enter your email address."></input></p>
+	            </div>
+                <label class="control-label col-sm-2" for="description">Description</label>
+                <div class="col-sm-10">
+	                <p><input class="form-control" type="text" id="description" data-bind="text, textInput: description" placeholder="Describe yourself. (Optional)"></input></p>
+	            </div>
+
+				<!-- Demographic data -->
+                <label class="control-label col-sm-2" for="gender">Gender</label>
+                <div class="col-sm-10">
+	                <p><select class="form-control" data-type="select" id="gender" data-bind="options: pulldown.genderValues, value: gender" data-title="Select your gender."></select></p>
+	            </div>
+                <label class="control-label col-sm-2" for="country">Country</label>
+                <div class="col-sm-10">
+	                <p><select class="form-control" data-type="select" id="country" data-bind="options: pulldown.countryValues, value: country" data-title="Select your country of origin."></select></p>
+	            </div>
+                <label class="control-label col-sm-2" for="age">Date of Birth</label>
+                <div class="col-sm-10">
+                    <p><a href="#profile" class="editable form-control" id="dob" data-type="date" data-bind="editable: dob" data-datepicker="{ startView: 2 }" data-format="yyyy-mm-dd" data-viewformat="yyyy-mm-dd" data-mode="popup" data-title="When were you born?" data-placement="top"></a></p>
+                </div>
+				<p>&nbsp;</p>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-primary btn-lg" data-bind="disable: !$data.isDirty(), click: Reset">Reset</button> &nbsp;
+						<button type="submit" class="btn btn-primary btn-lg" data-bind="disable: !$data.isDirty() || !$data.canSubmit(), click: Submit">Submit</button>
+					</div>
+				</div>
+            </div>
+        </form>
+        <h3 align="center" data-bind="text:statusMessage"></h3>
+	</div>
+
+	<div class="floatleft">
+		<h3 class="text-primary"><span class="fa fa-money"></span> Wallet Info</h3>
+		<table width="100%">
+			<tr><td width="15%"><strong>Node_ID</strong>: </td><td><span data-bind="text: node_id"></span></td></tr>
+			<tr><td width="15%"><strong>Account</strong>: </td><td><span data-bind="text: account"></span></td></tr>
+			<tr><td width="15%"><strong>Address</strong>: </td><td><span data-bind="text: address"></span></td></tr>
+		</table>
+	</div>
+	<div class="floatright">
+	<!-- LOCAL -->
+	<!-- ko if: login_type() === 'local' -->
+		<h3 class="text-primary"><span class="fa fa-database"></span> Signed in As</h3>
+		<table width="100%">
+			<tr><td width="15%"><strong>Account</strong>: </td><td><span data-bind="text: login_id"></span></td></tr>
+			<tr><td width="15%"><strong>Password</strong>: </td><td><span>[<a href="/password">change</a>]</span></td></tr>
+		</table>
+	<!-- /ko -->
+	<!-- FACEBOOK -->
+	<!-- ko if: login_type() === 'facebook' -->
+		<h3 class="text-primary"><span class="fa fa-facebook"></span> Signed in with Facebook</h3>
+		<table width="100%">
+			<tr><td width="15%"><strong>Account</strong>: </td><td><span><a data-bind="attr: {href: facebookUrl().concat(login_id())}" target="_blank">Facebook</a></span></td></tr>
+		</table>
+	<!-- /ko -->
+	<!-- GOOGLE -->
+	<!-- ko if: login_type() === 'google' -->
+		<h3 class="text-primary"><span class="fa fa-google-plus"></span> Signed in with Google</h3>
+		<table width="100%">
+			<tr><td width="15%"><strong>Account</strong>: </td><td><span><a data-bind="attr: {href: googleUrl().concat(login_id())}" target="_blank">Google</a></span></td></tr>
+		</table>
+	<!-- /ko -->
+	<!-- TWITTER -->
+	<!-- ko if: login_type() === 'twitter' -->
+		<h3 class="text-primary"><span class="fa fa-twitter"></span> Signed in with Twitter</h3>
+		<table width="100%">
+			<tr><td width="15%"><strong>Account</strong>: </td><td><span><a data-bind="attr: {href: twitterUrl().concat(login_id())}" target="_blank">Twitter</a></span></td></tr>
+		</table>
+	<!-- /ko -->
+	</div>
+</div>

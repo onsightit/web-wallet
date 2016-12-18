@@ -1,0 +1,20 @@
+<!-- ko with: $.extend({ showdialog:ko.observable(false), displayfooter:true, viewmodel: ko.observable({ text: 'Specify a view! }), view: 'modals/placeholder'},$data)  -->
+<div data-bind="modal:showdialog"  id="defaultModal" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h4 id="modal-label">Dynamic Modal</h4>
+            </div>
+
+            <div class="modal-body">
+                <!--ko template: { name: $data.view, data:$data.viewmodel } --><!-- /ko -->
+            </div>
+            <div class="modal-footer" data-bind="$data.displayfooter">
+                <button type="button" class="btn btn-primary btn-xs" data-bind="click:$data.viewmodel.execute" >One</button>
+                <button type="button" class="btn btn-primary btn-xs" data-bind="click:$data.viewmodel.cancel" >Two</button>
+            </div>
+        </div> 
+    </div> 
+</div> 
+<!-- /ko -->

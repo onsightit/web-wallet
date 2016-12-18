@@ -1,0 +1,25 @@
+<!-- views/error.ejs -->
+<!doctype html>
+<html lang="en">
+    <head>
+        <title><%= settings.coinName %> - Error!</title>
+        <% include partials/meta %>
+    </head>
+    <body role="document" class="intro">
+        <div id='wrapper'>
+            <div id='page-content-wrapper'>
+                <div id="main" class="container" role="main">
+                    <div class="well">
+                        <h2><%= settings.coinName %> - error occurred</h2>
+                        <div>
+                            <span class=tab>Error: <%= message %></span><br /><br />
+                            <span class=tab>Status: <%= error %></span><br /><br />
+                        </div>
+                        <h4><a href="<%= settings.chRoot %>/">Back to Home</a></h4>
+                    </div>
+                </div>
+                <% include partials/footer %>
+            </div>
+        </div>
+    </body>
+</html>

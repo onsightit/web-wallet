@@ -1,0 +1,375 @@
+body {
+    background: url("../images/Icon.png") rgba(247,247,247,1.0) no-repeat 36px 5px;
+}
+
+#main {
+    margin-bottom: 15px;
+}
+
+@media screen and (min-width: 720px) {
+    #main {
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+}
+
+sup {
+    vertical-align: super;
+    font-size: small;
+}
+
+.theme-dropdown .dropdown-menu {
+    position: static;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+    margin: 5px 0;
+}
+
+.theme-showcase .navbar .container {
+    width: auto;
+}
+
+#wrapper {
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+    padding-left: 200px;
+}
+
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: absolute;
+    left: 200px;
+    width: 0;
+    height: 150%;
+    margin-left: -200px;
+    overflow-y: hidden;
+    background: rgba(45,169,171,1.0);
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 200px;
+}
+
+#page-content-wrapper {
+    min-width: 500px !important;
+    width: 100%;
+    position: absolute;
+    overflow: hidden;
+}
+
+#wrapper.toggled #page-content-wrapper {
+    /*width: auto;*/
+    position: absolute;
+    margin-right: -100px;
+}
+
+/* Top Content Header */
+
+.top-content {
+    min-width: 500px !important;
+    width: 100%;
+    height: 140px;
+    background: rgba(251,199,30,1.0);
+    /*position: fixed;*/
+}
+
+.top-content .text {
+    text-align: center;
+    font-weight: 600;
+    font-size: 24px;
+    font-size: 10.0vh;
+    color: white;
+}
+ 
+/* Sidebar */
+
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 200px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* This controls stats text */
+.sidebar-nav li {
+    text-indent: 20px;
+    line-height: 30px;
+    font-size: 12px;
+    color: #ddd;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+}
+
+.sidebar-nav li a:hover {
+    text-decoration: none;
+    color: #ddd;
+    background: rgba(255,255,255,0.2);
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+
+.sidebar-nav span.sidebar-nav-button-content {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 19px;
+    font-size: 2.1vh;
+    margin-left: 20px;
+}
+
+.sidebar-nav div.sidebar-nav-button-content {
+    text-indent: 10px;
+    line-height: 60px;
+    text-decoration: none;
+    color: #fff;
+    padding-top: 5px;
+}
+
+.sidebar-nav div.sidebar-nav-button-content:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.sidebar-nav div.sidebar-nav-button-content.selected {
+    background: rgba(97,75,175,1.0);
+}
+
+.sidebar-nav > .sidebar-brand {
+    display: table-cell;
+    vertical-align: bottom;
+    height: 140px;
+    width: 200px;
+    font-size: 24px;
+    font-size: 2.4vh;
+    line-height: 60px;
+    background: url("../images/Icon.png") no-repeat 36px 5px;
+}
+
+.sidebar-nav > .sidebar-brand a {
+    color: #fff;
+}
+
+.sidebar-nav > .sidebar-brand a:hover {
+    color: #fff;
+    background: none;
+}
+
+
+.wallet-stats {
+    width:100%;
+    float: right;
+    margin-top: -20px;
+    height: auto;
+}
+
+.wallet-stats .text {
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+}
+ 
+.wallet-stats .left {
+    text-align: right;
+}
+
+.wallet-stats .center {
+    text-align: center;
+}
+
+.wallet-stats .right {
+    text-align: left;
+}
+
+.button-settings {
+    float: left;
+    font-size:35px;
+    color: white;
+    padding: 15px 0px 0px 20px;
+    cursor: pointer;
+}
+
+.button-refresh {
+    float: right;
+    font-size:35px;
+    color: white;
+    padding: 15px 20px 0px 0px;
+    cursor: pointer;
+}
+
+.table-striped > tbody > tr:nth-of-type(2n) {
+    background-color: #ffffff;
+}
+
+.table-striped > tbody > tr:hover:nth-of-type(2n) {
+    background-color: #f5f5f5;
+}
+
+.history-timereceived {
+    width: 20%;
+}
+
+.history-category {
+    width: 10%;
+}
+
+.history-address {
+    width: 30%;
+}
+
+.history-txcomment {
+    width: 30%;
+}
+
+.history-ammount {
+    width: 10%;
+}
+
+#receive-container .glyph-icon-plus {
+    color: green;
+}
+
+.console-out .pre-scrollable {
+    font-size: 10px;
+    min-height: 200px;
+}
+
+.confirmation-body {
+    width: 100%;
+}
+
+#wrapper.toggled .container {
+    /*margin-left: 15px;*/
+    padding-right: 200px;
+}
+
+.intro {
+    background: rgba(247,247,247,1.0);
+}
+
+.floatright {
+    float: right !important;
+    padding: 20px;
+}
+
+.floatleft {
+    float: left !important;
+    padding: 20px;
+}
+
+.copyright {
+    text-align: center;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    margin: 10px;
+    margin-top: 100px;
+}
+
+#wrapper.toggled .copyright {
+    padding-right: 200px;
+}
+
+
+/*** Bootstrap Overrides ***/
+
+/* Customize container from bootstrap.css */
+.container {
+    min-width: 500px !important;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+/* Customize well from bootstrap.css */
+.well {
+    /*min-width: 500px !important; /* Breaks datepicker width */
+    background-color: inherit;
+    padding: 20px;
+    margin-bottom: 0px;
+    border-radius: 18px;
+    overflow: visible !important;
+}
+
+/* Customize jumbotron from bootstrap.css */
+.jumbotron {
+    background-color: inherit;
+}
+
+/* Customize text-primary from bootstrap.css */
+.text-primary {
+  color: #2da9ab;
+}
+a.text-primary:hover,
+a.text-primary:focus {
+  color: #1d99bb;
+}
+
+/* Customize btn-primary from bootstrap-theme.css */
+.btn-primary {
+    background: #614baf; /* Old browsers */
+    background-image: -webkit-linear-gradient(top, #614baf 0%, #3f4c6b 100%);
+    background-image:      -o-linear-gradient(top, #614baf 0%, #3f4c6b 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#614baf), to(#3f4c6b));
+    background-image:         linear-gradient(to bottom, #614baf 0%, #3f4c6b 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff614baf', endColorstr='#ff3f4c6b', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+    background-repeat: repeat-x;
+    border-color: #374463;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #3f4c6b;
+  background-position: 0 -15px;
+}
+.btn-primary:active,
+.btn-primary.active {
+  background-color: #3f4c6b;
+  border-color: #374463;
+}
+
+/* Customize popover from bootstrap-editable.css */
+/*.editable-container {
+    max-width: 240px;
+}
+.editable-input {
+    max-width: 240px;
+}
+.editable-date {
+    max-width: 240px;
+}
+*/
+.editable-container.popover {
+    padding: 10px;
+}
+
+/* Customize slider from bootstrap-slider.min.css */
+.slider {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 5px;
+}
+/* font-awesome icon fix-up
+[class*="fa-"]:before,
+[class^=" fa"]:before {
+    margin-right: 10px;
+}
+*/
+
+/*** End Bootstrap  Overrides ***/

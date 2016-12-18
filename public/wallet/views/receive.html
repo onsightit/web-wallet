@@ -1,0 +1,31 @@
+<div id="receive-container" class="container" data-bind="with:receive">
+
+    <!-- RECEIVE -->
+	<div class="well">
+		<h1 class="text-primary"><span class="fa fa-inbox"></span> Your <span data-bind="text: wallet.settings().coinName"></span> Addresses</h1>
+		<table class="table table-hover table-striped table-bordered">
+			<thead>
+				<tr>
+					<th>Account</th>
+					<th>Address</th>
+					<th>Amount</th>
+				</tr>
+			</thead>
+			<!-- ko if: $data.addresses -->
+			<tbody data-bind="foreach: addresses">
+				<!-- ko if: $data.address -->
+				<tr>
+					<td data-bind="text: account"></td>
+					<td data-bind="text: address"></td>
+					<td data-bind="text: amount"></td>
+				</tr>
+				<!-- /ko -->
+			</tbody>
+			<!-- /ko -->
+		</table>
+		<button type="button" class="btn btn-primary btn-lg" data-bind="click: newAddress">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Address
+		</button>
+	    <h3 align="center" data-bind="text:statusMessage"></h3>
+	</div>
+</div>

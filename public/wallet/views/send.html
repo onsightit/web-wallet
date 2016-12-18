@@ -1,0 +1,42 @@
+<div class="container" data-bind="with:send">
+
+    <!-- SEND -->
+    <div class="well">
+        <h1 class="text-primary"><span class="fa fa-paper-plane"></span> Send <span data-bind="text: wallet.settings().coinName"></span> to Someone</h1>
+        <form class="form-horizontal" role="form">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="recipient">To Address</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" id="recipient" data-bind="textInput: recipientAddress" placeholder="Enter a wallet address (e.g. H34lFEaCKE1QB8oMi9NUSpic9qD1Cfk2Rf)"/>
+                </div>
+            </div>
+            <!--div class="form-group">
+                <label class="control-label col-sm-2" for="label">Label:</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" id="label" data-bind="textInput:label" placeholder="Assign a label to the address (e.g. Joey)">
+                </div>
+            </div-->
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="amount">Amount in <span data-bind="text: coinSymbol"></span></label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="number" id="amount" data-bind="numericInput, textInput: amount" placeholder="Amount of coin to send."/>
+                </div>
+            </div>
+	<!-- ko if: hasTxComment -->
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="txcomment">Comment</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" id="txcomment" data-bind="textInput: txcomment" placeholder="Add a comment to the transaction. (Optional)"/>
+                </div>
+            </div>
+	<!-- /ko -->
+    
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-primary btn-lg" type="submit" data-bind="disable: !$data.canSend(), click: sendSubmit">Send</button>
+                </div>
+            </div>
+        </form>
+        <h3 align="center" data-bind="text:statusMessage"></h3>
+    </div>
+</div>

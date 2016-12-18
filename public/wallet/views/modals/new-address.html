@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+    <h4 id="modal-label">Create New Address</h4>
+</div>
+<div class="modal-body">
+    <div class="container" data-bind="with: parent">
+        <form class="form-horizontal" role="form">
+            <div class="form-group">
+                <label class="control-label col-sm-1" for="account">Account:</label>
+                <div class="col-sm-4">
+                    <input disabled type="text" class="form-control" id="account" data-bind="textInput: account">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-1" for="address">Address:</label>
+                <div class="col-sm-4">
+                    <input disabled type="text" class="form-control" id="address" placeholder="A new wallet address will be generated...">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer" data-bind="$data.displayfooter">
+    <button type="button" class="btn btn-default" data-dismiss="modal" data-bind="click: newAddressCancel">Close</button>
+    <button type="button" class="btn btn-primary" data-bind="click: newAddressConfirm">Create</button>
+</div>

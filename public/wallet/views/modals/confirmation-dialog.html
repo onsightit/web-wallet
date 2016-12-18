@@ -1,0 +1,13 @@
+<div class="modal-header">
+    <button data-bind="visible: allowClose" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+    <h4 id="modal-label" data-bind="text: title"></h4>
+</div>
+<div class="modal-body">
+    <div class="container confirmation-body">
+        <!--ko template: { name: contentTemplate, data: $data.context } --><!-- /ko -->
+    </div>
+</div>
+<div class="modal-footer" data-bind="$data.displayfooter">
+    <button type="button" class="btn btn-default" data-dismiss="modal" data-bind="visible: showNegativeButton, click: negative, text: negativeButtonText"></button>
+    <button type="button" class="btn btn-primary" data-bind="enable: canAffirm, click: affirmative, text: affirmativeButtonText"></button>
+</div>
