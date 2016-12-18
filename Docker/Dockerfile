@@ -16,18 +16,18 @@ RUN apt-get --yes upgrade
 # Install utils.
 RUN apt-get install --yes git sudo openssh-server vim aptitude daemon nodejs inetutils-ping telnet cron
 
-RUN useradd --user-group --create-home --shell /bin/bash healthcoin \
-    && echo 'healthcoin:healthcoin' | chpasswd && adduser healthcoin sudo
-RUN echo 'healthcoin ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+RUN useradd --user-group --create-home --shell /bin/bash solarcoin \
+    && echo 'solarcoin:solarcoin' | chpasswd && adduser solarcoin sudo
+RUN echo 'solarcoin ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
-COPY web-wallet /home/healthcoin/
-RUN chmod a+rwx /home/healthcoin/web-wallet
-RUN chown healthcoin:healthcoin /home/healthcoin/web-wallet
-RUN mkdir /home/healthcoin/.healthcoin
-COPY coin.conf /home/healthcoin/.healthcoin/
-RUN chown -R healthcoin:healthcoin /home/healthcoin/.healthcoin
+COPY web-wallet /home/solarcoin/
+RUN chmod a+rwx /home/solarcoin/web-wallet
+RUN chown solarcoin:solarcoin /home/solarcoin/web-wallet
+RUN mkdir /home/solarcoin/.solarcoin
+COPY coin.conf /home/solarcoin/.solarcoin/
+RUN chown -R solarcoin:solarcoin /home/solarcoin/.solarcoin
 
-USER healthcoin
+USER solarcoin
 
 # Install web-wallet
 RUN cd ~ \
@@ -38,8 +38,8 @@ EXPOSE 8181
 #EXPOSE 8383
 
 # Add VOLUMEs to allow backup of data
-VOLUME  ['/home/healthcoin']
+VOLUME  ['/home/solarcoin']
 
-WORKDIR /home/healthcoin
+WORKDIR /home/solarcoin
 
 CMD ./web-wallet

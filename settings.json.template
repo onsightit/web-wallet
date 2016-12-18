@@ -18,7 +18,7 @@
   "copyRight": "Copyright (c) 2016, The Healthcoin Developers. All rights reserved.",
 
   // Coin name / page heading
-  "coinName": "healthcoin",
+  "coinName": "solarcoin",
 
   // Coin symbol
   "coinSymbol": "HCN",
@@ -75,9 +75,9 @@
 
   // Database settings (MongoDB)
   "mdb": {
-    "user": "healthcoin",
+    "user": "solarcoin",
     "password": "password",
-    "database": "healthcoin",
+    "database": "solarcoin",
     "host": "localhost",
     "port": 27017
   },
@@ -87,7 +87,7 @@
   "masterAccount": "MASTER_ACCOUNT",
 
   // Master email account.
-  "masterEmail": "admin@healthcoin.com",
+  "masterEmail": "admin@solarcoin.com",
 
   // Master can encrypt the wallet
   "masterCanEncrypt": true

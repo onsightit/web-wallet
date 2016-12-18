@@ -3,13 +3,13 @@
 
 ## Prerequisites:
 
-A running RPC coin daemon. See: https://github.com/onsightit/healthcoin
+A running RPC coin daemon. See: https://github.com/onsightit/solarcoin
 
 Mongo DB for storing account info and biomarker data. See: https://www.mongodb.com/
 
  Create DB and user:
- > use healthcoin
- > db.createUser( { user: "healthcoin", pwd: "{password}", roles: [ "readWrite" ] } )
+ > use solarcoin
+ > db.createUser( { user: "solarcoin", pwd: "{password}", roles: [ "readWrite" ] } )
 
 Node.js 6.x for running the Web Wallet. For debian installations:
 
@@ -17,13 +17,13 @@ Node.js 6.x for running the Web Wallet. For debian installations:
  sudo apt-get purge nodejs npm
 
  Install 6.x:
- curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
- sudo apt-get install -y nodejs
+ > curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+ > sudo apt-get install -y nodejs
 
 If the Web Wallet is not running locally, https is the default protocol.  To set up a self-signed SSL certificate in debian/apache2 environments, run:
 
- sudo mkdir /etc/apache2/certs
- sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/certs/{domain name}.key -out /etc/apache2/certs/{domain name}.crt
+ > sudo mkdir /etc/apache2/certs
+ > sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/certs/{domain name}.key -out /etc/apache2/certs/{domain name}.crt
 
  Note: Also copy the crt and key file to the {nodejs}/sslcert directory. Change the owner to that of the nodejs process, then make sure your settings.json SSL parameters have the correct file-names for your key and crt files.
 
@@ -37,33 +37,33 @@ Configure the Web Wallet and daemon for local or non-local operation, or a combi
 If the daemon is running on the same machine as the Web Wallet, the daemon's config file will be used. It can be found at:
 
  // Mac OS
- '$HOME/Library/Application Support/Healthcoin/healthcoin.conf'
+ '$HOME/Library/Application Support/SolarCoin/solarcoin.conf'
 
  // Linux
- '$HOME/.healthcoin/healthcoin.conf'
+ '$HOME/.solarcoin/solarcoin.conf'
 
  // Windows
- '$APPDATA/Healthcoin/healthcoin.conf'
+ '$APPDATA/SolarCoin/solarcoin.conf'
 
-(Substitute your coin's name for 'Healthcoin' above.)
+(Substitute your coin's name for 'SolarCoin' above.)
 
 If the daemon is running on another machine, you will need to configure node.js's coin.conf file to match the daemon's config file. coin.conf is found in: lib/coin.conf
 
 Either way, the config file will need at a minimum the following parameters:
 
-rpcuser=rpcuser
-rpcpassword=password  # Change me!
-rpcconnect=localhost  # RPC daemon
-rpcport=18184
+ > rpcuser=rpcuser
+ > rpcpassword=password  # Change me!
+ > rpcconnect=localhost  # RPC daemon
+ > rpcport=18184
 
 Local vs Not-Local configuration:
 
 The config file parameter 'rpcconnect' determines whether the daemon (and thus the Web Wallet) is local or not-local, even if the daemon and Web Wallet are both running on the same machine. The Web Wallet's boolean flag 'isLocal' is determined to be true if 'rpcconnect' is one of the following:
 
-rpcconnect=127.0.0.1
-rpcconnect=localhost
-rpcconnect=192.168.x.x
-rpcconnect=hostname_with_no_tld
+ > rpcconnect=127.0.0.1
+ > rpcconnect=localhost
+ > rpcconnect=192.168.x.x
+ > rpcconnect=hostname_with_no_tld
 
 The last two examples allow for the Web Wallet to be considered 'local', even though the node and daemon may be running on different machines on the same local network.
 
@@ -80,20 +80,20 @@ If you need to run the Web Wallet app from a "sub directory" of the main web-sit
 
 Windows:
 
-  web-wallet.bat
+ > web-wallet.bat
 
-  (If supervisor is not installed, run 'npm install supervisor'.)
+ (If supervisor is not installed, run 'npm install supervisor'.)
 
 Linux:
 
-  web-wallet.sh
+ > web-wallet.sh
 
-  (If 'daemon' is not installed, please consult your Linux distro's documentation for installing 'daemon'.)
+ (If 'daemon' is not installed, please consult your Linux distro's documentation for installing 'daemon'.)
 
 The Web Wallet has an admin account pre-defined which you can login with:
 
-  Login:    MASTER_ACCOUNT
-  Password: password  (you will be required to change this)
+ > Login:    MASTER_ACCOUNT
+ > Password: password  (you will be required to change this)
 
 The MASTER_ACOUNT always sees the Web Wallet as 'local' and has views into the wallet as if you were running a Qt wallet (i.e. the full wallet balance).
 
