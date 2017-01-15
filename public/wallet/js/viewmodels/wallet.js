@@ -13,8 +13,6 @@ define(['knockout',
     'common/dialog',
     'viewmodels/wallet-status',
     'viewmodels/home/home',
-    'viewmodels/biomarkers/biomarkers',
-    'viewmodels/coinstream/coinstream',
     'viewmodels/send/send',
     'viewmodels/receive/receive',
     'viewmodels/history/history',
@@ -23,7 +21,7 @@ define(['knockout',
     'viewmodels/profile/profile',
     'bindinghandlers/modal',
     'viewmodels/common/wallet-passphrase',
-    'viewmodels/common/command'], function(ko, dialog, WalletStatus, Home, Biomarkers, Coinstream, Send, Receive, History, Explore, Console, Profile, Modal, WalletPassphrase, Command){
+    'viewmodels/common/command'], function(ko, dialog, WalletStatus, Home, Send, Receive, History, Explore, Console, Profile, Modal, WalletPassphrase, Command){
 
     var walletType = function(){
         var self = this;
@@ -64,12 +62,6 @@ define(['knockout',
             switch(view){
                 case ("home"):
                     self.home.refresh(false);
-                    break;
-                case ("biomarkers"):
-                    self.biomarkers.refresh(false);
-                    break;
-                case ("coinstream"):
-                    self.coinstream.refresh(false);
                     break;
                 case ("send"):
                     self.send.refresh(false);
@@ -236,8 +228,6 @@ define(['knockout',
         var refreshPromise = $.when(self.walletStatus.refresh())
             .done(function(){
                 self.home.refresh(timerRefresh);
-                self.biomarkers.refresh(timerRefresh);
-                self.coinstream.refresh(timerRefresh);
                 self.send.refresh(timerRefresh);
                 self.receive.refresh(timerRefresh);
                 self.history.refresh(timerRefresh);

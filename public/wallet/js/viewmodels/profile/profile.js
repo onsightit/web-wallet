@@ -19,7 +19,7 @@ define(['knockout',
         self.role = ko.observable("");
         self.login_type = ko.observable("");
         self.login_id = ko.observable("");
-        self.credit = ko.observable(0.0000); // TODO: Make this Coins Earned (use Coinstream output)
+        self.credit = ko.observable(0.0000);
         self.creditFmt = ko.pureComputed(function(){return self.wallet.formatNumber(self.credit(), 4, '.', ',');});
         self.facebookUrl = ko.observable("https://facebook.com/");
         self.googleUrl = ko.observable("https://plus.google.com/");
