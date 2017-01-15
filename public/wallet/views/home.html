@@ -2,18 +2,16 @@
 
     <!-- HOME -->
     <div class="well">
-        <h1 class="text-primary"><span class="fa fa-h-square"></span> Welcome to <span data-bind="text: wallet.settings().coinName"></span> <span data-bind="text: name"></span></h1>
+        <h1 class="text-primary"><span class="fa fa-h-square"></span> Welcome to <span data-bind="text: wallet.settings().coinName"></span> <span data-bind="text: first_name"></span> <span data-bind="text: last_name"></span></h1>
         <p><span data-bind="text: wallet.settings().coinDescription"></span></p>
         <ul>
-        <li>Use the side-menu to explore the <span data-bind="text: wallet.settings().coinName"></span> app features.</li>
-        <li>Send <span data-bind="text: wallet.settings().coinName"></span> to other people on the network on the Send page.</li>
-        <li>Receive <span data-bind="text: wallet.settings().coinName"></span> from other people on the network by sharing your address with them. Your addresses are found on the Receive page.</li>
-        <li>View your <span data-bind="text: wallet.settings().coinName"></span> transaction history on the History page.</li>
-        <!-- ko if: role() === 'Admin' -->
-        <li>Explore the <span data-bind="text: wallet.settings().coinName"></span> blockchain on the Explore page.</li>
-        <li>Run RPC commands on the Console page.</li>
-        <!-- /ko -->
-        <li>Click Profile to complete or update your <span data-bind="text: wallet.settings().coinName"></span> profile.</li>
+            <li>Send <span data-bind="text: wallet.settings().coinName"></span> to other people on the network on the Send page.</li>
+            <li>Receive <span data-bind="text: wallet.settings().coinName"></span> from other people on the network on the Receive page.</li>
+            <li>View your transaction history on the blockchain on the History page.</li>
+            <!-- ko if: role() === 'Admin' -->
+            <li>Explore the <span data-bind="text: wallet.settings().coinName"></span> blockchain on the Explore page.</li>
+            <li>Run RPC commands on the Console page.</li>
+            <!-- /ko -->
         </ul>
         <h3 align="center" data-bind="text:statusMessage"></h3>
 

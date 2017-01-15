@@ -47,6 +47,7 @@
     "express": "latest",
     "express-session": "latest",
     "jsonminify": "0.4.1",
+    "moment": "latest",
     "mongode": "0.1.6",
     "mongoose": "latest",
     "morgan": "~1.5.3",

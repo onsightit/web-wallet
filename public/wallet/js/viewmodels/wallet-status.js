@@ -4,25 +4,27 @@ define(['knockout',
         var self = this;
         self.wallet = options.parent;
 
-        self.total = ko.observable(0.00);
-        self.stake = ko.observable(0.00);
-        self.available = ko.observable(0.00);
+        self.total = ko.observable(0.0000);
+        self.stake = ko.observable(0.0000);
+        self.available = ko.observable(0.0000);
         self.blocks = ko.observable(0);
         self.isEncrypted = ko.observable("No");
         self.isUnlocked = ko.observable("No");
         self.unlockedUntil = ko.observable(-1);
 
-        self.totalFmt = ko.observable("0.00");
-        self.stakeFmt = ko.observable("0.00");
-        self.availableFmt = ko.observable("0.00");
+        self.decimalPlaces = ko.observable(4);
+        self.totalFmt = ko.observable("0.0000");
+        self.stakeFmt = ko.observable("0.0000");
+        self.availableFmt = ko.observable("0.0000");
 
-        self.total.subscribe(function (){self.totalFmt(self.wallet.formatNumber(self.total(), 2, '.', ','));});
-        self.stake.subscribe(function (){self.stakeFmt(self.wallet.formatNumber(self.stake(), 2, '.', ','));});
-        self.available.subscribe(function (){self.availableFmt(self.wallet.formatNumber(self.available(), 2, '.', ','));});
+        self.total.subscribe(function (){self.totalFmt(self.wallet.formatNumber(self.total(), self.decimalPlaces(), '.', ','));});
+        self.stake.subscribe(function (){self.stakeFmt(self.wallet.formatNumber(self.stake(), self.decimalPlaces(), '.', ','));});
+        self.available.subscribe(function (){self.availableFmt(self.wallet.formatNumber(self.available(), self.decimalPlaces(), '.', ','));});
     };
 
     walletStatusType.prototype.refresh = function(){
         var self = this;
+        self.decimalPlaces(self.wallet.settings().decimalPlaces);
         var getInfoCommand = new Command('getinfo', [],
                                          self.wallet.settings().chRoot,
                                          self.wallet.settings().env),

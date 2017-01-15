@@ -5,26 +5,32 @@
 //  Do not modify settings.json.template!
 //
 {
+  // Version
+  "version": "1.0.2",
+
   // Runtime environment: 'development' or 'production'
   "env": "development",
 
   // The name of your app
-  "coinTitle": "Healthcoin Web Wallet",
+  "coinTitle": "SolarCoin Web Wallet",
 
   // Coin description
-  "coinDescription": "Healthcoin keeps track of the user's biomarker progress in diabetic and pre-diabetic patients. Biomarker data is sent anonymously to the blockchain for research purposes later.",
-
-  // The copyright for the footer
-  "copyRight": "Copyright (c) 2016, The Healthcoin Developers. All rights reserved.",
+  "coinDescription": "SolarCoin description goes here.",
 
   // Coin name / page heading
-  "coinName": "solarcoin",
+  "coinName": "SolarCoin",
+
+  // The copyright for the footer (uncomment to override default)
+  //"copyRight": "Copyright (c) 2016-2017, The SolarCoin developers. All rights reserved.",
 
   // Coin symbol
-  "coinSymbol": "HCN",
+  "coinSymbol": "SLR",
 
   // Coin addresses start with this character
-  "coinChar": "H",
+  "coinChar": "8",
+
+  // How many decimale places to display for coin fractions
+  "decimalPlaces": 4,
 
   // Coin has transaction txcomment feature
   "txComment": false,
@@ -45,6 +51,9 @@
 
   // favicon
   "favicon": "./public/wallet/favicon.ico",
+
+  // Show stats in navigation
+  "showStats": true,
 
   // History rows per page
   "historyRowsPP": 10,
@@ -75,9 +84,9 @@
 
   // Database settings (MongoDB)
   "mdb": {
-    "user": "solarcoin",
+    "user": "SolarCoin",
     "password": "password",
-    "database": "solarcoin",
+    "database": "SolarCoin",
     "host": "localhost",
     "port": 27017
   },
@@ -87,8 +96,12 @@
   "masterAccount": "MASTER_ACCOUNT",
 
   // Master email account.
-  "masterEmail": "admin@solarcoin.com",
+  "masterEmail": "admin@SolarCoin.com",
 
   // Master can encrypt the wallet
-  "masterCanEncrypt": true
+  "masterCanEncrypt": true,
+
+  // Google reCaptcha private/public keys
+  "reCaptchaSecret":  "",
+  "reCaptchaKey": ""
 }

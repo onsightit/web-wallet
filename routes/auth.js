@@ -1,3 +1,4 @@
+var https = require('https');
 module.exports = function(app, passport){
 
 	var chRoot = app.get('chRoot');
@@ -31,8 +32,29 @@ module.exports = function(app, passport){
 		}
 		res.render('signup.ejs', { message: req.flash('signupMessage') });
 	});
-	app.post(chRoot + '/signup', passport.authenticate('local-signup', {
-		successRedirect: chRoot + '/login', // Require login on success
+	app.post(chRoot + '/signup', isNotLoggedIn, function (req, res, next){
+		var resKey = req.body['g-recaptcha-response'];
+		if (resKey){
+			https.get('https://www.google.com/recaptcha/api/siteverify?secret=' + settings.reCaptchaSecret + '&response=' + resKey, function (res) {
+				var data = '';
+				res.on('data', function (chunk) {
+					data += chunk.toString();
+				});
+				res.on('end', function () {
+					var parseData = JSON.parse(data);
+					//console.log("DEBUG: parseData = " + JSON.stringify(parseData));
+					if (parseData && parseData.success === true){
+						return next();
+					}
+				});
+			});
+		} else {
+			res.redirect(chRoot + '/signup');
+		}
+	},
+	// Invoked by next() from previous middleware
+	passport.authenticate('local-signup', {
+		successRedirect: chRoot + '/login',
 		failureRedirect: chRoot + '/signup',
 		failureFlash: true
 	}));
@@ -84,4 +106,12 @@ function isLoggedIn(req, res, next) {
 		return next();
 	}
 	res.render('index.ejs');
+}
+function isNotLoggedIn(req, res, next) {
+	if(!req.isAuthenticated()){
+		return next();
+	}
+	// Need to be logged out first
+	req.logout();
+	res.redirect(chRoot + '/');
 }

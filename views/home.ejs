@@ -24,7 +24,15 @@
 					<li><a href="#send"><div data-bind="css: { selected: $data.currentView() === 'send' }" class="sidebar-nav-button-content"><div class="fa fa-paper-plane fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Send</span></div></div></a></li>
 					<li><a href="#receive"><div data-bind="css: { selected: $data.currentView() === 'receive' }" class="sidebar-nav-button-content"><div class="fa fa-inbox fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Receive</span></div></div></a></li>
 					<li><a href="#history"><div data-bind="css: { selected: $data.currentView() === 'history' }" class="sidebar-nav-button-content"><div class="fa fa-calendar fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">History</span></div></div></a></li>
+		<!-- ko if: gender() === 'Female' -->
 					<li><a href="#profile"><div data-bind="css: { selected: $data.currentView() === 'profile' }" class="sidebar-nav-button-content"><div class="fa fa-user fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Profile</span></div></div></a></li>
+		<!-- /ko -->
+		<!-- ko if: gender() === 'Male' -->
+					<li><a href="#profile"><div data-bind="css: { selected: $data.currentView() === 'profile' }" class="sidebar-nav-button-content"><div class="fa fa-user fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Profile</span></div></div></a></li>
+		<!-- /ko -->
+		<!-- ko if: gender() === '' -->
+					<li><a href="#profile"><div data-bind="css: { selected: $data.currentView() === 'profile' }" class="sidebar-nav-button-content"><div class="fa fa-user fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Profile</span></div></div></a></li>
+		<!-- /ko -->
 		<!-- ko if: role() === 'Admin' -->
 					<li><a href="#explore"><div data-bind="css: { selected: $data.currentView() === 'explore' }" class="sidebar-nav-button-content"><div class="fa fa-search fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Explore</span></div></div></a></li>
 					<li><a href="#console"><div data-bind="css: { selected: $data.currentView() === 'console' }" class="sidebar-nav-button-content"><div class="fa fa-terminal fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Console</span></div></div></a></li>
@@ -38,18 +46,21 @@
 			<!-- /ko -->
 		<!-- /ko -->
 					<li><a href="logout"><div class="sidebar-nav-button-content"><div class="fa fa-sign-out fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Logout</span></div></div></a></li>
+
+		<!-- ko if: showStats() -->
 					<li><span>&nbsp;</span</li>
 					<li><h4><%= settings.coinName %> Stats</h4></li>
 					<li>Balance: <span data-bind='text: walletStatus.totalFmt'></span></li>
-		<!-- ko if: walletStatus.isEncrypted() === 'Yes' && (isLocalWallet() || role() === 'Admin') -->
+			<!-- ko if: walletStatus.isEncrypted() === 'Yes' && (isLocalWallet() || role() === 'Admin') -->
 					<li>Available: <span data-bind='text: walletStatus.availableFmt'></span></li>
 					<li>Staking: <span data-bind='text: walletStatus.stakeFmt'></span></li>
-		<!-- /ko -->
-		<!-- ko if: isLocalWallet() || role() === 'Admin' -->
+			<!-- /ko -->
+			<!-- ko if: isLocalWallet() || role() === 'Admin' -->
 					<li>Block Height: <span data-bind="text: walletStatus.blocks"></span></li>
 					<li>Wallet Encrypted: <span data-bind="text: walletStatus.isEncrypted"></span></li>
-			<!-- ko if: walletStatus.isEncrypted() === 'Yes' -->
+				<!-- ko if: walletStatus.isEncrypted() === 'Yes' -->
 					<li>Currently Staking: <span data-bind="text: walletStatus.isUnlocked"></span></li>
+				<!-- /ko -->
 			<!-- /ko -->
 		<!-- /ko -->
 				</ul>

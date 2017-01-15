@@ -112,7 +112,7 @@
             var subscribeToChanges = function() {
                 var throttleAmount = ko.unwrap(chartBinding.options.throttle) || 100;
                 var dataSubscribables = getSubscribables(chartBinding.data);
-                console.log("found obs", dataSubscribables);
+                //console.log("found obs", dataSubscribables);
 
                 ko.observableGroup(dataSubscribables)
                     .throttle(throttleAmount)

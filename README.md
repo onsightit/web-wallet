@@ -5,7 +5,7 @@
 
 A running RPC coin daemon. See: https://github.com/onsightit/solarcoin
 
-Mongo DB for storing account info and biomarker data. See: https://www.mongodb.com/
+Mongo DB for storing account info. See: https://www.mongodb.com/
 
  Create DB and user:
  > use solarcoin
@@ -14,7 +14,7 @@ Mongo DB for storing account info and biomarker data. See: https://www.mongodb.c
 Node.js 6.x for running the Web Wallet. For debian installations:
 
  If running 4.x:
- sudo apt-get purge nodejs npm
+ > sudo apt-get purge nodejs npm
 
  Install 6.x:
  > curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
@@ -98,9 +98,3 @@ The Web Wallet has an admin account pre-defined which you can login with:
 The MASTER_ACOUNT always sees the Web Wallet as 'local' and has views into the wallet as if you were running a Qt wallet (i.e. the full wallet balance).
 
 To setup individual accounts, use the Web Wallet's Signup page, or login with a social media account.
-
-## Support:
-
-If you would like support for setup, enhancements, bug fixes, or anything else, please send your requests to: onsightit@gmail.com.  If you would like to send a donation in BTC, my address is: 1KhcfCr6SBhzNQ7x1DeMk27StfZYZE3kDR
-
-Enjoy!

@@ -13,6 +13,7 @@ require.config({
         "knockout-validation": 'lib/knockout.validation.min',
         "knockout-x-editable": 'lib/knockout.x-editable.min',
         "knockout-chart": 'lib/knockout.chart',
+        "knockout-file-bindings": 'lib/knockout-file-bindings',
         "socket.io": "lib/socket.io.min",
         text: "lib/text",
         patterns: 'extenders/patterns'

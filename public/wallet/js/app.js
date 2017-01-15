@@ -11,6 +11,7 @@ define( [
         "knockout-validation",
         "knockout-x-editable",
         "knockout-chart",
+        "knockout-file-bindings",
         "common/dialog",
         "viewmodels/wallet",
         "socket.io",
@@ -18,7 +19,7 @@ define( [
         "bindinghandlers/slider",
         "bindinghandlers/numeric-text",
         "bindinghandlers/numeric-input",
-        ], function(jQuery, Sammy, moment, chart, bootstrap, bse, slider, ko, koah, kov, koxe, koc, dialog, Wallet, io){
+        ], function(jQuery, Sammy, moment, chart, bootstrap, bse, slider, ko, koah, kov, koxe, koc, kofb, dialog, Wallet, io){
     var App = function(){
     };
     ko.amdTemplateEngine.defaultPath = "../views";

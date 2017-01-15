@@ -13,6 +13,8 @@ define(['knockout',
     'common/dialog',
     'viewmodels/wallet-status',
     'viewmodels/home/home',
+    'viewmodels/biomarkers/biomarkers',
+    'viewmodels/coinstream/coinstream',
     'viewmodels/send/send',
     'viewmodels/receive/receive',
     'viewmodels/history/history',
@@ -21,7 +23,7 @@ define(['knockout',
     'viewmodels/profile/profile',
     'bindinghandlers/modal',
     'viewmodels/common/wallet-passphrase',
-    'viewmodels/common/command'], function(ko, dialog, WalletStatus, Home, Send, Receive, History, Explore, Console, Profile, Modal, WalletPassphrase, Command){
+    'viewmodels/common/command'], function(ko, dialog, WalletStatus, Home, Biomarkers, Coinstream, Send, Receive, History, Explore, Console, Profile, Modal, WalletPassphrase, Command){
 
     var walletType = function(){
         var self = this;
@@ -47,6 +49,7 @@ define(['knockout',
 
         self.currentView = ko.observable('home');
         self.sidebarToggled = ko.observable(true);
+        self.showStats = ko.observable(false);
 
         this.home = new Home({parent: self});
         this.send = new Send({parent: self});
@@ -56,21 +59,54 @@ define(['knockout',
         this.console = new Console({parent: self});
         this.profile = new Profile({parent: self});
 
-        self.currentView.subscribe(function (){
+        self.currentView.subscribe(function (view){
             self.sessionExpires(Date.now() + self.sessionTimeout());
+            switch(view){
+                case ("home"):
+                    self.home.refresh(false);
+                    break;
+                case ("biomarkers"):
+                    self.biomarkers.refresh(false);
+                    break;
+                case ("coinstream"):
+                    self.coinstream.refresh(false);
+                    break;
+                case ("send"):
+                    self.send.refresh(false);
+                    break;
+                case ("receive"):
+                    self.receive.refresh(false);
+                    break;
+                case ("history"):
+                    self.history.refresh(false);
+                    break;
+                case ("explore"):
+                    self.explore.refresh(false);
+                    break;
+                case ("console"):
+                    self.console.refresh(false);
+                    break;
+                case ("profile"):
+                    self.profile.refresh(false);
+                    break;
+                default:
+                    break;
+            }
         });
 
         self.profileComplete = ko.computed(function(){
             var isComplete = false;
-            if (self.User().profile && self.User().profile.name !== 'undefined') {
-                isComplete = self.User().profile.name !== "" &&
-                             self.User().profile.age > 0 &&
+            if (self.User().profile && self.User().profile.first_name !== 'undefined') {
+                isComplete = self.User().profile.first_name && self.User().profile.first_name !== "" &&
+                             self.User().profile.last_name && self.User().profile.last_name !== "" &&
+                             self.User().profile.employer && self.User().profile.employer !== "" &&
+                             self.User().profile.email && self.User().profile.email !== "" &&
+                             self.User().profile.age && self.User().profile.age > 0 &&
                              self.User().profile.dob && self.User().profile.dob !== "" &&
-                             self.User().profile.weight > 0 &&
-                             self.User().profile.waist > 0 &&
-                             self.User().profile.gender !== "" &&
-                             self.User().profile.ethnicity !== "" &&
-                             self.User().profile.country !== "";
+                             self.User().profile.gender && self.User().profile.gender !== "" &&
+                             self.User().profile.ethnicity && self.User().profile.ethnicity !== "" &&
+                             self.User().profile.country && self.User().profile.country !== "" &&
+                             self.User().profile.terms && self.User().profile.terms === true;
             }
             return isComplete;
         });
@@ -99,6 +135,7 @@ define(['knockout',
                     self.node_id(getNodeInfoData.node_id);
                     self.isLocalWallet(getNodeInfoData.isLocal);
                     self.settings(getNodeInfoData.settings);
+                    self.showStats(self.settings().showStats || false);
                     if (self.settings().env !== 'production'){
                         console.log("WARNING: Not running in production mode!\n  (settings.env=" + self.settings().env + ")");
                     }
@@ -170,7 +207,7 @@ define(['knockout',
             } else {
                 // Normal polling
                 if (Date.now() <= self.sessionExpires()){
-                    $.when(self.refresh()).done(function(){
+                    $.when(self.refresh(true)).done(function(){
                         if (self.timeout < 60000){ // First timeout
                             self.timeout = 60000;
                             // Turn off initial loading icon
@@ -193,18 +230,20 @@ define(['knockout',
         },self.timeout);
     };
 
-    // Refresh the universe.
-    walletType.prototype.refresh = function(){
+    // Refresh the universe. If timerRefresh is false it's a manual refresh.
+    walletType.prototype.refresh = function(timerRefresh = false){
         var self = this;
         var refreshPromise = $.when(self.walletStatus.refresh())
             .done(function(){
-                self.home.refresh();
-                self.send.refresh();
-                self.receive.refresh();
-                self.history.refresh();
-                self.explore.refresh();
-                self.console.refresh();
-                self.profile.refresh();
+                self.home.refresh(timerRefresh);
+                self.biomarkers.refresh(timerRefresh);
+                self.coinstream.refresh(timerRefresh);
+                self.send.refresh(timerRefresh);
+                self.receive.refresh(timerRefresh);
+                self.history.refresh(timerRefresh);
+                self.explore.refresh(timerRefresh);
+                self.console.refresh(timerRefresh);
+                self.profile.refresh(timerRefresh);
 	    });
         return refreshPromise;
     };
@@ -232,13 +271,13 @@ define(['knockout',
             new WalletPassphrase({canSpecifyStaking: true}).userPrompt(false, 'Unlock Wallet', 'This action will unlock the wallet for sending or staking','OK')
             .done(function(result){
                 //console.log(result);
-                self.walletStatus.refresh(self.account());
+                self.walletStatus.refresh();
                 result.passphrase = "XXXXXXXX"; // Clear password in memory
             })
             .fail(function(error){
                 console.log(error);
                 dialog.notification(error.message);
-                self.walletStatus.refresh(self.account());
+                self.walletStatus.refresh();
             });
         }
     };
@@ -251,11 +290,11 @@ define(['knockout',
                                                 self.settings().env).execute()
             .done(function(){
                 dialog.notification("Wallet is now locked. To send transactions or stake you must unlock the wallet.");
-                self.walletStatus.refresh(self.account());
+                self.walletStatus.refresh();
             })
             .fail(function(){
                 dialog.notification("Wallet is already locked.");
-                self.walletStatus.refresh(self.account());
+                self.walletStatus.refresh();
             });
             return walletLockCommand;
         }
@@ -285,8 +324,8 @@ define(['knockout',
             });
     };
 
-    walletType.prototype.formatNumber = function(value, precision, decimalPoint, commaSeparator){
-        return value.formatNumber(precision, decimalPoint, commaSeparator);
+    walletType.prototype.formatNumber = function(value, decimalPlaces, decimalPoint, commaSeparator){
+        return value.formatNumber(decimalPlaces, decimalPoint, commaSeparator);
     };
 
     walletType.prototype.toggleSidebar = function(){

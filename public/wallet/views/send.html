@@ -18,25 +18,23 @@
             </div-->
             <div class="form-group">
                 <label class="control-label col-sm-2" for="amount">Amount in <span data-bind="text: coinSymbol"></span></label>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <input class="form-control" type="number" id="amount" data-bind="numericInput, textInput: amount" placeholder="Amount of coin to send."/>
                 </div>
             </div>
-	<!-- ko if: hasTxComment -->
             <div class="form-group">
                 <label class="control-label col-sm-2" for="txcomment">Comment</label>
                 <div class="col-sm-10">
-                    <input class="form-control" type="text" id="txcomment" data-bind="textInput: txcomment" placeholder="Add a comment to the transaction. (Optional)"/>
+                    <input class="form-control" type="text" id="txcomment" data-bind="textInput: txcomment" placeholder="Add a public comment to the transaction. (Optional)"/>
                 </div>
             </div>
-	<!-- /ko -->
     
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
+            <div class="form-group" style="text-align: right">
+                <div class="col-sm-12">
+                    <h3 align="center" data-bind="text:statusMessage"></h3>
                     <button class="btn btn-primary btn-lg" type="submit" data-bind="disable: !$data.canSend(), click: sendSubmit">Send</button>
                 </div>
             </div>
         </form>
-        <h3 align="center" data-bind="text:statusMessage"></h3>
     </div>
 </div>

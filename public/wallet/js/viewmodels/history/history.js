@@ -6,6 +6,8 @@ define(['knockout',
         var self = this;
         self.wallet = options.parent || {};
 
+        self.statusMessage = ko.observable("");
+
         self.page = ko.observable(1);
         self.pageFirst = ko.observable(-1);
         self.pagePrev = ko.observable(0);
@@ -18,18 +20,17 @@ define(['knockout',
             var trans = self.isLoadingTransactions();
             return trans;
         });
-
-        self.statusMessage = ko.observable("");
     };
 
-    historyType.prototype.refresh = function(){
+    historyType.prototype.refresh = function(timerRefresh){
         var self = this;
-        var account = self.wallet.account();
-        if (account !== ""){
-            if (account === self.wallet.settings().masterAccount){
-                self.statusMessage("Global Transaction History View");
+        if (self.wallet.account() !== ""){
+            if (self.wallet.account === self.wallet.settings().masterAccount){
+                self.statusMessage("Master Transaction History View");
             }
-            self.getTransactions(account, self.page());
+        }
+        if (!timerRefresh){
+            self.getTransactions(self.wallet.account(), self.page());
         }
     };
 

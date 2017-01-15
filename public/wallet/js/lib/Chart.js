@@ -3967,8 +3967,8 @@ module.exports = function(Chart) {
 		// Do NOT use configMerge() for the data object because this method merges arrays
 		// and so would change references to labels and datasets, preventing data updates.
 		var data = config.data = config.data || {};
-		data.datasets = data.datasets || [];
-		data.labels = data.labels || [];
+      data.datasets = data.datasets || [];
+      data.labels = data.labels || [];
 
 		config.options = helpers.configMerge(
 			Chart.defaults.global,

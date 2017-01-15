@@ -59,8 +59,8 @@ app.use(express.static(path.join(__dirname, 'public' + coin.settings.chRoot)));
 app.use(favicon(path.join(__dirname, coin.settings.favicon)));
 app.use(morgan('dev'));
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false, limit: '2mb'})); // TODO: Put this limit in settings.json
+app.use(bodyParser.json({limit: '2mb'})); // TODO: Put this limit in settings.json
 app.use(session({name: coin.settings.coinName,
                 secret: coin.settings.coinName + ' is the best ' + coin.settings.coinTitle,
                 genid: function(req) {
@@ -228,11 +228,11 @@ app.get(chRoot + '/sendfrom/:fromaccount/:toaddress/:amount/:minconf?/:comment?/
     var fromaccount = req.params.fromaccount || '';
     var toaddress = req.params.toaddress || '';
     var amount = parseFloat(req.params.amount) || 0.0;
-    var maxSendAmount = parseFloat(coin.settings.maxSendAmount) || 0.0001; // Haha
     var minconf = parseInt(req.params.minconf || 1);
     var comment = req.params.comment || '';
     var commentto = req.params.commentto || '';
-    var txcomment = atob(decodeURIComponent(req.params.txcomment)) || '';
+    var txcomment = (req.params.txcomment ? atob(decodeURIComponent(req.params.txcomment)) : '');
+    var maxSendAmount = parseFloat(coin.settings.maxSendAmount) || 0.0001; // Haha
     if(fromaccount.length && toaddress.length && amount && amount <= maxSendAmount){
         callCoin('sendfrom', res, coinHandler, fromaccount, toaddress, amount, minconf, comment, commentto, txcomment);
     } else {

@@ -21,7 +21,7 @@ define(['knockout'], function(ko){
         return url;
     }
 
-    consoleType.prototype.refresh = function(){
+    consoleType.prototype.refresh = function(timerRefresh){
         var self = this;
         if (self.wallet.User().profile){
             self.role(self.wallet.User().profile.role);

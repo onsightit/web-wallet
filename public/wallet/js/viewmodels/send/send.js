@@ -8,7 +8,8 @@ define(['knockout',
         var self = this;
         self.wallet = options.parent || {};
 
-        self.hasTxComment = true;
+        self.statusMessage = ko.observable("");
+
         self.txcomment = ko.observable("");
 
         self.recipientAddress = ko.observable("").extend( 
@@ -31,7 +32,7 @@ define(['knockout',
 
         self.canSend = ko.computed(function(){
             var address = self.recipientAddress(),
-                addressValid = address.length && self.recipientAddress.isValid(),
+                addressValid = (address.length > 0 && self.recipientAddress.isValid()),
                 //label = self.label,
                 amount = self.amount(),
                 available = self.available(),
@@ -43,13 +44,10 @@ define(['knockout',
         self.isEncrypted = ko.computed(function(){
             return (self.wallet.walletStatus.isEncrypted() === 'Yes');
         });
-
-        self.statusMessage = ko.observable("");
     };
 
-    sendType.prototype.refresh = function(){
+    sendType.prototype.refresh = function(timerRefresh){
         var self = this;
-        self.hasTxComment = self.wallet.settings().txComment;
         self.available(self.wallet.walletStatus.available());
         self.maxSendAmount(self.wallet.settings().maxSendAmount);
         self.coinSymbol(self.wallet.settings().coinSymbol);
