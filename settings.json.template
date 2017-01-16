@@ -5,6 +5,8 @@
 //  Do not modify settings.json.template!
 //
 {
+  // NOTE: rpcuser/pass/host/port is pulled from the coin's config file.
+
   // Version
   "version": "1.0.2",
 
@@ -82,11 +84,11 @@
   // SSL certs crt
   "sslCrt": "./sslcert/server.crt",
 
-  // Database settings (MongoDB)
+  // This setting is passed to MongoDB. See README.md for setting up the database.
   "mdb": {
-    "user": "SolarCoin",
+    "user": "solarcoin",
     "password": "password",
-    "database": "SolarCoin",
+    "database": "solarcoin",
     "host": "localhost",
     "port": 27017
   },

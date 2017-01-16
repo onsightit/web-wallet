@@ -9,7 +9,7 @@ Mongo DB for storing account info. See: https://www.mongodb.com/
 
  Create DB and user:
  > use solarcoin
- > db.createUser( { user: "solarcoin", pwd: "{password}", roles: [ "readWrite" ] } )
+ > db.createUser( { user: "solarcoin", pwd: "{password}", roles: [ { role: "readWrite" } ] } )
 
 Node.js 6.x for running the Web Wallet. For debian installations:
 
@@ -54,7 +54,8 @@ Either way, the config file will need at a minimum the following parameters:
  > rpcuser=rpcuser
  > rpcpassword=password  # Change me!
  > rpcconnect=localhost  # RPC daemon
- > rpcport=18184
+ > rpcport=18181
+ > server=1              # If not running a daemon
 
 Local vs Not-Local configuration:
 
