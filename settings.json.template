@@ -7,9 +7,6 @@
 {
   // NOTE: rpcuser/pass/host/port is pulled from the coin's config file.
 
-  // Version
-  "version": "1.0.2",
-
   // Runtime environment: 'development' or 'production'
   "env": "development",
 
