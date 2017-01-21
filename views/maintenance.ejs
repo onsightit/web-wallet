@@ -1,0 +1,32 @@
+<!-- views/maintenance.ejs -->
+<!doctype html>
+<html lang="en">
+	<head>
+		<title><%= settings.coinName %> - Maintenance</title>
+		<% include partials/meta %>
+	</head>
+	<body role="document" class="intro">
+		<div id='wrapper'>
+			<div id='page-content-wrapper'>
+				<div id="main" class="container" role="main">
+					<div class="well">
+						<div style="background: url('images/Icon.png') no-repeat center; margin-top: 50px; height: 128px;"><span></span></div>
+						<!-- MAINTENANCE -->
+						<div class="jumbotron text-center">
+							<h1><%= settings.coinName %><sup>&reg;</sup> is Under Maintenance</h1>
+							<div style="margin-top: 50px;">
+							<a href="signup" class="btn btn-primary btn-lg"><span class="fa fa-user"></span> Signup</a>
+							<a href="login" class="btn btn-primary btn-lg"><span class="fa fa-user"></span> Login</a>
+							<p><br>&mdash; Or Connect With &mdash;</p>
+							<a href="auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+							<a href="auth/google" class="btn btn-primary"><span class="fa fa-google-plus"></span> Google</a>
+							<a href="auth/twitter" class="btn btn-primary"><span class="fa fa-twitter"></span> Twitter</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<% include partials/footer %>
+			</div>
+		</div>
+	</body>
+</html>

@@ -30,16 +30,26 @@ define( [
     App.prototype.init = function() {
         var wallet = new Wallet();
 
-        //var port = (window.location.port === '' ? '' : ":" + window.location.port);
-        //var socket = io.connect(window.location.protocol + '//' + window.location.hostname + port + '/');
-        //socket.emit('news', { news: 'Connected from: ' + window.location.protocol + '//' + window.location.hostname + port + '/'});
-        //socket.on('news', function (data) {
-        //  console.log(data);
-        //});
-        //socket.on('connect_error', function(err) {
-        //  // handle server error
-        //  console.log('Error connecting to server. Try again later. ' + err);
-        //});
+        var port = (window.location.port === '' ? '' : ":" + window.location.port);
+        var sockOpt = {
+            "force new connection" : true,
+            "reconnectionAttempts": "Infinity",
+            "timeout" : 10000,
+            "transports" : ["websocket"]
+        };
+
+        var socket = io.connect(window.location.protocol + '//' + window.location.hostname + port + '/', sockOpt);
+        socket.on('news', function (data) {
+            console.log(data);
+        });
+        socket.on('abort', function(page) {
+            // handle abort request and redirect to page.
+            window.location = wallet.settings().chRoot + '/' + page;
+        });
+        socket.on('connect_error', function(err) {
+            // handle server error
+            console.log('Error connecting to server. ' + err);
+        });
 
         //$('.editable').editable.defaults.mode = 'inline'; // Comment or change to 'popup' (default)
 

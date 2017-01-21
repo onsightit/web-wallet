@@ -223,7 +223,7 @@ define(['knockout',
     };
 
     // Refresh the universe. If timerRefresh is false it's a manual refresh.
-    walletType.prototype.refresh = function(timerRefresh = false){
+    walletType.prototype.refresh = function(timerRefresh){
         var self = this;
         var refreshPromise = $.when(self.walletStatus.refresh())
             .done(function(){

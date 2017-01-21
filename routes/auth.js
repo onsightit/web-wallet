@@ -99,6 +99,13 @@ module.exports = function(app, passport){
 		req.logout();
 		res.redirect(chRoot + '/');
 	});
+
+	app.get(chRoot + '/maintenance', function(req, res){
+		if (req.session)
+			req.session.destroy();
+		req.logout();
+		res.render('maintenance.ejs');
+	});
 };
 
 function isLoggedIn(req, res, next) {

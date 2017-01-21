@@ -50,9 +50,9 @@ var flash = require('connect-flash');
 
 // All environments
 app.set('env', coin.settings.env || 'production');
-app.set('port', coin.isLocal ? coin.settings.port : coin.settings.sslPort);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.set('port', coin.isLocal ? coin.settings.port : coin.settings.sslPort);
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public' + coin.settings.chRoot)));
@@ -84,9 +84,14 @@ dbString = dbString + '/' + coin.settings.mdb.database;
 coin.settings.mdb.password = "XXXXXXXX";
 coin.settings.mdb = null; // garbage collection
 
-// Connects or exits
-mdb.connect(dbString, function() {
-    console.log('Connected to database.');
+// Connect to Database
+mdb.connect(dbString, function(err) {
+    if (err){
+        console.log('Database is down. Exiting App.');
+        process.exit(1);
+    } else {
+        console.log('Connecting to database...');
+    }
 });
 
 // Localizations for EJS rendering [MUST COME AFTER DB FUNCTIONS AND BEFORE AUTH ROUTES]
@@ -113,10 +118,6 @@ var chRoot = app.get('chRoot') || '';
 require('./routes/auth.js')(app, passport); // Auth routes (includes: '/', '/signup', '/login', '/logout', '/profile', '/password', + oauth routes).
 require('./lib/passport')(passport);        // Requires exported 'coin'
 
-
-////////// Routes //////////
-
-
 // Add CORS headers to all requests
 app.all('*', function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -134,14 +135,29 @@ function callCoin(command, res, handler){
 }
 
 function coinHandler(err, result){
+    var Error = null;
+    if (err) {
+        //console.log("DEBUG: err=" + err);
+        try {
+            Error = JSON.parse(err);
+        } catch (e) {
+            Error = JSON.stringify(err);
+        }
+    }
     var response = {
-        error: JSON.parse(err ? err.message : null),
+        error: Error,
         result: result
     };
-    if (typeof this.res.send !== 'undefined' && this.res.send){
-        this.res.send(JSON.stringify(response));
+    if (Error && typeof Error.code !== 'undefined'){
+        process.emit('rpc_error', 'RPC Error: ' + Error.code);
+    } else {
+        if (typeof this.res.send !== 'undefined' && this.res.send){
+            this.res.send(response);
+        }
     }
 }
+
+////////// Routes //////////
 
 // Non-RPC routes //
 
@@ -173,19 +189,23 @@ app.get(chRoot + '/getuseraccount', function(req,res){
 
 // Saves user profile.
 app.get(chRoot + '/saveuserprofile/:profile', function(req,res){
-    var profile = JSON.parse(atob(decodeURIComponent(req.params.profile))) || req.user.profile,
-        result = null;
+    var profile = JSON.parse(atob(decodeURIComponent(req.params.profile))) || req.user.profile;
     if (profile && profile.login_type){
         req.user.profile = profile;
-        result = mdb.saveUserProfile(req.user._id, profile);
+        mdb.saveUserProfile(req.user._id, profile, function(err, data){
+            if (err) {
+                res.status(500).send(JSON.stringify(data));
+            } else {
+                //console.log("DEBUG: data = " + JSON.stringify(data));
+                var response = {
+                    error: null,
+                    result: data
+                };
+                res.send(JSON.stringify(response));
+            }
+        });
     }
-    var response = {
-        error: null,
-        result: result
-    };
-    res.send(JSON.stringify(response));
 });
-
 
 // RPC routes //
 
@@ -357,7 +377,6 @@ app.get(chRoot + '/', function(req, res){
 app.get('*', function(req, res) {
     var err = 'The document you requested was not found.';
     if (req.accepts('html')) {
-        // development error handler will print stacktrace
         res.render('error', {
             message: err,
             error: 404
@@ -371,9 +390,26 @@ app.get('*', function(req, res) {
     res.type('txt').send(err);
 });
 
-
 // *** Express 4.x requires these app.use calls to be after any app.get or app.post routes.
 // *** "Your code should move any calls to app.use that came after app.use(app.router) after any routes (HTTP verbs)."
+
+app.use(function(err, req, res, next) {
+    // Handle error message display
+    var msg = app.get('env') === 'production' ? 'An internal error occurred. Please try again later.': err;
+    if (req.accepts('html')) {
+        res.render('error', {
+            message: msg,
+            error: 500
+        });
+        return;
+    }
+    if (req.accepts('json')) {
+        res.send({ error: msg });
+        return;
+    }
+    res.type('txt').send(msg);
+    next();
+});
 
 // Catch session timeout
 app.use(function(req, res, next) {
@@ -384,48 +420,59 @@ app.use(function(req, res, next) {
     }
 });
 
-
-// TODO: Needs testing
-function tryReconnect(){
-    setTimeout(function(){
-        mdb.connect(dbString, function(){
-            console.log('Reconnected to database.');
-        });
-    },5000);
-}
-
 // Start it up!
 function startApp(app) {
     // Start the Express server
     console.log("Express " + (coin.isLocal ? "" : "Secure ") + "Server starting...");
     var protocol = coin.isLocal ? require('http') : require('https');
     var server = coin.isLocal ? protocol.createServer(app) : protocol.createServer(credentials, app);
-    var port = coin.isLocal ? coin.settings.port : coin.settings.sslPort;
+    var port = app.get('port'); // 8181 or 8383 depending on coin.isLocal
 
-    server.listen(port, function(){
+    var listener = server.listen(port, function(){
+        console.log('  Server listening on port ' + port);
+        console.log('  Wallet is: ' + (coin.isLocal ? 'Local' : 'Not-Local'));
+
         // Init MASTER_ACCOUNT in wallet and database for this node_id (Requires exported 'coin')
         require('./lib/init-wallet')();
 
-        //var io = require('socket.io')(server, {
-        //        port: port
-        //    });
-        //io.on('connection', function (socket) {
-        //    socket.emit('news', { news: 'Socket.io connected!' });
-        //    socket.on('news', function (data) {
-        //      console.log(data);
-        //    });
-        //    socket.on('connect_error', function (err) {
-        //        socket.emit('news', { news: 'Node socket connection error.' });
-        //        console.log("Socket.io Error: " + err);
-        //    });
-            process.on('uncaughtException', function (err) {
-        //      socket.emit('news', { news: 'Wallet connection error.' });
-              console.log('Caught exception: ' + JSON.stringify(err));
-              tryReconnect();
+        var io = require('socket.io')(server, { port: port });
+        //Allow Cross Domain Requests
+        io.set('transports', [ 'websocket' ]);
+        io.on('connection', function (socket){
+            socket.on('news', function (data){
+                console.log(data);
             });
-        //});
-        console.log('  Server listening on port ' + port);
-        console.log('  Wallet is: ' + (coin.isLocal ? 'Local' : 'Not-Local'));
+            socket.on('connect_error', function (err) {
+                console.log("Socket connection error: " + err);
+            });
+            // Send a message to newly connected client
+            socket.emit('news', 'Socket connected!');
+        });
+        process.on('rpc_error', function (err) {
+            console.log(err);
+            // Send abort message to all clients
+            io.sockets.emit('news', 'Going down for wallet maintenance...');
+            io.sockets.emit('abort', 'maintenance');
+        });
+        process.on('database_closed', function (err) {
+            console.log(err);
+            // Send abort message to all clients
+            io.sockets.emit('news', 'Going down for database maintenance...');
+            io.sockets.emit('abort', 'maintenance');
+        });
+        process.on('uncaughtException', function (err) {
+            console.log('Caught unknown exception: ' + err);
+        });
+        process.on('SIGINT', function(err){
+            console.log('SIGINT Received: ' + err);
+            mdb.close(function() {
+                listener.close(function(err) {
+                    if (err) throw err;
+                    console.log('Exiting App.');
+                    process.exit(2);
+                });
+            });
+        });
     });
 }
 startApp(app);
