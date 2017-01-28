@@ -157,7 +157,10 @@ function coinHandler(err, result){
     if (Error && typeof Error.code !== 'undefined'){
         process.emit('rpc_error', 'RPC Error: ' + Error.code);
     } else {
-        if (typeof this.res.send !== 'undefined' && this.res.send){
+        if (app.get('status').length > 0){
+            process.emit('rpc_connected', 'RPC Connected.');
+        }
+        if (this.res && typeof this.res.send !== 'undefined'){
             this.res.send(response);
         }
     }
@@ -463,42 +466,49 @@ function startApp(app) {
         });
         process.on('rpc_error', function (err) {
             console.log(err);
-            app.set('status', coin.settings.coinName + ' Maintenance');
+            app.set('status', coin.settings.coinName + ' Wallet Maintenance');
             // Send abort message to all clients
             io.sockets.emit('news', 'Down for wallet maintenance...');
             io.sockets.emit('abort', 'maintenance');
         });
-        process.on('database_disconnected', function (err) {
+        process.on('rpc_connected', function (err) {
             console.log(err);
-            app.set('status', coin.settings.coinName + ' Maintenance');
-            // Send abort message to all clients
-            io.sockets.emit('news', 'Down for database maintenance...');
-            io.sockets.emit('abort', 'maintenance');
+            app.set('status', '');
+            // Send continue message to all clients
+            io.sockets.emit('news', 'Wallet is connected...');
+            io.sockets.emit('continue', '');
         });
         process.on('database_error', function (err) {
             console.log(err);
-            app.set('status', coin.settings.coinName + ' Maintenance');
+            app.set('status', coin.settings.coinName + ' Database Maintenance');
             // Send abort message to all clients
             io.sockets.emit('news', 'Database error...');
+            io.sockets.emit('abort', 'maintenance');
+        });
+        process.on('database_disconnected', function (err) {
+            console.log(err);
+            app.set('status', coin.settings.coinName + ' Database Maintenance');
+            // Send abort message to all clients
+            io.sockets.emit('news', 'Down for database maintenance...');
             io.sockets.emit('abort', 'maintenance');
         });
         process.on('database_reconnected', function (err) {
             console.log(err);
             app.set('status', '');
-            // Send abort message to all clients
+            // Send continue message to all clients
             io.sockets.emit('news', 'Database is reconnected...');
             io.sockets.emit('continue', '');
         });
         process.on('database_connected', function (err) {
             console.log(err);
             app.set('status', '');
-            // Send abort message to all clients
+            // Send continue message to all clients
             io.sockets.emit('news', 'Database is connected...');
             io.sockets.emit('continue', '');
         });
         process.on('SIGINT', function(err){
             console.log('SIGINT Received: ' + err);
-            app.set('status', coin.settings.coinName + ' Maintenance');
+            app.set('status', coin.settings.coinName + ' Down for Maintenance');
             // Send abort message to all clients
             io.sockets.emit('news', 'Going down for maintenance...');
             io.sockets.emit('abort', 'maintenance');
@@ -521,10 +531,19 @@ function startApp(app) {
         });
         // Poll Status
         setInterval(function(){
-            if (app.get('status').length > 0){
-                // Reconnect DB
-                console.log('Attempting to reconnect database...');
-                databaseConnect();
+            var status = app.get('status');
+            if (status.length > 0){
+                if (status.indexOf('Wallet') > 0){
+                    // Recconnect Wallet
+                    console.log('Attempting to reconnect wallet...');
+                    callCoin('getBlockCount', null, coinHandler);
+                } else {
+                    if (status.indexOf('Database') > 0){
+                        // Reconnect DB
+                        console.log('Attempting to reconnect database...');
+                        databaseConnect();
+                    }
+                }
             }
         }, 5000);
     });
