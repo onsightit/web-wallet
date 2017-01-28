@@ -50,6 +50,7 @@ var flash = require('connect-flash');
 
 // All environments
 app.set('env', coin.settings.env || 'production');
+app.set('status', '');    // Public status message (Important: Init to "")
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.set('port', coin.isLocal ? coin.settings.port : coin.settings.sslPort);
@@ -76,6 +77,7 @@ app.use(flash());            // use connect-flash for flash messages stored in s
 
 // DB Functions
 var mdb = require('./lib/database');
+
 var dbString = 'mongodb://' + coin.settings.mdb.user;
 dbString = dbString + ':' + coin.settings.mdb.password;
 dbString = dbString + '@' + coin.settings.mdb.host;
@@ -85,14 +87,18 @@ coin.settings.mdb.password = "XXXXXXXX";
 coin.settings.mdb = null; // garbage collection
 
 // Connect to Database
-mdb.connect(dbString, function(err) {
-    if (err){
-        console.log('Database is down. Exiting App.');
-        process.exit(1);
-    } else {
-        console.log('Connecting to database...');
-    }
-});
+function databaseConnect(){
+    //mdb.close(function() {
+        mdb.connect(dbString, function(err) {
+            if (err){
+                app.set('status', coin.settings.coinName + ' Maintenance');
+            } else {
+                app.set('status', '');
+            }
+        });
+    //});
+}
+databaseConnect();
 
 // Localizations for EJS rendering [MUST COME AFTER DB FUNCTIONS AND BEFORE AUTH ROUTES]
 for (var s in coin.settings){
@@ -442,6 +448,13 @@ function startApp(app) {
             socket.on('news', function (data){
                 console.log(data);
             });
+            socket.on('abort', function (data){
+                console.log('Told clients to abort for: ' + data);
+            });
+            socket.on('continue', function (data){
+                console.log('Told clients to continue to: /' + data);
+                app.set('status', '');
+            });
             socket.on('connect_error', function (err) {
                 console.log("Socket connection error: " + err);
             });
@@ -450,21 +463,45 @@ function startApp(app) {
         });
         process.on('rpc_error', function (err) {
             console.log(err);
+            app.set('status', coin.settings.coinName + ' Maintenance');
             // Send abort message to all clients
-            io.sockets.emit('news', 'Going down for wallet maintenance...');
+            io.sockets.emit('news', 'Down for wallet maintenance...');
             io.sockets.emit('abort', 'maintenance');
         });
-        process.on('database_closed', function (err) {
+        process.on('database_disconnected', function (err) {
             console.log(err);
+            app.set('status', coin.settings.coinName + ' Maintenance');
             // Send abort message to all clients
-            io.sockets.emit('news', 'Going down for database maintenance...');
+            io.sockets.emit('news', 'Down for database maintenance...');
             io.sockets.emit('abort', 'maintenance');
         });
-        process.on('uncaughtException', function (err) {
-            console.log('Caught unknown exception: ' + err);
+        process.on('database_error', function (err) {
+            console.log(err);
+            app.set('status', coin.settings.coinName + ' Maintenance');
+            // Send abort message to all clients
+            io.sockets.emit('news', 'Database error...');
+            io.sockets.emit('abort', 'maintenance');
+        });
+        process.on('database_reconnected', function (err) {
+            console.log(err);
+            app.set('status', '');
+            // Send abort message to all clients
+            io.sockets.emit('news', 'Database is reconnected...');
+            io.sockets.emit('continue', '');
+        });
+        process.on('database_connected', function (err) {
+            console.log(err);
+            app.set('status', '');
+            // Send abort message to all clients
+            io.sockets.emit('news', 'Database is connected...');
+            io.sockets.emit('continue', '');
         });
         process.on('SIGINT', function(err){
             console.log('SIGINT Received: ' + err);
+            app.set('status', coin.settings.coinName + ' Maintenance');
+            // Send abort message to all clients
+            io.sockets.emit('news', 'Going down for maintenance...');
+            io.sockets.emit('abort', 'maintenance');
             mdb.close(function() {
                 listener.close(function(err) {
                     if (err) throw err;
@@ -473,6 +510,23 @@ function startApp(app) {
                 });
             });
         });
+        process.on('uncaughtException', function (err) {
+            console.log('Caught unknown exception: ' + err);
+        });
+        process.on('unhandledRejection', function (reason, p) {
+            console.log('Caught unhandled rejection: ' + reason + ' (' + JSON.stringify(p) + ')');
+        });
+        process.on('rejectionHandled', function (p) {
+            console.log('Caught rejection handled: ' + JSON.stringify(p));
+        });
+        // Poll Status
+        setInterval(function(){
+            if (app.get('status').length > 0){
+                // Reconnect DB
+                console.log('Attempting to reconnect database...');
+                databaseConnect();
+            }
+        }, 5000);
     });
 }
 startApp(app);

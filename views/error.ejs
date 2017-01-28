@@ -10,12 +10,19 @@
             <div id='page-content-wrapper'>
                 <div id="main" class="container" role="main">
                     <div class="well">
+						<div style="background: url('images/Icon.png') no-repeat center; margin-top: 50px; height: 128px;"><span></span></div>
+						<div style="margin-top: 50px;">
+						<!-- show any status messages from server -->
+						<% if (settings.status.length > 0) { %>
+							<div class="alert alert-danger"><%= settings.status %></div>
+						<% } %>
                         <h2><%= settings.coinName %> - error occurred</h2>
                         <div>
                             <span class=tab>Error: <%= message %></span><br /><br />
                             <span class=tab>Status: <%= error %></span><br /><br />
                         </div>
                         <h4><a href="<%= settings.chRoot %>/">Back to Home</a></h4>
+                        </div>
                     </div>
                 </div>
                 <% include partials/footer %>

@@ -33,8 +33,8 @@ define( [
         var port = (window.location.port === '' ? '' : ":" + window.location.port);
         var sockOpt = {
             "force new connection" : true,
-            "reconnectionAttempts": "Infinity",
-            "timeout" : 10000,
+            "reconnectionAttempts": 3,
+            "timeout" : 3000,
             "transports" : ["websocket"]
         };
 
@@ -43,6 +43,11 @@ define( [
             console.log(data);
         });
         socket.on('abort', function(page) {
+            // handle abort request and redirect to page.
+            window.stop();
+            window.location = wallet.settings().chRoot + '/' + page;
+        });
+        socket.on('continue', function(page) {
             // handle abort request and redirect to page.
             window.location = wallet.settings().chRoot + '/' + page;
         });
