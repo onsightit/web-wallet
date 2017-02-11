@@ -44,7 +44,26 @@ define(['knockout',
         getNewAddressCommand.execute()
             .done(function(address){
                 if (address && address.length === 34){
-                    self.addresses.push(new ReceiveAddress({addressObj:{address: address, account: self.wallet.account()}}));
+                    var addresses = [];
+                    self.addresses().push(new ReceiveAddress({addressObj:{address: address, account: self.wallet.account()}}));
+                    for (var k in self.addresses()){
+                        if (self.addresses()[k].account === self.wallet.account()){
+                            addresses.push(self.addresses()[k].address);
+                        }
+                    }
+                    var saveUserWalletCommand = new Command('saveuserwallet',
+                                                            [encodeURIComponent(btoa(self.wallet.account())),
+                                                             encodeURIComponent(btoa(JSON.stringify(addresses)))],
+                                                            self.wallet.settings().chRoot,
+                                                            self.wallet.settings().env);
+                    saveUserWalletCommand.execute()
+                        .done(function(data){
+                            self.statusMessage(data);
+                            self.wallet.initUser(); // wallet needs updating.
+                        })
+                        .fail(function(){
+                            self.statusMessage("Save Error!");
+                        });
                 } else {
                     self.statusMessage("There was a problem creating a new address.");
                 }
@@ -69,18 +88,18 @@ define(['knockout',
         self.isLoadingReceiveAddresses(true);
         var receivePromise = listReceivedByAddressesCommand.execute()
             .done(function(data){
-                if (self.wallet.account() !== self.wallet.settings().masterAccount){
-                    for (var k in data){
-                        //console.log("data[k]:" + JSON.stringify(data[k]));
-                        if (data[k].account !== self.wallet.account()){
-                            delete data[k];
-                        }
+                var addresses = [],
+                    masterAccount = (self.wallet.account() === self.wallet.settings().masterAccount);
+                for (var k in data){
+                    //console.log("data[k]:" + JSON.stringify(data[k]));
+                    if (masterAccount || data[k].account === self.wallet.account()){
+                        addresses.push(data[k]);
                     }
                 }
-                self.addresses(ko.utils.arrayMap(data,function(addressObj){
-                        return new ReceiveAddress({addressObj: addressObj});
+                self.addresses(ko.utils.arrayMap(addresses, function(addressObj){
+                    return new ReceiveAddress({addressObj: addressObj});
                 }));
-                self.isLoadingReceiveAddresses(false); 
+                self.isLoadingReceiveAddresses(false);
             });
         return receivePromise;
     };

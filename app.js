@@ -213,6 +213,30 @@ app.get(chRoot + '/saveuserprofile/:profile', function(req,res){
                 res.send(JSON.stringify(response));
             }
         });
+    } else {
+        res.send(JSON.stringify("Profile error."));
+    }
+});
+
+// Saves user wallet.
+app.get(chRoot + '/saveuserwallet/:account/:addresses', function(req,res){
+    var account = atob(decodeURIComponent(req.params.account)) || null;
+    var addresses = JSON.parse(atob(decodeURIComponent(req.params.addresses))) || [];
+    if (account && addresses && addresses.length){
+        mdb.saveUserWallet(req.user._id, coin.rpcHost, account, addresses, function(err, data){
+            if (err) {
+                res.status(500).send(JSON.stringify(data));
+            } else {
+                //console.log("DEBUG: data = " + JSON.stringify(data));
+                var response = {
+                    error: null,
+                    result: data
+                };
+                res.send(JSON.stringify(response));
+            }
+        });
+    } else {
+        res.send(JSON.stringify("Account error."));
     }
 });
 

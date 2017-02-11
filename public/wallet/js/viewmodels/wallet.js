@@ -166,7 +166,7 @@ define(['knockout',
                     var wallet = self.User().wallet.filter(function(wal){
                         if(wal.node_id && wal.node_id === self.node_id()){
                             self.account(wal.account);
-                            self.address(wal.address);
+                            self.address(wal.addresses[0]);
                             return wal;
                         }
                     });
