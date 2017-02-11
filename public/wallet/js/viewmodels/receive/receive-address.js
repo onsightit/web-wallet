@@ -5,7 +5,6 @@ define(['knockout'], function(){
         this.account = addressObj.account || '';
         this.amount = addressObj.amount || 0.0;
         this.confirmations = addressObj.confirmations || 0;
-        //this.wallet = options.parent;
     };
 
     return receiveAddressType;

@@ -45,13 +45,17 @@ define(['knockout',
             .done(function(address){
                 if (address && address.length === 34){
                     var addresses = [];
-                    self.addresses().push(new ReceiveAddress({addressObj:{address: address, account: self.wallet.account()}}));
                     for (var k in self.addresses()){
                         if (self.addresses()[k].account === self.wallet.account()){
                             // Save the address object
                             addresses.push(self.addresses()[k]);
                         }
                     }
+                    addresses.push(new ReceiveAddress({addressObj:{address: address, account: self.wallet.account()}}));
+                    addresses.sort(function(a, b){return b.amount - a.amount;}); // Sort by amount descending
+                    self.addresses(ko.utils.arrayMap(addresses, function(addressObj){
+                        return new ReceiveAddress({addressObj: addressObj});
+                    }));
                     var saveUserWalletCommand = new Command('saveuserwallet',
                                                             [encodeURIComponent(btoa(self.wallet.account())),
                                                              encodeURIComponent(btoa(JSON.stringify(addresses)))],
