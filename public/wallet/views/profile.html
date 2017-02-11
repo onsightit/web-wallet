@@ -70,7 +70,7 @@
 		<div class="small">
 		<!-- LOCAL -->
 		<!-- ko if: login_type() === 'local' -->
-			<h4 class="text-primary"><span class="fa fa-database"></span> Signed in with Account: <span data-bind="text: login_id"></span> <span class="small">[<a href="/password">change password</a>]</span></h4>
+			<h4 class="text-primary"><span class="fa fa-database"></span> Signed in with ID: <span data-bind="text: login_id"></span> <span class="small">[<a href="/password">change password</a>]</span></h4>
 		<!-- /ko -->
 		<!-- FACEBOOK -->
 		<!-- ko if: login_type() === 'facebook' -->
@@ -85,10 +85,8 @@
 			<h4 class="text-primary"><span class="fa fa-twitter"></span> Signed in with Twitter</h4>
 		<!-- /ko -->
 			<table width="100%">
-				<th width="25"></th><th colspan=2 class="text-primary"><span class="fa fa-money"></span> Wallet Info</th>
 				<tr><td></td><td width="10%"><strong>Node_ID</strong>: </td><td><span data-bind="text: node_id"></span></td></tr>
 				<tr><td></td><td width="10%"><strong>Account</strong>: </td><td><span data-bind="text: account"></span></td></tr>
-				<tr><td></td><td width="10%"><strong>Address</strong>: </td><td><span data-bind="text: address"></span></td></tr>
 			</table>
 		</div>
 	</div>

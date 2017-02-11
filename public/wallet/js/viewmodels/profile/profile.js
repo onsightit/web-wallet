@@ -13,7 +13,6 @@ define(['knockout',
 
         self.node_id = ko.observable("");
         self.account = ko.observable("");
-        self.address = ko.observable("");
 
         self.profileComplete = ko.observable(false);
         self.role = ko.observable("");
@@ -127,7 +126,6 @@ define(['knockout',
             self.role(self.wallet.User().profile.role || "User");
             self.node_id(self.wallet.node_id());
             self.account(self.wallet.account());
-            self.address(self.wallet.address());
 
             self.first_name(self.wallet.User().profile.first_name || "");
             self.last_name(self.wallet.User().profile.last_name || "");

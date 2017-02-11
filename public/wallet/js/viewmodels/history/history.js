@@ -69,7 +69,10 @@ define(['knockout',
                             transaction.category = "interest";
                         }
                         // Cosmetic changes if txn is for me.
-                        if (transaction.address === self.wallet.address()){
+                        var isMine = self.wallet.addresses().filter(function ( obj ) {
+                                return obj.address === transaction.address;
+                            });
+                        if (isMine){
                             // Display fiendly account name if me.
                             if (transaction.category === "send"){
                                 transaction.account = "To Me"; // i.e. Send to self

@@ -13,14 +13,14 @@ define(['knockout',
         self.txcomment = ko.observable("");
 
         self.recipientAddress = ko.observable("").extend( 
-            { 
+            {
                 pattern: { params: patterns.coin, message: 'Not a valid address.' }
             });
 
         self.label = ko.observable("");
 
         self.amount = ko.observable(0.00).extend(
-            { 
+            {
                 number: true,
                 required: true
             });

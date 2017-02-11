@@ -35,7 +35,7 @@ define(['knockout',
 
         self.node_id = ko.observable("");
         self.account = ko.observable("");
-        self.address = ko.observable("");
+        self.addresses = ko.observableArray([]);
 
         self.isLocalWallet = ko.observable(false);  // Is the node local?
         self.settings = ko.observable({});          // Some settings from settings.json
@@ -164,9 +164,10 @@ define(['knockout',
                     self.gender(self.User().profile.gender);
                     // Get the user's wallet account info for this node_id
                     var wallet = self.User().wallet.filter(function(wal){
-                        if(wal.node_id && wal.node_id === self.node_id()){
+                        if (wal.node_id && wal.node_id === self.node_id()){
+                            wal.addresses.sort(function(a, b){return b.amount - a.amount;}); // Sort by amount descending
                             self.account(wal.account);
-                            self.address(wal.addresses[0]);
+                            self.addresses(wal.addresses);
                             return wal;
                         }
                     });
@@ -174,6 +175,8 @@ define(['knockout',
                         // Bailing...
                         console.log("ERROR: Aborting! User wallet not found.");
                         window.location = self.settings().chRoot + '/logout';
+                    } else {
+                        wallet = null;
                     }
                 } else {
                     // Bailing...
