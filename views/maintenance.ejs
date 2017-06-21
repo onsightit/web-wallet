@@ -2,34 +2,33 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<title><%= settings.coinName %> - Maintenance</title>
+		<title><%= settings.appTitle %> - Maintenance</title>
 		<% include partials/meta %>
 	</head>
 	<body role="document" class="intro">
 		<div id='wrapper'>
 			<div id='page-content-wrapper'>
 				<div id="main" class="container" role="main">
-					<div class="well">
-						<div style="background: url('images/Icon.png') no-repeat center; margin-top: 50px; height: 128px;"><span></span></div>
-						<!-- MAINTENANCE -->
-						<div class="jumbotron text-center">
-							<h1>Welcome to <%= settings.coinName %><sup>&reg;</sup></h1>
-							<div style="margin-top: 50px;">
-						<!-- show any status messages from server -->
-						<% if (settings.status.length > 0) { %>
+					<div class="logo" style="background: url('<%= settings.logo %>') no-repeat top;"><span></span></div>
+					<div class="slogan"><%= settings.appSlogan %></div>
+					<div class="description"><%= settings.appDescription %></div>
+					<!-- MAINTENANCE -->
+					<div class="jumbotron text-center">
+						<div style="margin-top: 50px;">
+					<!-- show any status messages from server -->
+					<% if (settings.status.length > 0) { %>
 							<div class="alert alert-danger"><%= settings.status %></div>
 							<p>We appologize for the inconvenience, and are working to resolve the issue.</p>
 							<p><br><a href="<%= settings.chRoot %>/" class="btn btn-primary btn-lg"><span class="fa fa-home"></span> Try Later...</a></p>
-						<% } %>
-						<% if (settings.status.length == 0) { %>
+					<% } %>
+					<% if (settings.status.length == 0) { %>
 							<a href="signup" class="btn btn-primary btn-lg"><span class="fa fa-user"></span> Signup</a>
 							<a href="login" class="btn btn-primary btn-lg"><span class="fa fa-user"></span> Login</a>
 							<p><br>&mdash; Or Connect With &mdash;</p>
 							<a href="auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
 							<a href="auth/google" class="btn btn-primary"><span class="fa fa-google-plus"></span> Google</a>
 							<a href="auth/twitter" class="btn btn-primary"><span class="fa fa-twitter"></span> Twitter</a>
-						<% } %>
-							</div>
+					<% } %>
 						</div>
 					</div>
 				</div>

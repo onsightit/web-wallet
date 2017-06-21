@@ -10,23 +10,38 @@
   // Runtime environment: 'development' or 'production'
   "env": "development",
 
-  // The name of your app
-  "coinTitle": "SolarCoin Web Wallet",
+  // The url hosting the app. e.g. myhost.org (must match browser URI to satisfy CORS)
+  "appHost": "localhost",
 
-  // Coin description
-  "coinDescription": "SolarCoin description goes here.",
+  // The app title, visible in browser window
+  "appTitle": "Web-Wallet Title",
 
-  // Coin name / page heading
-  "coinName": "SolarCoin",
+  // The app slogan
+  "appSlogan": "Explore the Unexplored!",
+
+  // The app description
+  "appDescription": "Find short videos and documentaries from producers all around the world.",
 
   // The copyright for the footer (uncomment to override default)
-  //"copyRight": "Copyright (c) 2016-2017, The SolarCoin developers. All rights reserved.",
+  //"copyRight": "Copyright (c) 2016-2017, The Web-Wallet developers. All rights reserved.",
+
+  // Logo
+  "logo": "../images/Logo.png",
+
+  // Icon
+  "icon": "../images/Icon.png",
+
+  // favicon
+  "favicon": "./public/wallet/favicon.ico",
+
+  // Coin name / page heading
+  "coinName": "SpaceCredits",
 
   // Coin symbol
-  "coinSymbol": "SLR",
+  "coinSymbol": "SPC",
 
   // Coin addresses start with this character
-  "coinChar": "8",
+  "coinChar": "S",
 
   // How many decimale places to display for coin fractions
   "decimalPlaces": 4,
@@ -42,14 +57,8 @@
   //      # ORIGINAL RewriteRule . /index.php [L]
   //      RewriteRule ./ /index.php [L]
   // Set to "" to allow the sub-folder 'wallet' to be exposed for proxying.
-  // Set to "/wallet" to chroot the node to /public/wallet/ (Normal for stand-alone web wallet).
+  // Set to "/wallet" to chroot the node to /public/wallet/ (Normal for stand-alone Web-Wallet).
   "chRoot": "/wallet",
-
-  // Logo
-  "logo": "./public/wallet/images/Icon.png",
-
-  // favicon
-  "favicon": "./public/wallet/favicon.ico",
 
   // Show stats in navigation
   "showStats": true,
@@ -66,9 +75,6 @@
   // Some control over how much can be sent at one time
   "maxSendAmount": 1000.0,
 
-  // The url hosting the app. e.g. myhost.homelan.net
-  "appHost": "localhost",
-
   // Unsecure port to listen on
   "port": 8181,
 
@@ -83,9 +89,9 @@
 
   // This setting is passed to MongoDB. See README.md for setting up the database.
   "mdb": {
-    "user": "solarcoin",
+    "user": "admin",
     "password": "password",
-    "database": "solarcoin",
+    "database": "database",
     "host": "localhost",
     "port": 27017
   },
@@ -95,7 +101,7 @@
   "masterAccount": "MASTER_ACCOUNT",
 
   // Master email account.
-  "masterEmail": "admin@SolarCoin.com",
+  "masterEmail": "info@example.com",
 
   // Master can encrypt the wallet
   "masterCanEncrypt": true,

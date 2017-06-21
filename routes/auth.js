@@ -1,20 +1,25 @@
-var https = require('https');
-module.exports = function(app, passport){
+/*
+ * Auth Routes.
+ */
 
+var https = require('https');
+
+module.exports = function(app, passport) {
 	var chRoot = app.get('chRoot');
+
 	console.log("Info: Base URL is: " + (chRoot ? chRoot : '/'));
 
-	app.get(chRoot + '/', isLoggedIn, function(req, res){
-		if (req.user.local.changeme){
+	app.get(chRoot + '/', isLoggedIn, function(req, res) {
+		if (req.user.local.changeme) {
 			res.redirect(chRoot + '/password');
 		}
 		//console.log("DEBUG: req.session: " + JSON.stringify(req.session));
 		//console.log("DEBUG: req.user: " + JSON.stringify(req.user));
-		res.render('home.ejs'); // If logged in, allow access to the Web Wallet
+		res.render('home.ejs'); // If logged in, allow access to Web-Wallet
 	});
 
 	// Local login
-	app.get(chRoot + '/login', function(req, res){
+	app.get(chRoot + '/login', function(req, res) {
 		req.logout();
 		res.render('login.ejs', { message: req.flash('loginMessage') });
 	});
@@ -26,15 +31,15 @@ module.exports = function(app, passport){
 	);
 
 	// Local signup
-	app.get(chRoot + '/signup', function(req, res){
-		if(req.isAuthenticated()){
+	app.get(chRoot + '/signup', function(req, res) {
+		if(req.isAuthenticated()) {
 			res.redirect(chRoot + '/');
 		}
 		res.render('signup.ejs', { message: req.flash('signupMessage') });
 	});
-	app.post(chRoot + '/signup', isNotLoggedIn, function (req, res, next){
+	app.post(chRoot + '/signup', isNotLoggedIn, function (req, res, next) {
 		var resKey = req.body['g-recaptcha-response'];
-		if (resKey){
+		if (resKey) {
 			https.get('https://www.google.com/recaptcha/api/siteverify?secret=' + settings.reCaptchaSecret + '&response=' + resKey, function (res) {
 				var data = '';
 				res.on('data', function (chunk) {
@@ -43,7 +48,7 @@ module.exports = function(app, passport){
 				res.on('end', function () {
 					var parseData = JSON.parse(data);
 					//console.log("DEBUG: parseData = " + JSON.stringify(parseData));
-					if (parseData && parseData.success === true){
+					if (parseData && parseData.success === true) {
 						return next();
 					}
 				});
@@ -60,7 +65,7 @@ module.exports = function(app, passport){
 	}));
 
 	// Local change password
-	app.get(chRoot + '/password', isLoggedIn, function(req, res){
+	app.get(chRoot + '/password', isLoggedIn, function(req, res) {
 		res.render('password.ejs', { message: req.flash('passwordMessage'), user: req.user }); // If logged in, allow password change
 	});
 	app.post(chRoot + '/password', passport.authenticate('local-password', {
@@ -93,14 +98,14 @@ module.exports = function(app, passport){
 			failureRedirect: chRoot + '/' })
 	);
 
-	app.get(chRoot + '/logout', function(req, res){
+	app.get(chRoot + '/logout', function(req, res) {
 		if (req.session)
 			req.session.destroy();
 		req.logout();
 		res.redirect(chRoot + '/');
 	});
 
-	app.get(chRoot + '/maintenance', function(req, res){
+	app.get(chRoot + '/maintenance', function(req, res) {
 		if (req.session)
 			req.session.destroy();
 		req.logout();
@@ -109,13 +114,14 @@ module.exports = function(app, passport){
 };
 
 function isLoggedIn(req, res, next) {
-	if(req.isAuthenticated() && req.session){
+	if(req.isAuthenticated() && req.session) {
 		return next();
 	}
 	res.render('index.ejs');
 }
+
 function isNotLoggedIn(req, res, next) {
-	if(!req.isAuthenticated()){
+	if(!req.isAuthenticated()) {
 		return next();
 	}
 	// Need to be logged out first

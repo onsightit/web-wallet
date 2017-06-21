@@ -26,6 +26,8 @@ define(['knockout',
     var walletType = function(){
         var self = this;
 
+        self.wallet = ko.observable(false);        // Is the wallet node available?
+
         self.sessionTimeout = ko.observable(2 * 60 * 60 * 1000); // Application session timeout = 2 Hours between change of views.
         self.sessionExpires = ko.observable(Date.now() + self.sessionTimeout());
 
@@ -41,7 +43,7 @@ define(['knockout',
         self.settings = ko.observable({});          // Some settings from settings.json
 
         // Get node_id and settings, and User account
-        self.initNode('/wallet'); // Set unknown chRoot to common production environment.
+        self.initNode('/wallet'); // Initialize chRoot to common production environment.
 
         self.walletStatus = new WalletStatus({parent: self});
 
@@ -91,12 +93,10 @@ define(['knockout',
             if (self.User().profile && self.User().profile.first_name !== 'undefined') {
                 isComplete = self.User().profile.first_name && self.User().profile.first_name !== "" &&
                              self.User().profile.last_name && self.User().profile.last_name !== "" &&
-                             self.User().profile.employer && self.User().profile.employer !== "" &&
                              self.User().profile.email && self.User().profile.email !== "" &&
                              self.User().profile.age && self.User().profile.age > 0 &&
                              self.User().profile.dob && self.User().profile.dob !== "" &&
                              self.User().profile.gender && self.User().profile.gender !== "" &&
-                             self.User().profile.ethnicity && self.User().profile.ethnicity !== "" &&
                              self.User().profile.country && self.User().profile.country !== "" &&
                              self.User().profile.terms && self.User().profile.terms === true;
             }
@@ -115,7 +115,7 @@ define(['knockout',
     // Called once at startup.
     walletType.prototype.initNode = function(chRoot){
         var self = this;
-        // Catch-22: We don't know if the Web Wallet is chRoot'd to /public or /public/wallet,
+        // Catch-22: We don't know if Web-Wallet is chRoot'd to /public or /public/wallet,
         // because 'settings' has not been set yet, so we need to test for a failure first
         // to determine if settings().chRoot is "" or "/wallet".
         var getNodeInfoCommand = new Command('getnodeinfo', [],
@@ -183,7 +183,10 @@ define(['knockout',
                     console.log("ERROR: Aborting! User account not found.");
                     window.location = self.settings().chRoot + '/logout';
                 }
+                // Set flag for pollWalletStatus
                 self.initComplete = true;
+                // Turn off initial loading icon
+                self.isLoadingStatus(false);
             });
     };
 
@@ -191,6 +194,7 @@ define(['knockout',
     walletType.prototype.pollWalletStatus = function(){
         var self = this;
         setTimeout(function(){
+            // If initialization is complete and the wallet daemon is available.
             if (!self.initComplete){
                 // Prevent polling forever if init never finishes.
                 if (Date.now() <= self.sessionExpires()){
@@ -205,10 +209,12 @@ define(['knockout',
                     $.when(self.refresh(true)).done(function(){
                         if (self.timeout < 60000){ // First timeout
                             self.timeout = 60000;
-                            // Turn off initial loading icon
-                            self.isLoadingStatus(false);
-                            // One-time call after first refresh
-                            self.checkEncryptionStatus();
+                            // NOTE: self.wallet() is set true when the socket server sends the message.
+                            // (see /public/../js/app.js).
+                            if (self.wallet()) {
+                                // One-time call after first refresh
+                                self.checkEncryptionStatus();
+                            }
                         }
                         // This gets re-called until the user completes their profile.
                         // TODO: Find a better way to do this!

@@ -1,12 +1,12 @@
 {
-  "name": "web-wallet",
-  "version": "1.0.0",
-  "description": "Web Wallet for PoS Coins",
+  "name": "Web-Wallet",
+  "version": "2.0.0",
+  "description": "Web-Wallet for Altcoins",
   "private": true,
   "node-main": "./app.js",
   "main": "loading.html",
   "keywords": [
-    "coin, altcoin, wallet"
+    "streaming, distributed, storage, altcoin"
   ],
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   },
   "author": {
     "name": "Steve Woods",
-    "email": "onsightit@gmail.com"
+    "email": "steve@example.com"
   },
   "readme": "See README.md\n",
   "readmeFilename": "README.md",
@@ -23,8 +23,8 @@
   },
   "window": {
     "show": true,
-    "title": "Web Wallet",
-    "icon": "./public/wallet/images/Icon.png",
+    "title": "Web-Wallet",
+    "icon": "./public/images/logo.png",
     "toolbar": false,
     "frame": true,
     "width": 1024,
@@ -36,32 +36,34 @@
   "dependencies": {
     "atob": "latest",
     "bcryptjs": "latest",
-    "body-parser": "latest",
+    "body-parser": "^1.17.2",
     "btoa": "latest",
-    "coin-node": "1.0.0",
-    "connect-flash": "~0.1.1",
+    "connect-flash": "^0.1.1",
     "cookie": "latest",
     "cookie-parser": "latest",
-    "cryptoaddress-validator": "0.0.1",
-    "ejs": "latest",
-    "express": "latest",
-    "express-session": "latest",
-    "jsonminify": "0.4.1",
-    "moment": "latest",
-    "mongode": "0.1.6",
-    "mongoose": "latest",
-    "morgan": "~1.5.3",
-    "passport": "~0.2.2",
-    "passport-facebook": "~2.0.0",
+    "cors": "^2.8.3",
+    "cryptoaddress-validator": "^0.0.1",
+    "ejs": "^2.5.6",
+    "express": "^4.15.3",
+    "express-session": "^1.15.3",
+    "fs-extra": "^3.0.1",
+    "jsonminify": "^0.4.1",
+    "moment": "^2.18.1",
+    "mongode": "^0.1.6",
+    "mongoose": "^4.10.7",
+    "morgan": "^1.8.2",
+    "passport": "^0.2.2",
+    "passport-facebook": "^2.1.1",
     "passport-google-oauth": "^1.0.0",
-    "passport-local": "~1.0.0",
-    "passport-oauth2": "~1.0.0",
+    "passport-local": "^1.0.0",
+    "passport-oauth2": "^1.4.0",
     "passport-twitter": "^1.0.4",
-    "request": "~2.75.0",
-    "serve-favicon": "latest",
-    "socket.io": "1.7.1",
-    "uuid": "2.0.3",
-    "validator": "~6.0.0",
-    "xss": "0.1.7"
+    "request": "^2.81.0",
+    "serve-favicon": "^2.4.3",
+    "socket.io": "^1.7.4",
+    "uuid": "^2.0.3",
+    "validator": "^6.3.0",
+    "vary": "^1.1.1",
+    "xss": "^0.1.21"
   }
 }
