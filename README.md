@@ -1,6 +1,6 @@
 # Web-Wallet
 
-Decentralized and Distributed Blockchain-Infused Multimedia Streaming Application
+Web-Wallet for altcoin daemons.
 
 
 ## Prerequisites:

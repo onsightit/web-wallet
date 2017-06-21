@@ -14,13 +14,13 @@
   "appHost": "localhost",
 
   // The app title, visible in browser window
-  "appTitle": "Web-Wallet Title",
+  "appTitle": "Altcoin Web-Wallet",
 
   // The app slogan
-  "appSlogan": "Explore the Unexplored!",
+  "appSlogan": "Explore the Altcoin!",
 
   // The app description
-  "appDescription": "Find short videos and documentaries from producers all around the world.",
+  "appDescription": "Altcoin description goes here.",
 
   // The copyright for the footer (uncomment to override default)
   //"copyRight": "Copyright (c) 2016-2017, The Web-Wallet developers. All rights reserved.",
