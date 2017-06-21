@@ -4,6 +4,9 @@ settings.json
 # SSL certs
 sslcert/*.*
 
+# node_modules
+node_modules/
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
