@@ -1,6 +1,6 @@
-# YourApp
-![YourApp, LLC](https://github.com/YourApp/YourApp/blob/master/public/images/YourApp-logo.png)
+# Web-Wallet
 
+Web-Wallet for altcoin daemons.
 
 ## Prerequisites:
 
