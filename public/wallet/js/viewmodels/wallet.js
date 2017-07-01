@@ -26,7 +26,7 @@ define(['knockout',
     var walletType = function(){
         var self = this;
 
-        self.wallet = ko.observable(false);        // Is the wallet node available?
+        self.walletUp = ko.observable(true);        // Is the wallet node available?
 
         self.sessionTimeout = ko.observable(2 * 60 * 60 * 1000); // Application session timeout = 2 Hours between change of views.
         self.sessionExpires = ko.observable(Date.now() + self.sessionTimeout());
@@ -48,8 +48,8 @@ define(['knockout',
         self.walletStatus = new WalletStatus({parent: self});
 
         self.currentView = ko.observable('home');
-        self.sidebarToggled = ko.observable(true);
-        self.showStats = ko.observable(false);
+        self.sidebarToggled = ko.observable(false);
+        self.showStats = ko.observable(true);
 
         this.home = new Home({parent: self});
         this.send = new Send({parent: self});
@@ -107,6 +107,7 @@ define(['knockout',
         self.isLoadingStatus = ko.observable(true);
 
         self.timeout = 1000;
+        self.timerRefresh = false;
 
         // Start polling!
         self.pollWalletStatus();
@@ -115,7 +116,7 @@ define(['knockout',
     // Called once at startup.
     walletType.prototype.initNode = function(chRoot){
         var self = this;
-        // Catch-22: We don't know if Web-Wallet is chRoot'd to /public or /public/wallet,
+        // Catch-22: We don't know if YourApp is chRoot'd to /public or /public/wallet,
         // because 'settings' has not been set yet, so we need to test for a failure first
         // to determine if settings().chRoot is "" or "/wallet".
         var getNodeInfoCommand = new Command('getnodeinfo', [],
@@ -206,12 +207,13 @@ define(['knockout',
             } else {
                 // Normal polling
                 if (Date.now() <= self.sessionExpires()){
-                    $.when(self.refresh(true)).done(function(){
+                    $.when(self.refresh(self.timerRefresh)).done(function(){
                         if (self.timeout < 60000){ // First timeout
                             self.timeout = 60000;
-                            // NOTE: self.wallet() is set true when the socket server sends the message.
+                            self.timerRefresh = false;
+                            // NOTE: self.walletUp() is set true when the socket server sends the message.
                             // (see /public/../js/app.js).
-                            if (self.wallet()) {
+                            if (self.walletUp()) {
                                 // One-time call after first refresh
                                 self.checkEncryptionStatus();
                             }

@@ -1,0 +1,4 @@
+rpcuser=rpcuser
+rpcpassword=password
+rpcconnect=localhost # RPC Node
+rpcport=19184

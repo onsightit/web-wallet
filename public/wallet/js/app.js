@@ -38,13 +38,21 @@ define( [
             "transports" : ["websocket"]
         };
 
+        //console.log('DEBUG: ' + window.location.protocol + '//' + window.location.hostname + port + '/');
         var socket = io.connect(window.location.protocol + '//' + window.location.hostname + port + '/', sockOpt);
         socket.on('news', function (data) {
             console.log(data);
         });
+        socket.on('wallet', function(state) {
+            // When the server sends a wallet message, set the wallet available state.
+            if (state === 'down') {
+                wallet.walletUp(false);
+            } else {
+                wallet.walletUp(true);
+            }
+        });
         socket.on('abort', function(page) {
             // handle abort request and redirect to page.
-            window.stop();
             window.location = wallet.settings().chRoot + '/' + page;
         });
         socket.on('continue', function(page) {
@@ -65,6 +73,7 @@ define( [
             this.get('#home', function() {
                 wallet.currentView('home');
             });
+
             this.get('#send', function() {
                 wallet.currentView('send');
             });

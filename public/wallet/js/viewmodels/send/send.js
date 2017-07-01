@@ -53,7 +53,7 @@ define(['knockout',
         self.coinSymbol(self.wallet.settings().coinSymbol);
         self.minTxFee(self.wallet.settings().minTxFee);
 
-        self.statusMessage("Available: " + self.available() + " " + self.wallet.settings().coinSymbol + " ( Maximum send allowed: " + self.maxSendAmount() + " )");
+        self.statusMessage("Available: " + self.available() + " " + self.wallet.settings().coinSymbol + " ( Max send amount: " + self.maxSendAmount() + " )");
     };
 
     sendType.prototype.lockWallet = function(){

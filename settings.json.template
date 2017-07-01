@@ -7,6 +7,9 @@
 {
   // NOTE: rpcuser/pass/host/port is pulled from the coin's config file.
 
+  // Version
+  "version": "2.1.0",
+
   // Runtime environment: 'development' or 'production'
   "env": "development",
 
@@ -14,28 +17,28 @@
   "appHost": "localhost",
 
   // The app title, visible in browser window
-  "appTitle": "Altcoin Web-Wallet",
+  "appTitle": "YourApp Title",
 
   // The app slogan
-  "appSlogan": "Explore the Altcoin!",
+  "appSlogan": "Explore YourCoin!",
 
   // The app description
-  "appDescription": "Altcoin description goes here.",
+  "appDescription": "Find short videos and documentaries from producers all around the world.",
 
   // The copyright for the footer (uncomment to override default)
-  //"copyRight": "Copyright (c) 2016-2017, The Web-Wallet developers. All rights reserved.",
+  //"copyRight": "Copyright (c) 2016-2017, The YourApp developers. All rights reserved.",
 
   // Logo
-  "logo": "../images/Logo.png",
+  "logo": "/images/Logo.png",
 
   // Icon
-  "icon": "../images/Icon.png",
+  "icon": "/images/Icon.png",
 
   // favicon
   "favicon": "./public/wallet/favicon.ico",
 
   // Coin name / page heading
-  "coinName": "SpaceCredits",
+  "coinName": "YourCoin",
 
   // Coin symbol
   "coinSymbol": "SPC",
@@ -57,7 +60,7 @@
   //      # ORIGINAL RewriteRule . /index.php [L]
   //      RewriteRule ./ /index.php [L]
   // Set to "" to allow the sub-folder 'wallet' to be exposed for proxying.
-  // Set to "/wallet" to chroot the node to /public/wallet/ (Normal for stand-alone Web-Wallet).
+  // Set to "/wallet" to chroot the node to /public/wallet/ (Normal for stand-alone YourApp).
   "chRoot": "/wallet",
 
   // Show stats in navigation
@@ -74,6 +77,9 @@
 
   // Some control over how much can be sent at one time
   "maxSendAmount": 1000.0,
+
+  // Run nodejs as ssl server or not
+  "ssl": false,
 
   // Unsecure port to listen on
   "port": 8181,
@@ -100,11 +106,17 @@
   // ***  DO NOT CHANGE THE ACCOUNT NAME AFTER FIRST RUN!  ***
   "masterAccount": "MASTER_ACCOUNT",
 
-  // Master email account.
+  // Master email account for UI.
   "masterEmail": "info@example.com",
+
+  // Master password for UI.
+  "masterPassword": "SecretPassword",
 
   // Master can encrypt the wallet
   "masterCanEncrypt": true,
+
+  // Secret used for keyring and cookies
+  "supersecret": "super secret pass phrase",
 
   // Google reCaptcha private/public keys
   "reCaptchaSecret":  "",

@@ -1,13 +1,12 @@
 body {
-    background: url("../images/Icon.png") rgba(247,247,247,1.0) no-repeat 36px 5px;
-    font-size: 16px;
+    font-size: large;
 }
 
 #main {
     margin-bottom: 15px;
 }
 
-@media screen and (min-width: 720px) {
+@media screen and (min-width: 800px) {
     #main {
         margin-top: 25px;
         margin-bottom: 25px;
@@ -17,6 +16,43 @@ body {
 sup {
     vertical-align: super;
     font-size: small;
+}
+
+.intro {
+    background: url("/images/background.jpg") no-repeat center fixed;
+    background-color: #D8D8D8;
+    background-size: cover;
+}
+
+.intro-form {
+    max-width: 600px;
+}
+
+.logo {
+    /* image is defined in settings.json */
+    height: 100px;
+    background-size: auto 80px;
+    font-size: large;
+    text-align: center;
+}
+
+.icon {
+    /* icon is defined in settings.json */
+    height: 128px;
+    width: 128px;
+    margin-left: 20px;
+}
+
+.slogan {
+    font-size: xx-large;
+    text-align: center;
+    padding: 20px;
+}
+
+.description {
+    font-size: large;
+    text-align: center;
+    margin-bottom: 40px;
 }
 
 .theme-dropdown .dropdown-menu {
@@ -45,16 +81,16 @@ sup {
     padding-left: 200px;
 }
 
-
 #sidebar-wrapper {
     z-index: 1000;
     position: absolute;
     left: 200px;
     width: 0;
-    height: 150%;
+    height: 200%;
+    background-color: rgba(0,0,0,0.80);
     margin-left: -200px;
+    overflow-x: hidden;
     overflow-y: hidden;
-    background: rgba(45,169,171,1.0);
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -66,8 +102,11 @@ sup {
 }
 
 #page-content-wrapper {
-    min-width: 500px !important;
+    background: url("/images/background.jpg") no-repeat center fixed;
+    background-size: cover;
+    min-width: 800px !important;
     width: 100%;
+    height: 100%;
     position: absolute;
     overflow: hidden;
 }
@@ -76,16 +115,18 @@ sup {
     /*width: auto;*/
     position: absolute;
     margin-right: -100px;
+    height: 200%;
 }
 
 /* Top Content Header */
 
 .top-content {
-    min-width: 500px !important;
     width: 100%;
-    height: 140px;
-    background: rgba(251,199,30,1.0);
     /*position: fixed;*/
+}
+
+.top-content .container {
+    width:100%;
 }
 
 .top-content .text {
@@ -95,8 +136,53 @@ sup {
     font-size: 10.0vh;
     color: white;
 }
- 
-/* Sidebar */
+
+/* Top Nav Style */ 
+
+.top-nav {
+    background-color: rgba(0,0,0,0.1);
+}
+
+.top-nav div.top-nav-button-content {
+    height:180px;
+    margin-left: 6px;
+    padding: 20px;
+}
+
+.top-nav div.top-nav-button-content:hover {
+    background: rgba(247,247,247,0.2);
+}
+
+.top-nav div.top-nav-button-content.selected {
+    background: rgba(242,111,3,1.0);
+    border-bottom: 2px solid white;
+}
+
+.top-nav.container {
+    padding: 0px;
+}
+
+.top-nav .glyph {
+    color: white;
+    padding-top: 20px;
+    text-align: center;
+    font-size: 30px;
+}
+
+.top-nav .text {
+    font-weight: 600;
+    font-size: 42px;
+    font-size: 4.8vh;
+    color: white;
+    padding-top: 0px;
+    text-align: center;
+}
+
+.top-nav-button {
+}
+
+
+/* Sidebar Style */
 
 .sidebar-nav {
     position: absolute;
@@ -131,6 +217,10 @@ sup {
     text-decoration: none;
 }
 
+.sidebar-nav li div.progress{
+    margin: 20px 20px 20px 20px;
+}
+
 .sidebar-nav span.sidebar-nav-button-content {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 19px;
@@ -151,18 +241,20 @@ sup {
 }
 
 .sidebar-nav div.sidebar-nav-button-content.selected {
-    background: rgba(97,75,175,1.0);
+    background: rgba(242,111,3,1.0);
+}
+
+.sidebar-brand {
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 .sidebar-nav > .sidebar-brand {
-    display: table-cell;
-    vertical-align: bottom;
-    height: 140px;
+    height: 150px;
     width: 200px;
     font-size: 24px;
     font-size: 2.4vh;
     line-height: 60px;
-    background: url("../images/Icon.png") no-repeat 36px 5px;
 }
 
 .sidebar-nav > .sidebar-brand a {
@@ -258,12 +350,7 @@ sup {
 }
 
 #wrapper.toggled .container {
-    /*margin-left: 15px;*/
     padding-right: 200px;
-}
-
-.intro {
-    background: rgba(247,247,247,1.0);
 }
 
 .floatright {
@@ -279,33 +366,41 @@ sup {
 .copyright {
     text-align: center;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 12px;
+    font-size: 14px;
+    color: whitesmoke;
     margin: 10px;
     margin-top: 100px;
+}
+.copyright a {
+    color: #FFF;
+}
+a.copyright:hover,
+a.copyright:focus {
+    color: #FFF;
 }
 
 #wrapper.toggled .copyright {
     padding-right: 200px;
 }
 
-/*** Overrides ***/
+/*** Bootstrap Overrides ***/
 
 /* Customize container from bootstrap.css */
 .container {
-    min-width: 500px !important;
+    min-width: 800px !important;
     padding-left: 0px;
     padding-right: 0px;
 }
 
 /* Customize well from bootstrap.css and bootstrap-theme.css */
+/* TODO: Use another class besides well!!! */
 .well {
-    /*-webkit-box-shadow: inset 0 0px 0px;
-            box-shadow: inset 0 0px 0px;*/
-    background-color: inherit;
-    border: 1px solid rgba(225,225,225,1.0);
-    border-radius: 18px;
-    padding: 20px;
-    margin-bottom: 0px;
+    background: white;
+    background-color: white;
+    border: 0px solid rgba(225,225,225,1.0);
+    border-radius: 8px;
+    /*padding: 20px;*/
+    margin: 30px;
     overflow: visible !important;
 }
 
@@ -316,34 +411,37 @@ sup {
 
 /* Customize text-primary from bootstrap.css */
 .text-primary {
-  color: #2da9ab;
+    color: #111;
+}
+.text-primary a {
+    color: #333;
 }
 a.text-primary:hover,
 a.text-primary:focus {
-  color: #1d99bb;
+    color: #222;
 }
 
 /* Customize btn-primary from bootstrap-theme.css */
 .btn-primary {
-    background: #614baf; /* Old browsers */
-    background-image: -webkit-linear-gradient(top, #614baf 0%, #3f4c6b 100%);
-    background-image:      -o-linear-gradient(top, #614baf 0%, #3f4c6b 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#614baf), to(#3f4c6b));
-    background-image:         linear-gradient(to bottom, #614baf 0%, #3f4c6b 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff614baf', endColorstr='#ff3f4c6b', GradientType=0);
+    background: #f26f03; /* Old browsers */
+    background-image: -webkit-linear-gradient(top, #f26f03 0%, #E8846B 100%);
+    background-image:      -o-linear-gradient(top, #f26f03 0%, #E8846B 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f26f03), to(#E8846B));
+    background-image:         linear-gradient(to bottom, #f26f03 0%, #E8846B 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f26f03', endColorstr='#E8846B', GradientType=0);
     filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
     background-repeat: repeat-x;
-    border-color: #374463;
+    border-color: #E8846B;
 }
 .btn-primary:hover,
 .btn-primary:focus {
-  background-color: #3f4c6b;
-  background-position: 0 -15px;
+    background-color: #E8846B;
+    background-position: 0 -15px;
 }
 .btn-primary:active,
 .btn-primary.active {
-  background-color: #3f4c6b;
-  border-color: #374463;
+    background-color: #E8846B;
+    border-color: #E8846B;
 }
 
 /* Customize popover from bootstrap-editable.css */

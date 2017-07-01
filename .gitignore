@@ -1,8 +1,10 @@
 # Live settings file
 settings.json
+coin.conf
 
-# SSL certs
+# SSL certs and keys
 sslcert/*.*
+key.ring/*.*
 
 # node_modules
 node_modules/

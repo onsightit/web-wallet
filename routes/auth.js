@@ -7,7 +7,7 @@ var https = require('https');
 module.exports = function(app, passport) {
 	var chRoot = app.get('chRoot');
 
-	console.log("Info: Base URL is: " + (chRoot ? chRoot : '/'));
+	console.log("Base URL is: " + (chRoot ? chRoot : '/'));
 
 	app.get(chRoot + '/', isLoggedIn, function(req, res) {
 		if (req.user.local.changeme) {
@@ -15,7 +15,7 @@ module.exports = function(app, passport) {
 		}
 		//console.log("DEBUG: req.session: " + JSON.stringify(req.session));
 		//console.log("DEBUG: req.user: " + JSON.stringify(req.user));
-		res.render('home.ejs'); // If logged in, allow access to Web-Wallet
+		res.render('home.ejs'); // If logged in, allow access to YourApp
 	});
 
 	// Local login
@@ -69,7 +69,7 @@ module.exports = function(app, passport) {
 		res.render('password.ejs', { message: req.flash('passwordMessage'), user: req.user }); // If logged in, allow password change
 	});
 	app.post(chRoot + '/password', passport.authenticate('local-password', {
-		successRedirect: chRoot + '/login', // Require login on success
+		successRedirect: chRoot + '/login',
 		failureRedirect: chRoot + '/password',
 		failureFlash: true
 	}));
@@ -114,6 +114,7 @@ module.exports = function(app, passport) {
 };
 
 function isLoggedIn(req, res, next) {
+	//console.log("DEBUG: req.session: " + JSON.stringify(req.session));
 	if(req.isAuthenticated() && req.session) {
 		return next();
 	}

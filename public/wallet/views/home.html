@@ -2,18 +2,13 @@
 
     <!-- HOME -->
     <div class="well">
-        <h1 class="text-primary"><span class="fa fa-h-square"></span> Welcome to <span data-bind="text: wallet.settings().coinName"></span> <span data-bind="text: first_name"></span> <span data-bind="text: last_name"></span></h1>
-        <p><span data-bind="text: wallet.settings().coinDescription"></span></p>
-        <ul>
-            <li>Send <span data-bind="text: wallet.settings().coinName"></span> to other people on the network on the Send page.</li>
-            <li>Receive <span data-bind="text: wallet.settings().coinName"></span> from other people on the network on the Receive page.</li>
-            <li>View your transaction history on the blockchain on the History page.</li>
-            <!-- ko if: role() === 'Admin' -->
-            <li>Explore the <span data-bind="text: wallet.settings().coinName"></span> blockchain on the Explore page.</li>
-            <li>Run RPC commands on the Console page.</li>
-            <!-- /ko -->
-        </ul>
+        <div class="slogan" data-bind="text: wallet.settings().appSlogan"></div>
+        <div class="description" data-bind="text: wallet.settings().appDescription"></div>
         <h3 align="center" data-bind="text:statusMessage"></h3>
+
+        <ul>
+            <li>[ VIDEO PREVIEW ]</li>
+        </ul>
 
         <p>&nbsp;</p>
     </div>

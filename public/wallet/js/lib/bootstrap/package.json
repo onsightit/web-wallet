@@ -10,7 +10,7 @@
         "spec": ">=3.0.0 <4.0.0",
         "type": "range"
       },
-      "C:\\GitHub\\web-wallet\\public\\wallet\\js\\lib"
+      "C:\\GitHub\\YourApp\\public\\wallet\\js\\lib"
     ]
   ],
   "_from": "bootstrap@>=3.0.0 <4.0.0",
@@ -44,7 +44,7 @@
   "_shasum": "5a389394549f23330875a3b150656574f8a9eb71",
   "_shrinkwrap": null,
   "_spec": "bootstrap@3",
-  "_where": "C:\\GitHub\\web-wallet\\public\\wallet\\js\\lib",
+  "_where": "C:\\GitHub\\YourApp\\public\\wallet\\js\\lib",
   "author": {
     "name": "Twitter, Inc."
   },

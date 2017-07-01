@@ -1,45 +1,9 @@
 define(['knockout'], function(ko){
     var profilePulldownType = function(){
 
-        this.employerValues =   ko.observableArray(["",
-            "American International Group",
-            "Bank of America Corp.",
-            "Berkshire Hathaway",
-            "Cardinal Health",
-            "Citigroup",
-            "ConocoPhillips",
-            "Exxon Mobil",
-            "Ford Motor",
-            "General Electric",
-            "General Motors",
-            "Hewlett-Packard",
-            "Home Depot",
-            "International Business Machines",
-            "J.P. Morgan Chase & Co.",
-            "McKesson",
-            "Morgan Stanley",
-            "Valero Energy",
-            "Verizon Communications",
-            "Wal-Mart Stores",
-            "Other"
-            ]);
-
-        this.employeeValues =   ko.observableArray([{id: "", dob: "", name: ""}]);
-
         this.genderValues = ko.observableArray(["",
             "Female",
             "Male"
-            ]);
-
-        this.ethnicityValues = ko.observableArray(["",
-            "Non-Hispanic White or Euro-American",
-            "Black, Afro-Caribbean, or African American",
-            "Latino or Hispanic American",
-            "East Asian or Asian American",
-            "South Asian or Indian American",
-            "Middle Eastern or Arab American",
-            "Native American or Alaskan Native",
-            "Other"
             ]);
 
         this.countryValues = ko.observable([{code: "US", country: "United States"},

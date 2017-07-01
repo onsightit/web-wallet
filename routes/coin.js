@@ -1,6 +1,8 @@
 /*
  * Coin RPC Routes.
  */
+var atob = require('atob');
+var btoa = require('btoa');
 
 module.exports = function(app, coin){
 	var chRoot = app.get('chRoot');
@@ -29,9 +31,9 @@ module.exports = function(app, coin){
         if (Error && typeof Error.code !== 'undefined'){
             process.emit('rpc_error', 'RPC Error: ' + Error.code);
         } else {
-            if (app.get('status').length > 0){
+            //if (app.get('status').length > 0){
                 process.emit('rpc_connected', 'RPC Connected.');
-            }
+            //}
             if (this.res && typeof this.res.send !== 'undefined'){
                 this.res.send(response);
             }
@@ -39,6 +41,7 @@ module.exports = function(app, coin){
     }
 
     app.get(chRoot + '/getinfo', function(req,res){ callCoin('getInfo', res, coinHandler); } );
+    app.get(chRoot + '/getpeerinfo', function(req,res){ callCoin('getPeerInfo', res, coinHandler); } );
     app.get(chRoot + '/getinterestrate', function(req,res){ callCoin('getInterestRate', res, coinHandler); } );
     app.get(chRoot + '/getinflationrate', function(req,res){ callCoin('getInflationRate', res, coinHandler); } );
     app.get(chRoot + '/getblockcount', function(req,res){ callCoin('getBlockCount', res, coinHandler); } );

@@ -23,7 +23,7 @@ define(['knockout',
         var self = this;
         if (self.wallet.account() !== ""){
             if (self.wallet.account() === self.wallet.settings().masterAccount){
-                self.statusMessage("Master Receive Addresses View");
+                self.statusMessage("Master Account Receive Addresses");
             }
         }
         if (!timerRefresh){
@@ -87,14 +87,15 @@ define(['knockout',
 
     receiveType.prototype.getReceiveAddresses = function(){
         var self = this,
-            listReceivedByAddressesCommand = new Command('listreceivedbyaddress', ['1','true'],
+            masterAccount = (self.wallet.account() === self.wallet.settings().masterAccount),
+            listEmpty = (masterAccount ? "true" : "false"),
+            listReceivedByAddressesCommand = new Command('listreceivedbyaddress', ['1',listEmpty],
                                                          self.wallet.settings().chRoot,
                                                          self.wallet.settings().env);
         self.isLoadingReceiveAddresses(true);
         var receivePromise = listReceivedByAddressesCommand.execute()
             .done(function(data){
-                var addresses = [],
-                    masterAccount = (self.wallet.account() === self.wallet.settings().masterAccount);
+                var addresses = [];
                 for (var k in data){
                     //console.log("data[k]:" + JSON.stringify(data[k]));
                     if (masterAccount || data[k].account === self.wallet.account()){

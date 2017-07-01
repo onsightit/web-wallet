@@ -1,6 +1,6 @@
 require.config({
     paths: {
-        jquery: 'lib/jquery.min', // 2.2.4
+        jquery: 'lib/jquery.min',
         sammy: "lib/sammy",
         moment: "lib/moment.min",
         chart: "lib/Chart.min",
@@ -21,9 +21,10 @@ require.config({
 });
 
 // Requre jQuery and assign the object to the window since we do not include jQuery on the page.
-// Enforce order for dependant modules.
+// Enforce require order for dependant modules.
 require( [ "jquery" ], function(jQuery){
     window.jQuery = window.$ = jQuery;
+
     // Require bootstrap plugins.
     require( [ "npm" ], function(){
         // Require moment for bootstrap-editable.

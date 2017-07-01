@@ -2,7 +2,7 @@
 
 	<!-- PROFILE -->
 	<div class="well">
-		<h1 class="text-primary"><span class="fa fa-user"></span> Your <span data-bind="text: wallet.settings().coinName"></span> Profile</h1>
+		<h1 class="text-primary"><span class="fa fa-user"></span> Your <span data-bind="text: wallet.settings().appTitle"></span> Profile</h1>
         <form class="form-horizontal" role="form">
             <div class="form-group">
 				<!-- Personal data -->
@@ -16,13 +16,13 @@
 	            </div>
 			</div>
             <div class="form-group">
-                <label class="control-label col-sm-2" for="employer">Employer</label>
-                <div class="col-sm-4">
-                    <p><select class="form-control" data-type="select" id="employer" data-bind="options: profilePulldown.employerValues, value: employer" data-title="Employer / Sponsor"></select></p>
-                </div>
                 <label class="control-label col-sm-2" for="email">Email</label>
                 <div class="col-sm-4">
 	                <p><input class="form-control" type="email" id="email" data-bind="email, textInput: email" placeholder="Enter your email address."></input></p>
+	            </div>
+                <label class="control-label col-sm-2" for="gender">Gender</label>
+                <div class="col-sm-4">
+	                <p><select class="form-control" data-type="select" id="gender" data-bind="options: profilePulldown.genderValues, value: gender" data-title="Select your gender."></select></p>
 	            </div>
 			</div>
             <div class="form-group">
@@ -30,25 +30,15 @@
                 <div class="col-sm-4">
                     <p><a href="#profile" class="editable form-control" id="dob" data-type="date" data-bind="editable: dob" data-datepicker="{ startView: 2, autoclose: true }" data-format="yyyy-mm-dd" data-viewformat="yyyy-mm-dd" data-mode="popup" data-title="When were you born?" data-placement="bottom"></a></p>
                 </div>
-                <label class="control-label col-sm-2" for="gender">Gender</label>
-                <div class="col-sm-4">
-	                <p><select class="form-control" data-type="select" id="gender" data-bind="options: profilePulldown.genderValues, value: gender" data-title="Select your gender."></select></p>
-	            </div>
-			</div>
-            <div class="form-group">
                 <label class="control-label col-sm-2" for="country">Country</label>
                 <div class="col-sm-4">
 	                <p><select class="form-control" data-type="select" id="country" data-bind="options: profilePulldown.countryValues, optionsText: 'country', optionsValue: 'code', value: country"></select></p>
-	            </div>
-                <label class="control-label col-sm-2" for="ethnicity">Ethnicity</label>
-                <div class="col-sm-4">
-	                <p><select class="form-control" data-type="select" id="ethnicity" data-bind="options: profilePulldown.ethnicityValues, value: ethnicity" data-title="Select your ethnicity."></select></p>
 	            </div>
 			</div>
 
             <div class="form-group">
                 <label class="control-label col-sm-2" for="description">Description</label>
-                <div class="col-sm-10">
+                <div class="col-sm-8">
 	                <p><input class="form-control" type="text" id="description" data-bind="text, textInput: description" placeholder="Describe yourself. (Optional)"></input></p>
 	            </div>
 			</div>
@@ -59,7 +49,7 @@
 	        <!-- /ko -->
 			<p>&nbsp;</p>
 			<div class="form-group" style="text-align: right">
-				<div class="col-sm-12">
+				<div class="col-sm-10">
 			        <h3 align="center" data-bind="text:statusMessage"></h3>
 					<button type="submit" class="btn btn-primary btn-lg" data-bind="disable: !$data.isDirty(), click: Reset">Reset</button> &nbsp;
 					<button type="submit" class="btn btn-primary btn-lg" data-bind="disable: !$data.isDirty() || !$data.canSubmit(), click: Submit">Submit</button>

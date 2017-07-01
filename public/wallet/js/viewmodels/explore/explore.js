@@ -6,7 +6,7 @@ define(['knockout'], function(ko){
         self.statusMessage = ko.observable("");
 
         self.role = ko.observable("");
-        self.explorerURL = ko.observable("https://explorer.solarcoin.com/");
+        self.explorerURL = ko.observable("http://explorer.example.com/");
     };
 
     exploreType.prototype.refresh = function(timerRefresh){

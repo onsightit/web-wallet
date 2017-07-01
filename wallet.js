@@ -1,5 +1,5 @@
 /**
- *  Web-Wallet App
+ *  YourApp App
  */
 
 Object.defineProperty(Error.prototype, 'toJSON', {
@@ -31,6 +31,7 @@ var credentials = {key: privateKey, cert: certificate};
 var express = require('express');
 var app = express();
 
+var async = require('async');
 var cors = require('cors');
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -48,7 +49,7 @@ app.set('status', '');    // Public status message (Important: Init to "")
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.set('host', coin.settings.appHost);
-app.set('port', coin.isLocal ? coin.settings.port : coin.settings.sslPort);
+app.set('port', coin.ssl ? coin.settings.sslPort : coin.settings.port);
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public' + coin.settings.chRoot)));
@@ -58,12 +59,12 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: false, limit: '2mb'})); // TODO: Put this limit in settings.json
 app.use(bodyParser.json({limit: '2mb'})); // TODO: Put this limit in settings.json
 app.use(session({name: coin.settings.appTitle,
-                secret: coin.settings.appTitle + ' has the best ' + coin.settings.coinName,
+                secret: coin.settings.supersecret,
                 genid: function(req) {
                     return uuid.v4(); // use UUIDs
                 },
                 // Cookie expires in 30 days
-                cookie: {secure: coin.isLocal ? false : true, maxAge: 30 * 24 * 60 * 60 * 1000, domain: coin.settings.appHost},
+                cookie: {secure: coin.ssl, maxAge: 30 * 24 * 60 * 60 * 1000, domain: coin.settings.appHost},
                 saveUninitialized: false,
                 resave: true}));
 app.use(passport.initialize());
@@ -202,15 +203,15 @@ app.use(function(req, res, next) {
 // Start it up!
 function startApp(app) {
     // Start the Express server
-    console.log("Express " + (coin.isLocal ? "" : "Secure ") + "Server starting...");
-    var protocol = coin.isLocal ? require('http') : require('https');
-    var server = coin.isLocal ? protocol.createServer(app) : protocol.createServer(credentials, app);
-    var port = app.get('port'); // 8181 or 8383 depending on coin.isLocal
+    console.log("Express " + (coin.ssl ? "Secure " : "") + "Server starting...");
+    var protocol = coin.ssl ? require('https') : require('http');
+    var server = coin.ssl ? protocol.createServer(credentials, app) : protocol.createServer(app);
+    var port = app.get('port'); // 8181 or 8383 depending on coin.ssl
     var host = app.get('host');
 
     var listener = server.listen(port, function(){
-        console.log('  Server listening on: ' + (coin.isLocal ? 'http://' : 'https://') + host + ':' + port);
-        console.log('  Wallet is: ' + (coin.isLocal ? 'Local' : 'Not-Local'));
+        console.log('Server listening on: ' + (coin.ssl ? 'https://' : 'http://') + host + ':' + port);
+        console.log('Wallet is configured: ' + (coin.isLocal ? 'Local' : 'Not-Local'));
 
         // Init MASTER_ACCOUNT in wallet and database for this node_id.
         require('./lib/init-wallet')();

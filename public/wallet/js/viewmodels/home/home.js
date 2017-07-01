@@ -20,7 +20,7 @@ define(['knockout'], function(ko){
         if (timerRefresh && !self.wallet.profileComplete()){
             window.location = self.wallet.settings().chRoot + '/#profile';
         } else {
-            self.statusMessage("You have " + self.wallet.walletStatus.totalFmt() + " " + self.wallet.settings().coinSymbol + " in your wallet!");
+            self.statusMessage("You have " + self.wallet.walletStatus.totalFmt() + " " + self.wallet.settings().coinName + " in your wallet!");
         }
     };
 

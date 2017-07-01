@@ -27,13 +27,11 @@ define(['knockout',
         // User changeables
         self.first_name = ko.observable("");
         self.last_name = ko.observable("");
-        self.employer = ko.observable("");
         self.email = ko.observable("");
         self.description = ko.observable("");
         self.age = ko.observable("");
         self.dob = ko.observable(Moment(Date.now()).utc().format("YYYY-MM-DD"));
         self.gender = ko.observable("");
-        self.ethnicity = ko.observable("");
         self.country = ko.observable("");
         self.terms = ko.observable(false);
 
@@ -45,7 +43,6 @@ define(['knockout',
         // User changeables subscriptions
         self.first_name.subscribe(function (){self.dirtyFlag(true);});
         self.last_name.subscribe(function (){self.dirtyFlag(true);});
-        self.employer.subscribe(function (){self.dirtyFlag(true);});
         self.email.subscribe(function (){self.dirtyFlag(true);});
         self.description.subscribe(function (){self.dirtyFlag(true);});
         self.dob.subscribe(function (){
@@ -69,19 +66,16 @@ define(['knockout',
             self.dirtyFlag(true);
         });
         self.gender.subscribe(function (){self.dirtyFlag(true);});
-        self.ethnicity.subscribe(function (){self.dirtyFlag(true);});
         self.country.subscribe(function (){self.dirtyFlag(true);});
         self.terms.subscribe(function (){self.dirtyFlag(true);});
 
         self.canSubmit = ko.computed(function(){
             var canSubmit = self.first_name() !== "" &&
                             self.last_name() !== "" &&
-                            self.employer() !== "" &&
                             self.email() !== "" &&
                             self.dob() !== "" &&
                             self.age() >= 18 &&
                             self.gender() !== "" &&
-                            self.ethnicity() !== "" &&
                             self.country() !== "";
             // Bottom to top messages
             if (canSubmit && !self.terms()){
@@ -129,7 +123,6 @@ define(['knockout',
 
             self.first_name(self.wallet.User().profile.first_name || "");
             self.last_name(self.wallet.User().profile.last_name || "");
-            self.employer(self.wallet.User().profile.employer || "");
             self.email(self.wallet.User().profile.email || "");
             self.description(self.wallet.User().profile.description || "");
             self.age(self.wallet.User().profile.age || 0);
@@ -139,15 +132,10 @@ define(['knockout',
                 self.dob(Moment(Date.now()).utc().format("YYYY-MM-DD"));
             }
             self.gender(self.wallet.User().profile.gender || "");
-            self.ethnicity(self.wallet.User().profile.ethnicity || "");
             self.country(self.wallet.User().profile.country || "");
             self.terms(self.wallet.User().profile.terms || false);
             self.credit(self.wallet.User().profile.credit || 0);
 
-            // Do not allow MASTER_ACCOUNT to change Employer. It's set in init-wallet.
-            if (self.wallet.account() === self.wallet.settings().masterAccount){
-                self.profilePulldown.employerValues([self.employer()]);
-            }
             // This has to be inside the !isDirty check
             if (!self.wallet.profileComplete()){
                 self.profileComplete(false);
@@ -173,13 +161,11 @@ define(['knockout',
         // Save User changeables
         self.wallet.User().profile.first_name = self.first_name();
         self.wallet.User().profile.last_name = self.last_name();
-        self.wallet.User().profile.employer = self.employer();
         self.wallet.User().profile.email = self.email();
         self.wallet.User().profile.description = self.description();
         self.wallet.User().profile.age = self.age();
         self.wallet.User().profile.dob = self.dob();
         self.wallet.User().profile.gender = self.gender();
-        self.wallet.User().profile.ethnicity = self.ethnicity();
         self.wallet.User().profile.country = self.country();
         self.wallet.User().profile.terms = self.terms();
         var saveUserProfileCommand = new Command('saveuserprofile',
