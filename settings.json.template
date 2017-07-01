@@ -20,10 +20,10 @@
   "appTitle": "YourApp Title",
 
   // The app slogan
-  "appSlogan": "Explore YourCoin!",
+  "appSlogan": "Explore YourApp!",
 
   // The app description
-  "appDescription": "Find short videos and documentaries from producers all around the world.",
+  "appDescription": "YourApp description goes here.",
 
   // The copyright for the footer (uncomment to override default)
   //"copyRight": "Copyright (c) 2016-2017, The YourApp developers. All rights reserved.",
