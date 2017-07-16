@@ -49,7 +49,7 @@ app.set('status', '');    // Public status message (Important: Init to "")
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.set('host', coin.settings.appHost);
-app.set('port', coin.ssl ? coin.settings.sslPort : coin.settings.port);
+app.set('port', coin.settings.ssl ? coin.settings.sslPort : coin.settings.port);
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public' + coin.settings.chRoot)));
@@ -64,7 +64,7 @@ app.use(session({name: coin.settings.appTitle,
                     return uuid.v4(); // use UUIDs
                 },
                 // Cookie expires in 30 days
-                cookie: {secure: coin.ssl, maxAge: 30 * 24 * 60 * 60 * 1000, domain: coin.settings.appHost},
+                cookie: {secure: coin.settings.ssl, maxAge: 30 * 24 * 60 * 60 * 1000, domain: coin.settings.appHost},
                 saveUninitialized: false,
                 resave: true}));
 app.use(passport.initialize());
@@ -203,14 +203,14 @@ app.use(function(req, res, next) {
 // Start it up!
 function startApp(app) {
     // Start the Express server
-    console.log("Express " + (coin.ssl ? "Secure " : "") + "Server starting...");
-    var protocol = coin.ssl ? require('https') : require('http');
-    var server = coin.ssl ? protocol.createServer(credentials, app) : protocol.createServer(app);
-    var port = app.get('port'); // 8181 or 8383 depending on coin.ssl
+    console.log("Express " + (coin.settings.ssl ? "Secure " : "") + "Server starting...");
+    var protocol = coin.settings.ssl ? require('https') : require('http');
+    var server = coin.settings.ssl ? protocol.createServer(credentials, app) : protocol.createServer(app);
+    var port = app.get('port'); // 8181 or 8383
     var host = app.get('host');
 
     var listener = server.listen(port, function(){
-        console.log('Server listening on: ' + (coin.ssl ? 'https://' : 'http://') + host + ':' + port);
+        console.log('Server listening on: ' + (coin.settings.ssl ? 'https://' : 'http://') + host + ':' + port);
         console.log('Wallet is configured: ' + (coin.isLocal ? 'Local' : 'Not-Local'));
 
         // Init MASTER_ACCOUNT in wallet and database for this node_id.
