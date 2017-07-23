@@ -13,6 +13,8 @@ define(['knockout',
     'common/dialog',
     'viewmodels/wallet-status',
     'viewmodels/home/home',
+    'viewmodels/streams/streams',
+    'viewmodels/upload/upload',
     'viewmodels/send/send',
     'viewmodels/receive/receive',
     'viewmodels/history/history',
@@ -21,7 +23,8 @@ define(['knockout',
     'viewmodels/profile/profile',
     'bindinghandlers/modal',
     'viewmodels/common/wallet-passphrase',
-    'viewmodels/common/command'], function(ko, dialog, WalletStatus, Home, Send, Receive, History, Explore, Console, Profile, Modal, WalletPassphrase, Command){
+    'viewmodels/common/command',
+    'viewmodels/nodestats/nodestats'], function(ko, dialog, WalletStatus, Home, Streams, Upload, Send, Receive, History, Explore, Console, Profile, Modal, WalletPassphrase, Command, NodeStats){
 
     var walletType = function(){
         var self = this;
@@ -39,7 +42,6 @@ define(['knockout',
         self.account = ko.observable("");
         self.addresses = ko.observableArray([]);
 
-        self.isLocalWallet = ko.observable(false);  // Is the node local?
         self.settings = ko.observable({});          // Some settings from settings.json
 
         // Get node_id and settings, and User account
@@ -52,18 +54,27 @@ define(['knockout',
         self.showStats = ko.observable(true);
 
         this.home = new Home({parent: self});
+        this.streams = new Streams({parent: self});
+        this.upload = new Upload({parent: self});
         this.send = new Send({parent: self});
         this.receive = new Receive({parent: self});
         this.history = new History({parent: self});
         this.explore = new Explore({parent: self});
         this.console = new Console({parent: self});
         this.profile = new Profile({parent: self});
+        this.nodestats = new NodeStats({parent: self});
 
         self.currentView.subscribe(function (view){
             self.sessionExpires(Date.now() + self.sessionTimeout());
             switch(view){
                 case ("home"):
                     self.home.refresh(false);
+                    break;
+                case ("streams"):
+                    self.streams.refresh(false);
+                    break;
+                case ("upload"):
+                    self.upload.refresh(false);
                     break;
                 case ("send"):
                     self.send.refresh(false);
@@ -82,6 +93,9 @@ define(['knockout',
                     break;
                 case ("profile"):
                     self.profile.refresh(false);
+                    break;
+                case ("nodestats"):
+                    self.nodestats.refresh(false);
                     break;
                 default:
                     break;
@@ -107,7 +121,6 @@ define(['knockout',
         self.isLoadingStatus = ko.observable(true);
 
         self.timeout = 1000;
-        self.timerRefresh = false;
 
         // Start polling!
         self.pollWalletStatus();
@@ -116,7 +129,7 @@ define(['knockout',
     // Called once at startup.
     walletType.prototype.initNode = function(chRoot){
         var self = this;
-        // Catch-22: We don't know if YourApp is chRoot'd to /public or /public/wallet,
+        // Catch-22: We don't know if YourCoin is chRoot'd to /public or /public/wallet,
         // because 'settings' has not been set yet, so we need to test for a failure first
         // to determine if settings().chRoot is "" or "/wallet".
         var getNodeInfoCommand = new Command('getnodeinfo', [],
@@ -124,9 +137,8 @@ define(['knockout',
                                              'production'); // Gets the wallet info and settings quietly
         $.when(getNodeInfoCommand.execute())
             .done(function(getNodeInfoData){
-                if (typeof getNodeInfoData.node_id !== 'undefined'){
-                    self.node_id(getNodeInfoData.node_id);
-                    self.isLocalWallet(getNodeInfoData.isLocal);
+                if (typeof getNodeInfoData.settings.wallet.rpchost !== 'undefined'){
+                    self.node_id(getNodeInfoData.settings.wallet.rpchost);
                     self.settings(getNodeInfoData.settings);
                     self.showStats(self.settings().showStats || false);
                     if (self.settings().env !== 'production'){
@@ -137,10 +149,11 @@ define(['knockout',
                     console.log("ERROR: Aborting! Node_ID not found.");
                     window.location = chRoot + '/logout';
                 }
+                //console.log("DEBUG: node_id: " + self.node_id());
                 self.initUser();
             }).fail(function(jqXHR){
                 // If the second call to initNode fails, we bail.
-                if (chRoot === '/wallet'){
+                if (chRoot !== '') {
                     self.initNode(''); // Set unknown chRoot to normal '' mode.
                 } else {
                     // Bailing...
@@ -156,7 +169,7 @@ define(['knockout',
         var self = this;
         var getUserAccountCommand = new Command('getuseraccount', [],
                                                 self.settings().chRoot,
-                                                'production'); // Gets the User from the session quietly
+                                                self.settings().env);
         $.when(getUserAccountCommand.execute())
             .done(function(getUserAccountData){
                 if (typeof getUserAccountData.User !== 'undefined'){
@@ -207,10 +220,9 @@ define(['knockout',
             } else {
                 // Normal polling
                 if (Date.now() <= self.sessionExpires()){
-                    $.when(self.refresh(self.timerRefresh)).done(function(){
+                    $.when(self.refresh(true)).done(function(){
                         if (self.timeout < 60000){ // First timeout
                             self.timeout = 60000;
-                            self.timerRefresh = false;
                             // NOTE: self.walletUp() is set true when the socket server sends the message.
                             // (see /public/../js/app.js).
                             if (self.walletUp()) {
@@ -245,6 +257,7 @@ define(['knockout',
                 self.explore.refresh(timerRefresh);
                 self.console.refresh(timerRefresh);
                 self.profile.refresh(timerRefresh);
+                self.nodestats.refresh(timerRefresh);
 	    });
         return refreshPromise;
     };
@@ -252,7 +265,7 @@ define(['knockout',
     walletType.prototype.checkEncryptionStatus = function(){
         var self = this;
         // Do not allow non-local wallets to be encrypted except by MASTER_ACCOUNT!
-        if (self.isLocalWallet() || (self.account() === self.settings().masterAccount && self.settings().masterCanEncrypt === true)){
+        if (self.account() === self.settings().masterAccount && self.settings().masterCanEncrypt === true){
             switch(self.walletStatus.unlockedUntil()){
             case -1: // wallet is unencrypted
                 self.promptToEncrypt();
@@ -268,7 +281,7 @@ define(['knockout',
 
     walletType.prototype.unlockWallet = function(){
         var self = this;
-        if (self.isLocalWallet() || self.account() === self.settings().masterAccount){
+        if (self.account() === self.settings().masterAccount){
             new WalletPassphrase({canSpecifyStaking: true}).userPrompt(false, 'Unlock Wallet', 'This action will unlock the wallet for sending or staking','OK')
             .done(function(result){
                 //console.log(result);
@@ -276,16 +289,18 @@ define(['knockout',
                 result.passphrase = "XXXXXXXX"; // Clear password in memory
             })
             .fail(function(error){
-                console.log(error);
-                dialog.notification(error.message);
-                self.walletStatus.refresh();
+                if (error) {
+                    console.log(error);
+                    dialog.notification(error.message);
+                    self.walletStatus.refresh();
+                }
             });
         }
     };
 
     walletType.prototype.lockWallet = function(){
         var self = this;
-        if (self.isLocalWallet() || self.account() === self.settings().masterAccount){
+        if (self.account() === self.settings().masterAccount){
             var walletLockCommand = new Command('walletlock', [],
                                                 self.settings().chRoot,
                                                 self.settings().env).execute()
@@ -308,8 +323,10 @@ define(['knockout',
                 dialog.notification("Wallet successfully encrypted. Restart your coin daemon to continue.");
             })
             .fail(function(error){
-                console.log(error);
-                dialog.notification(error.message);
+                if (error) {
+                    console.log(error);
+                    dialog.notification(error.message);
+                }
             });
     };
 
@@ -320,8 +337,10 @@ define(['knockout',
                 console.log(result);
             })
             .fail(function(error){
-                console.log(error);
-                dialog.notification(error.message);
+                if (error) {
+                    console.log(error);
+                    dialog.notification(error.message);
+                }
             });
     };
 

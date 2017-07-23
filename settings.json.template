@@ -7,9 +7,6 @@
 {
   // NOTE: rpcuser/pass/host/port is pulled from the coin's config file.
 
-  // Version
-  "version": "2.1.0",
-
   // Runtime environment: 'development' or 'production'
   "env": "development",
 
@@ -17,16 +14,16 @@
   "appHost": "localhost",
 
   // The app title, visible in browser window
-  "appTitle": "YourApp Title",
+  "appTitle": "YourCoin Title",
 
   // The app slogan
-  "appSlogan": "Explore YourApp!",
+  "appSlogan": "Explore YourCoin!",
 
   // The app description
-  "appDescription": "YourApp description goes here.",
+  "appDescription": "YourCoin App description goes here.",
 
   // The copyright for the footer (uncomment to override default)
-  //"copyRight": "Copyright (c) 2016-2017, The YourApp developers. All rights reserved.",
+  //"copyRight": "Copyright (c) 2016-2017, The YourCoin developers. All rights reserved.",
 
   // Logo
   "logo": "/images/Logo.png",
@@ -41,7 +38,7 @@
   "coinName": "YourCoin",
 
   // Coin symbol
-  "coinSymbol": "SPC",
+  "coinSymbol": "SSH",
 
   // Coin addresses start with this character
   "coinChar": "S",
@@ -60,7 +57,7 @@
   //      # ORIGINAL RewriteRule . /index.php [L]
   //      RewriteRule ./ /index.php [L]
   // Set to "" to allow the sub-folder 'wallet' to be exposed for proxying.
-  // Set to "/wallet" to chroot the node to /public/wallet/ (Normal for stand-alone YourApp).
+  // Set to "/wallet" to chroot the node to /public/wallet/ (Normal for stand-alone YourCoin).
   "chRoot": "/wallet",
 
   // Show stats in navigation
@@ -102,12 +99,23 @@
     "port": 27017
   },
 
+  // This setting is used to make RPC calls to the wallet daemon.
+  "wallet": {
+    "rpcuser": "rpcuser",
+    "rpcpassword": "rpcpassword",
+    "rpchost": "127.0.0.1",
+    "rpcport": 19184,
+    "ssl": false,
+    "rejectUnauthorized": false,
+    "strictSSL": false
+  },
+
   // Master UI login account, and Label to assign to "" wallet accounts.
   // ***  DO NOT CHANGE THE ACCOUNT NAME AFTER FIRST RUN!  ***
   "masterAccount": "MASTER_ACCOUNT",
 
   // Master email account for UI.
-  "masterEmail": "info@example.com",
+  "masterEmail": "info@stream.space",
 
   // Master password for UI.
   "masterPassword": "SecretPassword",

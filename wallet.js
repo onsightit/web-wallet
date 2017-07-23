@@ -1,5 +1,5 @@
 /**
- *  YourApp App
+ *  YourCoin App
  */
 
 Object.defineProperty(Error.prototype, 'toJSON', {
@@ -24,8 +24,8 @@ var path = require('path');
 var atob = require('atob');
 var btoa = require('btoa');
 
-var privateKey  = fs.readFileSync(coin.settings.sslKey, 'utf8');
-var certificate = fs.readFileSync(coin.settings.sslCrt, 'utf8');
+var privateKey  = coin.settings.ssl ? fs.readFileSync(coin.settings.sslKey, 'utf8') : null;
+var certificate = coin.settings.ssl ? fs.readFileSync(coin.settings.sslCrt, 'utf8') : null;
 var credentials = {key: privateKey, cert: certificate};
 
 var express = require('express');
@@ -140,13 +140,11 @@ require('./routes/user.js')(app, coin, mdb);
 
 // Misc routes //
 
-// Returns the rpc node info and some localized settings.
+// Returns the wallet's rpc node info and localization settings.
 app.get(chRoot + '/getnodeinfo', function(req,res){
     var response = {
         error: null,
         result: {
-            node_id: coin.rpcHost,
-            isLocal: coin.isLocal,
             settings: coin.settings
         }
     };
@@ -209,9 +207,9 @@ function startApp(app) {
     var port = app.get('port'); // 8181 or 8383
     var host = app.get('host');
 
-    var listener = server.listen(port, function(){
-        console.log('Server listening on: ' + (coin.settings.ssl ? 'https://' : 'http://') + host + ':' + port);
-        console.log('Wallet is configured: ' + (coin.isLocal ? 'Local' : 'Not-Local'));
+    var listener = server.listen(port, function() {
+        console.log('Server is listening on: ' + (coin.settings.ssl ? 'https://' : 'http://') + host + ':' + port);
+        console.log('Wallet is listening on: ' + (coin.settings.wallet.ssl ? 'https://' : 'http://') + coin.settings.wallet.rpchost + ':' + coin.settings.wallet.rpcport);
 
         // Init MASTER_ACCOUNT in wallet and database for this node_id.
         require('./lib/init-wallet')();
@@ -219,14 +217,14 @@ function startApp(app) {
         var io = require('socket.io')(server, { port: port });
         //Allow Cross Domain Requests
         io.set('transports', [ 'websocket' ]);
-        io.on('connection', function (socket){
-            socket.on('news', function (data){
+        io.on('connection', function (socket) {
+            socket.on('news', function (data) {
                 console.log(data);
             });
-            socket.on('abort', function (data){
+            socket.on('abort', function (data) {
                 console.log('Told clients to abort for: ' + data);
             });
-            socket.on('continue', function (data){
+            socket.on('continue', function (data) {
                 console.log('Told clients to continue to: /' + data);
                 app.set('status', '');
             });

@@ -30,34 +30,34 @@ define(['knockout',
             }
         }
         if (!timerRefresh){
-            self.getTransactions(self.wallet.account(), self.page());
+            self.listTransactions(self.wallet.account(), self.page());
         }
     };
 
     historyType.prototype.firstPage = function(){
         var self = this;
-        this.getTransactions(self.wallet.account(), self.pageFirst());
+        this.listTransactions(self.wallet.account(), self.pageFirst());
     };
     historyType.prototype.prevPage = function(){
         var self = this;
-        this.getTransactions(self.wallet.account(), self.pagePrev());
+        this.listTransactions(self.wallet.account(), self.pagePrev());
     };
     historyType.prototype.nextPage = function(){
         var self = this;
-        this.getTransactions(self.wallet.account(), self.pageNext());
+        this.listTransactions(self.wallet.account(), self.pageNext());
     };
     historyType.prototype.lastPage = function(){
         var self = this;
-        this.getTransactions(self.wallet.account(), self.pageLast());
+        this.listTransactions(self.wallet.account(), self.pageLast());
     };
 
-    historyType.prototype.getTransactions = function(account, page){
+    historyType.prototype.listTransactions = function(account, page){
         var self = this,
-            getTransactionsCommand = new Command('listtransactions', [account, page],
+            listTransactionsCommand = new Command('listtransactions', [account, page],
                                                  self.wallet.settings().chRoot,
                                                  self.wallet.settings().env); // For pagination
         self.isLoadingTransactions(true);
-        var historyPromise = getTransactionsCommand.execute()
+        var historyPromise = listTransactionsCommand.execute()
             .done(function(data){
                 var i = 0, maxRows = self.wallet.settings().historyRowsPP;
                 //var descendingTxns = data.reverse();

@@ -20,7 +20,7 @@
 					<li><a href="#explore"><div data-bind="css: { selected: $data.currentView() === 'explore' }" class="sidebar-nav-button-content"><div class="fa fa-search fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Explore</span></div></div></a></li>
 					<li><a href="#console"><div data-bind="css: { selected: $data.currentView() === 'console' }" class="sidebar-nav-button-content"><div class="fa fa-terminal fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Console</span></div></div></a></li>
 			<!-- /ko -->
-			<!-- ko if: walletStatus.isEncrypted() === 'Yes' && (isLocalWallet() || role() === 'Admin') -->
+			<!-- ko if: walletStatus.isEncrypted() === 'Yes' && role() === 'Admin' -->
 				<!-- ko if: walletStatus.isUnlocked() === 'Yes' -->
 					<li><a href="#"><div data-bind="click:lockWallet" class="sidebar-nav-button-content"><div class="fa fa-unlock fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Lock Wallet</span></div></div></a></li>
 				<!-- /ko -->
