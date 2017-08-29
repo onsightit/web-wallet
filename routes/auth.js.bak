@@ -4,7 +4,7 @@
 
 var https = require('https');
 
-module.exports = function(app, passport, coin) {
+module.exports = function(app, passport) {
 	var chRoot = app.get('chRoot');
 
 	console.log("Base URL is: " + (chRoot ? chRoot : '/'));
@@ -40,7 +40,7 @@ module.exports = function(app, passport, coin) {
 	app.post(chRoot + '/signup', isNotLoggedIn, function (req, res, next) {
 		var resKey = req.body['g-recaptcha-response'];
 		if (resKey) {
-			https.get('https://www.google.com/recaptcha/api/siteverify?secret=' + coin.settings.reCaptchaSecret + '&response=' + resKey, function (res) {
+			https.get('https://www.google.com/recaptcha/api/siteverify?secret=' + settings.reCaptchaSecret + '&response=' + resKey, function (res) {
 				var data = '';
 				res.on('data', function (chunk) {
 					data += chunk.toString();

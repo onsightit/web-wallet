@@ -396,7 +396,6 @@ a.copyright:focus {
 /* Customize well from bootstrap.css and bootstrap-theme.css */
 /* TODO: Use another class besides well!!! */
 .well {
-    min-height: 500px;
     background: white;
     background-color: white;
     border: 0px solid rgba(225,225,225,1.0);
@@ -404,23 +403,6 @@ a.copyright:focus {
     /*padding: 20px;*/
     margin: 30px;
     overflow: visible !important;
-}
-
-.wellcf {
-    background: white;
-    background-color: white;
-    border: 0px solid rgba(225,225,225,1.0);
-    border-radius: 8px;
-    /*padding: 20px;*/
-    margin: 30px;
-    overflow: visible !important;
-    position: relative;
-}
-
-div.node-scroll{
-    max-height: 1000px;
-    width: 100%;
-    overflow: scroll;
 }
 
 /* Customize jumbotron from bootstrap.css */
@@ -462,11 +444,6 @@ a.text-primary:focus {
     background-color: #E8846B;
     border-color: #E8846B;
 }
-.btn-primary:disabled,
-.btn-primary.disabled {
-    background-color: #419641;
-    border-color: #3e8f3e;
-}
 
 /* Customize popover from bootstrap-editable.css */
 /*.editable-container {
@@ -504,21 +481,6 @@ a.text-primary:focus {
 .filedrag .drag-label {
     margin-top: 0px;
     margin-bottom: 10px;
-}
-
-.loader {
-    margin: 0 auto;
-    border: 16px solid #f3f3f3; /* Light grey */
-    border-top: 16px solid #E8846B; 
-    border-radius: 50%;
-    width: 120px;
-    height: 120px;
-    animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
 }
 
 /*** End Overrides ***/

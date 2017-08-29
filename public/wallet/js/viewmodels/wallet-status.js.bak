@@ -24,6 +24,7 @@ define(['knockout',
 
         self.blockProgress = ko.pureComputed(function(){
             var progress = 100 * self.blocks() / self.totalBlocks();
+            console.log("Progress: " + progress);
             return progress + '%';
         }).extend({ rateLimit: 500 });
     };

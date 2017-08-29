@@ -24,8 +24,8 @@ var path = require('path');
 var atob = require('atob');
 var btoa = require('btoa');
 
-var privateKey  = coin.settings.ssl ? fs.readFileSync(coin.settings.sslKey, 'utf8') : null;
-var certificate = coin.settings.ssl ? fs.readFileSync(coin.settings.sslCrt, 'utf8') : null;
+var privateKey  = fs.readFileSync(coin.settings.sslKey, 'utf8');
+var certificate = fs.readFileSync(coin.settings.sslCrt, 'utf8');
 var credentials = {key: privateKey, cert: certificate};
 
 var express = require('express');
@@ -49,7 +49,7 @@ app.set('status', '');    // Public status message (Important: Init to "")
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.set('host', coin.settings.appHost);
-app.set('port', coin.settings.ssl ? coin.settings.sslPort : coin.settings.port);
+app.set('port', coin.ssl ? coin.settings.sslPort : coin.settings.port);
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public' + coin.settings.chRoot)));
@@ -64,7 +64,7 @@ app.use(session({name: coin.settings.appTitle,
                     return uuid.v4(); // use UUIDs
                 },
                 // Cookie expires in 30 days
-                cookie: {secure: coin.settings.ssl, maxAge: 30 * 24 * 60 * 60 * 1000, domain: coin.settings.appHost},
+                cookie: {secure: coin.ssl, maxAge: 30 * 24 * 60 * 60 * 1000, domain: coin.settings.appHost},
                 saveUninitialized: false,
                 resave: true}));
 app.use(passport.initialize());
@@ -128,7 +128,7 @@ app.all('*', function(req, res, next) {
 });
 
 // Auth routes (includes: '/', '/signup', '/login', '/logout', '/profile', '/password', + oauth routes)
-require('./routes/auth.js')(app, passport, coin);
+require('./routes/auth.js')(app, passport);
 // Passport.use functions
 require('./lib/passport')(passport);
 
@@ -140,11 +140,13 @@ require('./routes/user.js')(app, coin, mdb);
 
 // Misc routes //
 
-// Returns the wallet's rpc node info and localization settings.
+// Returns the rpc node info and some localized settings.
 app.get(chRoot + '/getnodeinfo', function(req,res){
     var response = {
         error: null,
         result: {
+            node_id: coin.rpcHost,
+            isLocal: coin.isLocal,
             settings: coin.settings
         }
     };
@@ -201,15 +203,15 @@ app.use(function(req, res, next) {
 // Start it up!
 function startApp(app) {
     // Start the Express server
-    console.log("Express " + (coin.settings.ssl ? "Secure " : "") + "Server starting...");
-    var protocol = coin.settings.ssl ? require('https') : require('http');
-    var server = coin.settings.ssl ? protocol.createServer(credentials, app) : protocol.createServer(app);
-    var port = app.get('port'); // 8181 or 8383
+    console.log("Express " + (coin.ssl ? "Secure " : "") + "Server starting...");
+    var protocol = coin.ssl ? require('https') : require('http');
+    var server = coin.ssl ? protocol.createServer(credentials, app) : protocol.createServer(app);
+    var port = app.get('port'); // 8181 or 8383 depending on coin.ssl
     var host = app.get('host');
 
-    var listener = server.listen(port, function() {
-        console.log('Server is listening on: ' + (coin.settings.ssl ? 'https://' : 'http://') + host + ':' + port);
-        console.log('Wallet is listening on: ' + (coin.settings.wallet.ssl ? 'https://' : 'http://') + coin.settings.wallet.rpchost + ':' + coin.settings.wallet.rpcport);
+    var listener = server.listen(port, function(){
+        console.log('Server listening on: ' + (coin.ssl ? 'https://' : 'http://') + host + ':' + port);
+        console.log('Wallet is configured: ' + (coin.isLocal ? 'Local' : 'Not-Local'));
 
         // Init MASTER_ACCOUNT in wallet and database for this node_id.
         require('./lib/init-wallet')();
@@ -217,14 +219,14 @@ function startApp(app) {
         var io = require('socket.io')(server, { port: port });
         //Allow Cross Domain Requests
         io.set('transports', [ 'websocket' ]);
-        io.on('connection', function (socket) {
-            socket.on('news', function (data) {
+        io.on('connection', function (socket){
+            socket.on('news', function (data){
                 console.log(data);
             });
-            socket.on('abort', function (data) {
+            socket.on('abort', function (data){
                 console.log('Told clients to abort for: ' + data);
             });
-            socket.on('continue', function (data) {
+            socket.on('continue', function (data){
                 console.log('Told clients to continue to: /' + data);
                 app.set('status', '');
             });
@@ -305,7 +307,8 @@ function startApp(app) {
             if (status.length > 0){
                 if (status.indexOf('Wallet') > 0){
                     // Wallet daemon down.
-                    console.log(status);
+                    // TODO: Uncomment console logging when wallet daemon is installed.
+                    //console.log(status);
                 } else {
                     if (status.indexOf('Database') > 0){
                         // Reconnect DB

@@ -47,7 +47,7 @@ module.exports = function(app, coin, mdb){
         var account = atob(decodeURIComponent(req.params.account)) || null;
         var addresses = JSON.parse(atob(decodeURIComponent(req.params.addresses))) || [];
         if (account && addresses && addresses.length){
-            mdb.saveUserWallet(req.user._id, coin.settings.wallet.rpchost, account, addresses, function(err, data){
+            mdb.saveUserWallet(req.user._id, coin.rpcHost, account, addresses, function(err, data){
                 if (err) {
                     res.status(500).send(JSON.stringify(data));
                 } else {

@@ -6,7 +6,7 @@
   "node-main": "./wallet.js",
   "main": "loading.html",
   "keywords": [
-    "streaming, distributed, storage, altcoin"
+    "wallet, distributed, crypto, altcoin"
   ],
   "repository": {
     "type": "git",

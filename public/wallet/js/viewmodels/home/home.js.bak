@@ -1,12 +1,10 @@
-define(['knockout',
-    'viewmodels/common/command'], function(ko,Command){
-    var homeType = function (options) {
+define(['knockout'], function(ko){
+    var homeType = function(options){
         var self = this;
         self.wallet = options.parent || {};
 
         self.statusMessage = ko.observable("");
 
-        self.profileComplete = ko.observable(false);
         self.role = ko.observable("");
         self.first_name = ko.observable("");
         self.last_name = ko.observable("");
@@ -14,8 +12,10 @@ define(['knockout',
 
     homeType.prototype.refresh = function(timerRefresh){
         var self = this;
-        if (self.wallet.account() !== ""){
-            self.ready(true);
+        if (self.wallet.User().profile){
+            self.role(self.wallet.User().profile.role);
+            self.first_name(self.wallet.User().profile.first_name);
+            self.last_name(self.wallet.User().profile.last_name);
         }
         if (timerRefresh && !self.wallet.profileComplete()){
             window.location = self.wallet.settings().chRoot + '/#profile';

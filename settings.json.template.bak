@@ -7,6 +7,9 @@
 {
   // NOTE: rpcuser/pass/host/port is pulled from the coin's config file.
 
+  // Version
+  "version": "2.1.0",
+
   // Runtime environment: 'development' or 'production'
   "env": "development",
 
@@ -104,7 +107,7 @@
     "rpcuser": "rpcuser",
     "rpcpassword": "rpcpassword",
     "rpchost": "127.0.0.1",
-    "rpcport": 18181,
+    "rpcport": 18184,
     "ssl": false,
     "rejectUnauthorized": false,
     "strictSSL": false

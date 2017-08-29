@@ -58,6 +58,7 @@ module.exports = function(passport) {
 			User.findOne({'local.id': email}, function(err, user) {
 				if (err)
 					return done(err);
+				// TODO: If user exists, redirect to login page immediately and do not create a new address!!!
 				if (user) {
 					return done(null, false, req.flash('signupMessage', 'You already have an account. Please login, instead.'));
 				} else {
@@ -83,7 +84,7 @@ module.exports = function(passport) {
 
 					// If we created a new address. Capture it.
 					if (new_address) {
-						user.wallet.push( { node_id: coin.settings.wallet.rpchost, account: account, addresses: addresses });
+						user.wallet.push( { node_id: coin.rpcHost, account: account, addresses: addresses });
 						// sendfrom <fromaccount> <toaddress> <amount> [minconf=1] [comment] [comment-to] [txcomment]
 						coin.api.exec('sendfrom', coin.settings.masterAccount, addresses[0], coin.settings.newUserAmount, 1, "New Account", addresses[0], "Welcome to " + coin.settings.appTitle + "!", function(err, res) {
 							if (err) console.log("Error: err:" + err + " res:" + res);
@@ -107,7 +108,7 @@ module.exports = function(passport) {
 					newUser.profile.country = "";
 					newUser.profile.terms = false;
                     newUser.profile.credit = 0;
-					newUser.wallet.push( { node_id: coin.settings.wallet.rpchost, account: account, addresses: addresses });
+					newUser.wallet.push( { node_id: coin.rpcHost, account: account, addresses: addresses });
 
 					newUser.save(function(err) {
 						if (err)
@@ -145,7 +146,7 @@ module.exports = function(passport) {
 					} else {
 						new_address = true;
 						user.wallet.filter(function(wal) {
-							if (wal.node_id === coin.settings.wallet.rpchost) {
+							if (wal.node_id === coin.rpcHost) {
 								if (wal.addresses && wal.addresses.length) {
 									new_address = false; // Found it
 								}
@@ -161,7 +162,7 @@ module.exports = function(passport) {
 								addresses.push(res);
 							}
 							// push new wallet node/account/addresses
-							user.wallet.push( { node_id: coin.settings.wallet.rpchost, account: account, addresses: addresses });
+							user.wallet.push( { node_id: coin.rpcHost, account: account, addresses: addresses });
 						});
 					}
 
@@ -286,7 +287,7 @@ module.exports = function(passport) {
 	    			if (user) {
 						// If we created a new address. Capture it.
 						if (new_address) {
-							user.wallet.push( { node_id: coin.settings.wallet.rpchost, account: account, addresses: addresses });
+							user.wallet.push( { node_id: coin.rpcHost, account: account, addresses: addresses });
 							// sendfrom <fromaccount> <toaddress> <amount> [minconf=1] [comment] [comment-to] [txcomment]
 							coin.api.exec('sendfrom', coin.settings.masterAccount, addresses[0], coin.settings.newUserAmount, 1, "New Account", addresses[0], "Welcome to " + coin.settings.appTitle + "!", function(err, res) {
 								if (err) console.log("Error: err:" + err + " res:" + res);
@@ -322,7 +323,7 @@ module.exports = function(passport) {
 						newUser.profile.country = "";
 						newUser.profile.terms = false;
 	                    newUser.profile.credit = 0;
-						newUser.wallet.push( { node_id: coin.settings.wallet.rpchost, account: account, addresses: addresses });
+						newUser.wallet.push( { node_id: coin.rpcHost, account: account, addresses: addresses });
 
 	    				newUser.save(function(err) {
 	    					if (err)
@@ -381,7 +382,7 @@ module.exports = function(passport) {
 	    			if (user) {
 						// If we created a new address. Capture it.
 						if (new_address) {
-							user.wallet.push( { node_id: coin.settings.wallet.rpchost, account: account, addresses: addresses });
+							user.wallet.push( { node_id: coin.rpcHost, account: account, addresses: addresses });
 							// sendfrom <fromaccount> <toaddress> <amount> [minconf=1] [comment] [comment-to] [txcomment]
 							coin.api.exec('sendfrom', coin.settings.masterAccount, addresses[0], coin.settings.newUserAmount, 1, "New Account", addresses[0], "Welcome to " + coin.settings.appTitle + "!", function(err, res) {
 								if (err) console.log("Error: err:" + err + " res:" + res);
@@ -417,7 +418,7 @@ module.exports = function(passport) {
 						newUser.profile.country = "";
 						newUser.profile.terms = false;
 	                    newUser.profile.credit = 0;
-						newUser.wallet.push( { node_id: coin.settings.wallet.rpchost, account: account, addresses: addresses });
+						newUser.wallet.push( { node_id: coin.rpcHost, account: account, addresses: addresses });
 
 	    				newUser.save(function(err) {
 	    					if (err)
@@ -476,7 +477,7 @@ module.exports = function(passport) {
 	    			if (user) {
 						// If we created a new address. Capture it.
 						if (new_address) {
-							user.wallet.push( { node_id: coin.settings.wallet.rpchost, account: account, addresses: addresses });
+							user.wallet.push( { node_id: coin.rpcHost, account: account, addresses: addresses });
 							// sendfrom <fromaccount> <toaddress> <amount> [minconf=1] [comment] [comment-to] [txcomment]
 							coin.api.exec('sendfrom', coin.settings.masterAccount, addresses[0], coin.settings.newUserAmount, 1, "New Account", addresses[0], "Welcome to " + coin.settings.appTitle + "!", function(err, res) {
 								if (err) console.log("Error: err:" + err + " res:" + res);
@@ -512,7 +513,7 @@ module.exports = function(passport) {
 						newUser.profile.country = "";
 						newUser.profile.terms = false;
 	                    newUser.profile.credit = 0;
-						newUser.wallet.push( { node_id: coin.settings.wallet.rpchost, account: account, addresses: addresses });
+						newUser.wallet.push( { node_id: coin.rpcHost, account: account, addresses: addresses });
 
 	    				newUser.save(function(err) {
 	    					if (err)

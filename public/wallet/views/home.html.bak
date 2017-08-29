@@ -7,7 +7,7 @@
         <h3 align="center" data-bind="text:statusMessage"></h3>
 
         <ul>
-            <li>[ Welcome! ]</li>
+            <li>[ VIDEO PREVIEW ]</li>
         </ul>
 
         <p>&nbsp;</p>

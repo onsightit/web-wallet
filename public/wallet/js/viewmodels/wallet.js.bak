@@ -134,7 +134,6 @@ define(['knockout',
                     console.log("ERROR: Aborting! Node_ID not found.");
                     window.location = chRoot + '/logout';
                 }
-                //console.log("DEBUG: node_id: " + self.node_id());
                 self.initUser();
             }).fail(function(jqXHR){
                 // If the second call to initNode fails, we bail.

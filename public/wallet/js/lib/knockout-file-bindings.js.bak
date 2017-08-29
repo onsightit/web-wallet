@@ -35,11 +35,11 @@
         defaultOptions: {
             wrapperClass: 'input-group',
             fileNameClass: 'disabled form-control',
-            noFileText: '',
+            noFileText: 'No file chosen',
             buttonGroupClass: 'input-group-btn',
             buttonClass: 'btn btn-primary',
             clearButtonClass: 'btn btn-default',
-            buttonText: 'Select File',
+            buttonText: 'Choose File',
             changeButtonText: 'Change',
             clearButtonText: 'Clear',
             fileName: true,
