@@ -14,16 +14,16 @@
   "appHost": "localhost",
 
   // The app title, visible in browser window
-  "appTitle": "YourApp Title",
+  "appTitle": "YourCoin Title",
 
   // The app slogan
-  "appSlogan": "Explore YourApp!",
+  "appSlogan": "Explore YourCoin!",
 
   // The app description
-  "appDescription": "YourApp description goes here.",
+  "appDescription": "YourCoin App description goes here.",
 
   // The copyright for the footer (uncomment to override default)
-  //"copyRight": "Copyright (c) 2016-2017, The YourApp developers. All rights reserved.",
+  //"copyRight": "Copyright (c) 2016-2017, The YourCoin developers. All rights reserved.",
 
   // Logo
   "logo": "/images/Logo.png",
@@ -38,7 +38,7 @@
   "coinName": "YourCoin",
 
   // Coin symbol
-  "coinSymbol": "SPC",
+  "coinSymbol": "SSH",
 
   // Coin addresses start with this character
   "coinChar": "S",
@@ -57,7 +57,7 @@
   //      # ORIGINAL RewriteRule . /index.php [L]
   //      RewriteRule ./ /index.php [L]
   // Set to "" to allow the sub-folder 'wallet' to be exposed for proxying.
-  // Set to "/wallet" to chroot the node to /public/wallet/ (Normal for stand-alone YourApp).
+  // Set to "/wallet" to chroot the node to /public/wallet/ (Normal for stand-alone YourCoin).
   "chRoot": "/wallet",
 
   // Show stats in navigation

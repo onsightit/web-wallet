@@ -114,7 +114,7 @@ define(['knockout',
     // Called once at startup.
     walletType.prototype.initNode = function(chRoot){
         var self = this;
-        // Catch-22: We don't know if YourApp is chRoot'd to /public or /public/wallet,
+        // Catch-22: We don't know if YourCoin is chRoot'd to /public or /public/wallet,
         // because 'settings' has not been set yet, so we need to test for a failure first
         // to determine if settings().chRoot is "" or "/wallet".
         var getNodeInfoCommand = new Command('getnodeinfo', [],

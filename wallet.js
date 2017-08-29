@@ -1,5 +1,5 @@
 /**
- *  YourApp App
+ *  YourCoin App
  */
 
 Object.defineProperty(Error.prototype, 'toJSON', {
