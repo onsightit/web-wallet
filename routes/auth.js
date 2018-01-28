@@ -61,7 +61,6 @@ module.exports = function(app, passport, coin) {
 	});
 	app.post(chRoot + '/signup', isNotLoggedIn, function (req, res, next) {
 		var recaptcha = req.body['g-recaptcha-response'];
-		console.log(recaptcha);
 		if (recaptcha !== 'na') {
 			https.get('https://www.google.com/recaptcha/api/siteverify?secret=' + coin.settings.reCaptchaSecret + '&response=' + recaptcha, function (res) {
 				var data = '';

@@ -21,7 +21,7 @@ define(['knockout','common/dialog','viewmodels/common/confirmation-dialog','view
     };
 
     walletPassphraseType.prototype.userPrompt = function(encrypt, title, message, affirmativeButtonText){
-        var self = this, 
+        var self = this,
             walletPassphraseDeferred = $.Deferred(),
             passphraseDialog = new ConfirmationDialog({
                 title: title || 'Wallet Passphrase',

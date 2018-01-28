@@ -19,9 +19,11 @@ define(['knockout',
     'viewmodels/explore/explore',
     'viewmodels/console/console',
     'viewmodels/profile/profile',
+    'viewmodels/faq/faq',
+    'viewmodels/terms/terms',
     'bindinghandlers/modal',
     'viewmodels/common/wallet-passphrase',
-    'viewmodels/common/command'], function(ko, dialog, WalletStatus, Home, Send, Receive, History, Explore, Console, Profile, Modal, WalletPassphrase, Command){
+    'viewmodels/common/command'], function(ko, dialog, WalletStatus, Home, Send, Receive, History, Explore, Console, Profile, FAQ, Terms, Modal, WalletPassphrase, Command){
 
     var walletType = function(){
         var self = this;
@@ -57,7 +59,9 @@ define(['knockout',
         this.explore = new Explore({parent: self});
         this.console = new Console({parent: self});
         this.profile = new Profile({parent: self});
-
+        this.faq = new FAQ({parent: self});
+        this.terms = new Terms({parent: self});
+        
         self.currentView.subscribe(function (view){
             self.sessionExpires(Date.now() + self.sessionTimeout());
             switch(view){
@@ -81,6 +85,12 @@ define(['knockout',
                     break;
                 case ("profile"):
                     self.profile.refresh(false);
+                    break;
+                case ("faq"):
+                    self.faq.refresh(false);
+                    break;
+                case ("terms"):
+                    self.terms.refresh(false);
                     break;
                 default:
                     break;
@@ -121,7 +131,7 @@ define(['knockout',
     };
 
     // Called once at startup.
-    walletType.prototype.initNode = function(chRoot){
+    walletType.prototype.initNode = function(chRoot) {
         var self = this;
         // Catch-22: We don't know if YourCoin is chRoot'd to /public or /public/wallet,
         // because 'settings' has not been set yet, so we need to test for a failure first
@@ -130,7 +140,7 @@ define(['knockout',
                                              chRoot, // unknown chRoot on first call.
                                              'production'); // Gets the wallet info and settings quietly
         $.when(getNodeInfoCommand.execute())
-            .done(function(getNodeInfoData){
+            .done(function(getNodeInfoData) {
                 if (typeof getNodeInfoData.settings.wallet.rpchost !== 'undefined'){
                     self.node_id(getNodeInfoData.settings.wallet.rpchost);
                     self.settings(getNodeInfoData.settings);
@@ -251,7 +261,9 @@ define(['knockout',
                 self.explore.refresh(timerRefresh);
                 self.console.refresh(timerRefresh);
                 self.profile.refresh(timerRefresh);
-	    });
+                self.faq.refresh(timerRefresh);
+                self.terms.refresh(timerRefresh);
+			});
         return refreshPromise;
     };
 

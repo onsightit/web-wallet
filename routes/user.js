@@ -25,7 +25,7 @@ module.exports = function(app, coin, mdb){
         var profile = JSON.parse(atob(decodeURIComponent(req.params.profile))) || req.user.profile;
         if (profile && profile.login_type) {
             req.user.profile = profile;
-            sequelize.saveUserProfile(req.user._id, profile, function (err, data) {
+            mdb.saveUserProfile(req.user._id, profile, function (err, data) {
                 if (err) {
                     res.status(500).send(JSON.stringify(data));
                 } else {

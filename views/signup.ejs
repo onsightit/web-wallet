@@ -4,6 +4,7 @@
 	<head>
 		<title><%= settings.appTitle %> - Signup</title>
 		<% include partials/meta %>
+		<script>function onSubmit(token){document.getElementById("signup").submit();}</script>
 	</head>
 	<body role="document" class="intro">
 		<div id='wrapper'>
@@ -18,8 +19,8 @@
 						<% if (message != '') { %>
 							<div class="alert alert-danger"><%= message %></div>
 						<% } %>
-						<!-- LOGIN FORM -->
-						<form class="form-horizontal" role="form" action="signup" method="post">
+						<!-- SIGNUP FORM -->
+						<form class="form-horizontal" id="signup" role="form" action="signup" method="post">
 							<div class="form-group">
 								<div class="col-sm-6">
 									<input class="form-control" type="text" name="first_name" placeholder="Enter your first name.">
@@ -30,20 +31,26 @@
 							</div>
 							<div class="form-group">
 								<div class="col-sm-12">
-									<input class="form-control" type="text" name="email" placeholder="Enter your email address for your login.">
+									<input class="form-control" type="text" name="email" placeholder="Enter your email address.">
 								</div>
 							</div>
 							<div class="form-group">
 								<div class="col-sm-12">
-									<input class="form-control" type="text" name="password" value="<%= pwgenerated %>" placeholder="Your generated password." readonly>
+									<input class="form-control" type="hidden" name="password" value="<%= pwgenerated %>" placeholder="Enter your password. (8+ characters including numbers and symbols)">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-sm-offset-2" for="password">Make a copy of your password above before submitting!</label>
+								<div class="col-sm-12">
+									<pre style="max-height: 160px;"><%= terms %></pre>
+								</div>
 							</div>
 							<div class="form-group">
-								<div class="col-sm-offset-10 col-sm-2">
-									<button class="btn btn-primary btn-lg g-recaptcha" type="submit" data-sitekey="<%= settings.recaptchaKey %>" data-callback="onSubmit" data-badge="bottomright" data-size="invisible">Next</button>
+								<label class="control-label col-sm-10" for="terms">I agree to the Terms and Conditions above.</label>
+								<input class="form-control-addon" type="checkbox" name="terms">
+							</div>
+							<div class="form-group">
+								<div class="col-sm-offset-9 col-sm-3">
+									<button class="btn btn-primary btn-lg g-recaptcha" type="submit" data-sitekey="<%= settings.reCaptchaKey %>" data-callback="onSubmit" data-badge="bottomright" data-size="invisible">Next</button>
 								</div>
 							</div>
 						</form>

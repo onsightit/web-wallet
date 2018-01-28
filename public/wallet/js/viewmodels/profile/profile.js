@@ -1,7 +1,9 @@
 define(['knockout',
     'viewmodels/common/command',
-    '../common/profile-pulldown',
-    'moment'], function(ko,Command,ProfilePulldown,Moment){
+    'common/dialog',
+    'viewmodels/common/terms-dialog',
+    'viewmodels/common/profile-pulldown',
+    'moment'], function(ko, Command, Dialog, TermsDialog, ProfilePulldown, Moment) {
     var profileType = function(options){
         var self = this;
         self.wallet = options.parent || {};
@@ -35,6 +37,7 @@ define(['knockout',
         self.gender = ko.observable("");
         self.country = ko.observable("");
         self.terms = ko.observable(false);
+        self.termsHTML = ko.observable("");
 
         self.dirtyFlag = ko.observable(false);
         self.isDirty = ko.computed(function() {
@@ -42,10 +45,10 @@ define(['knockout',
         });
 
         // User changeables subscriptions
-        self.first_name.subscribe(function (){self.dirtyFlag(self.ready());});
-        self.last_name.subscribe(function (){self.dirtyFlag(self.ready());});
-        self.email.subscribe(function (){self.dirtyFlag(self.ready());});
-        self.description.subscribe(function (){self.dirtyFlag(self.ready());});
+        self.first_name.subscribe(function (){self.dirtyFlag(true);});
+        self.last_name.subscribe(function (){self.dirtyFlag(true);});
+        self.email.subscribe(function (){self.dirtyFlag(true);});
+        self.description.subscribe(function (){self.dirtyFlag(true);});
         self.dob.subscribe(function (){
             var now = Moment().utc();
             var dob = Moment(self.dob()).utc();
@@ -64,11 +67,17 @@ define(['knockout',
                 }
             }
             self.age(age);
-            self.dirtyFlag(self.ready());
+            self.dirtyFlag(true);
         });
         self.gender.subscribe(function (){self.dirtyFlag(self.ready());});
         self.country.subscribe(function (){self.dirtyFlag(self.ready());});
         self.terms.subscribe(function (){self.dirtyFlag(self.ready());});
+        self.terms.subscribe(function (){
+            if (self.ready()) {
+                self.agreeToTerms();
+                self.dirtyFlag(true);
+            }
+        });
 
         self.canSubmit = ko.computed(function(){
             var canSubmit = self.first_name() !== "" &&
@@ -138,17 +147,63 @@ define(['knockout',
             self.credit(self.wallet.User().profile.credit || 0);
 
             // This has to be inside the !isDirty check
-            if (!self.wallet.profileComplete()){
+            if (!self.wallet.profileComplete()) {
                 self.profileComplete(false);
-                self.statusMessage("Please complete your profile before continuing.");
             } else {
                 self.profileComplete(true);
             }
-            self.ready(true);
             self.dirtyFlag(false);
+            self.ready(true);
         }
-        if (!timerRefresh && !self.isDirty()){
+        if (!timerRefresh && !self.isDirty()) {
             self.statusMessage("");
+        }
+    };
+
+    profileType.prototype.userPrompt = function(koterms, title, affirmativeButtonText, negativeButtonText, message){
+        var self = this,
+            currentTerms = koterms();
+            termsDeferred = $.Deferred(),
+            termsDialog = new TermsDialog({
+                title: title || '',
+                contentTemplate: "modals/terms-message",
+                context: self,
+                canAffirm: function(){return true;},
+                allowClose: false,
+                showNegativeButton: true,
+                message: message,
+                affirmativeButtonText: affirmativeButtonText,
+                negativeButtonText: negativeButtonText,
+                affirmativeHandler: function(){
+                    if (!currentTerms) {
+                        self.ready(false); // Don't re-trigger
+                        koterms(true);
+                        self.ready(true);
+                    }
+                },
+                negativeHandler: function(){
+                    if (currentTerms) {
+                        self.ready(false); // Don't re-trigger
+                        koterms(false);
+                        self.ready(true);
+                    }
+                }
+            });
+            termsDialog.open();
+
+        return termsDeferred.promise();
+    };
+
+    profileType.prototype.agreeToTerms = function() {
+        var self = this;
+        if (self.terms()) {
+            // Read file containing terms and conditions
+            $.get("/docs/terms.txt", function(data) {
+                self.termsHTML(data);
+                }).done(function(){
+                    self.userPrompt(self.terms, 'Terms and Conditions', 'Agree', 'Disagree', self.termsHTML());
+                });
+            self.termsHTML("");
         }
     };
 
