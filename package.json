@@ -58,7 +58,6 @@
     "hash.js": "^1.1.3",
     "inflight": "^1.0.6",
     "ip": "^1.1.5",
-    "jsen": "github:bugventure/jsen#9e57a9d653ff4ea47d364fc37da0f1659bfb8e89",
     "jsonminify": "^0.4.1",
     "lodash": "^4.17.4",
     "mime": "^1.3.6",
