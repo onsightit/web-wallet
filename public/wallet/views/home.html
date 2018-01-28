@@ -1,15 +1,19 @@
-<div class="container" data-bind="with:home">
-
+<div class="well" data-bind="with:home">
     <!-- HOME -->
-    <div class="well">
-        <div class="slogan" data-bind="text: wallet.settings().appSlogan"></div>
-        <div class="description" data-bind="text: wallet.settings().appDescription"></div>
-        <h3 align="center" data-bind="text:statusMessage"></h3>
+    <h1 class="text-primary">Welcome to the <span data-bind="text: wallet.settings().appTitle"></span></h1>
+    <div class="slogan" data-bind="text: wallet.settings().appSlogan"></div>
+    <div class="description" data-bind="text: wallet.settings().appDescription"></div>
+    <h3 align="center" data-bind="text:statusMessage"></h3>
 
-        <ul>
-            <li>[ Welcome! ]</li>
-        </ul>
+    <!-- ko if: ready() -->
+    <ul>
+        <li>[ Welcome! ]</li>
+    </ul>
+    <p>&nbsp;</p>
+    <!-- /ko -->
 
-        <p>&nbsp;</p>
-    </div>
+    <!-- ko if: !ready() -->
+    <p>Loading...</p>
+    <!-- /ko -->
+
 </div>

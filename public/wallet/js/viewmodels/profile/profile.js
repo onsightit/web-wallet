@@ -5,7 +5,8 @@ define(['knockout',
     var profileType = function(options){
         var self = this;
         self.wallet = options.parent || {};
-
+        self.ready = ko.observable(false);
+        
         self.statusMessage = ko.observable("");
 
         // Source value arrays for pulldown menues
@@ -41,10 +42,10 @@ define(['knockout',
         });
 
         // User changeables subscriptions
-        self.first_name.subscribe(function (){self.dirtyFlag(true);});
-        self.last_name.subscribe(function (){self.dirtyFlag(true);});
-        self.email.subscribe(function (){self.dirtyFlag(true);});
-        self.description.subscribe(function (){self.dirtyFlag(true);});
+        self.first_name.subscribe(function (){self.dirtyFlag(self.ready());});
+        self.last_name.subscribe(function (){self.dirtyFlag(self.ready());});
+        self.email.subscribe(function (){self.dirtyFlag(self.ready());});
+        self.description.subscribe(function (){self.dirtyFlag(self.ready());});
         self.dob.subscribe(function (){
             var now = Moment().utc();
             var dob = Moment(self.dob()).utc();
@@ -63,11 +64,11 @@ define(['knockout',
                 }
             }
             self.age(age);
-            self.dirtyFlag(true);
+            self.dirtyFlag(self.ready());
         });
-        self.gender.subscribe(function (){self.dirtyFlag(true);});
-        self.country.subscribe(function (){self.dirtyFlag(true);});
-        self.terms.subscribe(function (){self.dirtyFlag(true);});
+        self.gender.subscribe(function (){self.dirtyFlag(self.ready());});
+        self.country.subscribe(function (){self.dirtyFlag(self.ready());});
+        self.terms.subscribe(function (){self.dirtyFlag(self.ready());});
 
         self.canSubmit = ko.computed(function(){
             var canSubmit = self.first_name() !== "" &&
@@ -143,6 +144,7 @@ define(['knockout',
             } else {
                 self.profileComplete(true);
             }
+            self.ready(true);
             self.dirtyFlag(false);
         }
         if (!timerRefresh && !self.isDirty()){

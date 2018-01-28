@@ -10,7 +10,7 @@
   // Runtime environment: 'development' or 'production'
   "env": "development",
 
-  // The url hosting the app. e.g. myhost.org (must match browser URI to satisfy CORS)
+  // The url hosting the app. e.g. myhost.org (Must match browser URI to satisfy CORS!!!)
   "appHost": "localhost",
 
   // The app title, visible in browser window
@@ -110,14 +110,17 @@
     "strictSSL": false
   },
 
+  // Email address to send through mail service.
+  "appEmail": "info@example.com",
+
   // Master UI login account, and Label to assign to "" wallet accounts.
   // ***  DO NOT CHANGE THE ACCOUNT NAME AFTER FIRST RUN!  ***
   "masterAccount": "MASTER_ACCOUNT",
 
   // Master email account for UI.
-  "masterEmail": "info@example.com",
+  "masterEmail": "webmaster@example.com",
 
-  // Master password for UI.
+  // Master password for UI. (CHANGE THIS!)
   "masterPassword": "SecretPassword",
 
   // Master can encrypt the wallet

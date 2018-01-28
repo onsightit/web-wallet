@@ -1,6 +1,5 @@
 # Live settings file
 settings.json
-coin.conf
 
 # SSL certs and keys
 sslcert/*.*
@@ -58,3 +57,4 @@ Temporary Items
 *.bak
 
 *.komodoproject
+.vscode/

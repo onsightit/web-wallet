@@ -26,7 +26,7 @@ define(['knockout',
     var walletType = function(){
         var self = this;
 
-        self.walletUp = ko.observable(true);        // Is the wallet node available?
+        self.walletUp = ko.observable(false);        // Is the wallet node available?
 
         self.sessionTimeout = ko.observable(2 * 60 * 60 * 1000); // Application session timeout = 2 Hours between change of views.
         self.sessionExpires = ko.observable(Date.now() + self.sessionTimeout());
@@ -87,9 +87,18 @@ define(['knockout',
             }
         });
 
+        self.emailVerified = ko.computed(function(){
+            var isVerified = false;
+            if (self.User().profile && typeof self.User().profile.verified !== 'undefined') {
+                isVerified = self.User().profile.verified === "Y" &&
+                             self.User().profile.email && self.User().profile.email !== "";
+            }
+            return isVerified;
+        });
+
         self.profileComplete = ko.computed(function(){
             var isComplete = false;
-            if (self.User().profile && self.User().profile.first_name !== 'undefined') {
+            if (self.User().profile && typeof self.User().profile.terms !== 'undefined') {
                 isComplete = self.User().profile.first_name && self.User().profile.first_name !== "" &&
                              self.User().profile.last_name && self.User().profile.last_name !== "" &&
                              self.User().profile.email && self.User().profile.email !== "" &&

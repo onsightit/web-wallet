@@ -22,8 +22,8 @@
 						<p><br><a href="<%= settings.chRoot %>/" class="btn btn-primary btn-lg"><span class="fa fa-home"></span> Try Later...</a></p>
 					<% } %>
 					<% if (settings.status.length == 0) { %>
-						<a href="signup" class="btn btn-primary btn-lg"><span class="fa fa-user"></span> Signup</a>
-						<a href="login" class="btn btn-primary btn-lg"><span class="fa fa-user"></span> Login</a>
+						<a href="signup" class="btn btn-primary btn-lg"><span class="fa fa-user"></span> Signup</a> &nbsp;
+						<a href="login" class="btn btn-primary btn-lg"><span class="fa fa-sign-in"></span> Login</a>
 						<p><br>&mdash; or &mdash;</p>
 						<a href="auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
 						<a href="auth/google" class="btn btn-primary"><span class="fa fa-google-plus"></span> Google</a>
@@ -32,6 +32,8 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="footer text-with-background text-centered">
 				<% include partials/footer %>
 			</div>
 		</div>

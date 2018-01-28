@@ -10,12 +10,17 @@ module.exports = function(app, passport, coin) {
 	console.log("Base URL is: " + (chRoot ? chRoot : '/'));
 
 	app.get(chRoot + '/', isLoggedIn, function(req, res) {
-		if (req.user.local.changeme) {
-			res.redirect(chRoot + '/password');
+		if (req.user.profile.verified !== 'Y') {
+			res.redirect(chRoot + '/verify');
+		} else {
+			if (req.user.local.changeme) {
+				res.redirect(chRoot + '/password');
+			} else {
+				//console.log("DEBUG: req.session: " + JSON.stringify(req.session));
+				//console.log("DEBUG: req.user: " + JSON.stringify(req.user));
+				res.render('home.ejs'); // If logged in, allow access to StreamSpace
+			}
 		}
-		//console.log("DEBUG: req.session: " + JSON.stringify(req.session));
-		//console.log("DEBUG: req.user: " + JSON.stringify(req.user));
-		res.render('home.ejs'); // If logged in, allow access to YourApp
 	});
 
 	// Local login
@@ -30,12 +35,32 @@ module.exports = function(app, passport, coin) {
 			failureFlash: true })
 	);
 
+	// Local verify email
+	app.get(chRoot + '/verify', function(req, res) {
+		if(!req.isAuthenticated()) {
+			res.redirect(chRoot + '/login');
+		} else {
+			if (req.user.profile.verified === 'Y') {
+				res.redirect(chRoot + '/');
+			} else {
+				res.render('verify.ejs', { message: req.flash('verifyMessage'), email: req.user.local.id });
+			}
+		}
+	});
+	app.post(chRoot + '/verify',
+		passport.authenticate('local-verify', {
+			successRedirect: chRoot + '/',
+			failureRedirect: chRoot + '/verify',
+			failureFlash: true })
+	);
+
 	// Local signup
 	app.get(chRoot + '/signup', function(req, res) {
 		if(req.isAuthenticated()) {
 			res.redirect(chRoot + '/');
+		} else {
+			res.render('signup.ejs', { message: req.flash('signupMessage') });
 		}
-		res.render('signup.ejs', { message: req.flash('signupMessage') });
 	});
 	app.post(chRoot + '/signup', isNotLoggedIn, function (req, res, next) {
 		var resKey = req.body['g-recaptcha-response'];
@@ -59,14 +84,18 @@ module.exports = function(app, passport, coin) {
 	},
 	// Invoked by next() from previous middleware
 	passport.authenticate('local-signup', {
-		successRedirect: chRoot + '/login',
+		successRedirect: chRoot + '/verify',
 		failureRedirect: chRoot + '/signup',
 		failureFlash: true
 	}));
 
 	// Local change password
-	app.get(chRoot + '/password', isLoggedIn, function(req, res) {
-		res.render('password.ejs', { message: req.flash('passwordMessage'), user: req.user }); // If logged in, allow password change
+	app.get(chRoot + '/password', function(req, res) {
+		if(!req.isAuthenticated()) {
+			res.redirect(chRoot + '/login');
+		} else {
+			res.render('password.ejs', { message: req.flash('passwordMessage'), email: req.user.local.id, changeme: req.user.local.changeme }); // If logged in, allow password change
+		}
 	});
 	app.post(chRoot + '/password', passport.authenticate('local-password', {
 		successRedirect: chRoot + '/login',
@@ -114,6 +143,7 @@ module.exports = function(app, passport, coin) {
 };
 
 function isLoggedIn(req, res, next) {
+	//console.log("DEBUG: req.isAuthenticated: " + req.isAuthenticated());
 	//console.log("DEBUG: req.session: " + JSON.stringify(req.session));
 	if(req.isAuthenticated() && req.session) {
 		return next();

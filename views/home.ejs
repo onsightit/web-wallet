@@ -41,7 +41,7 @@
 		<!-- /ko -->
 					<li><a href="logout"><div class="sidebar-nav-button-content"><div class="fa fa-sign-out fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Logout</span></div></div></a></li>
 
-		<!-- ko if: showStats() -->
+		<!-- ko if: showStats() & walletUp() -->
 					<li><span>&nbsp;</span></li>
 					<li><h4><%= settings.coinName %></h4></li>
 					<li>Balance: <span data-bind='text: walletStatus.totalFmt'></span></li>
@@ -64,35 +64,38 @@
 			</div>
 
 			<div id='page-content-wrapper'>
-				<div id="wallet-container">
-					<div class='top-content'>
-						<div class='top-nav container'>
-							<div class='row'>
-								<div class="button-settings"><span data-bind="click: toggleSidebar" class="glyphicon glyphicon-menu-hamburger"></span></div>
-								<div class="button-refresh"><span data-bind="click: refresh" class="glyphicon glyphicon-refresh"></span></div>
-								<!-- Top Navigation -->
-								<a href="#home">
-									<div data-bind="css: { selected: $data.currentView() === 'home' }" class="top-nav-button col-sm-3">
-										<div class="top-nav-glyph glyphicon glyphicon-search" aria-hidden="true"></div>
-										<div class="top-nav-text">Explore</div>
-									</div>
-								</a>
-								<a href="#page2">
-									<div data-bind="css: { selected: $data.currentView() === 'page2' }" class="top-nav-button col-sm-3" >
-										<div class="top-nav-glyph glyphicon glyphicon-film" aria-hidden="true"></div>
-										<div class="top-nav-text">Page 2</div>
-									</div>
-								</a>
-							</div>
+				<div class='top-content'>
+					<div class='top-nav container'>
+						<div class='row'>
+							<div class="button-settings"><span data-bind="click: toggleSidebar" class="glyphicon glyphicon-menu-hamburger"></span></div>
+		<!-- ko if: walletUp() -->
+							<div class="button-refresh"><span data-bind="click: refresh" class="glyphicon glyphicon-refresh"></span></div>
+		<!-- /ko -->
+							<!-- Top Navigation -->
+							<a href="#home">
+								<div data-bind="css: { selected: $data.currentView() === 'home' }" class="top-nav-button col-sm-3">
+									<div class="top-nav-glyph glyphicon glyphicon-search" aria-hidden="true"></div>
+									<div class="top-nav-text">Explore</div>
+								</div>
+							</a>
+							<a href="#page2">
+								<div data-bind="css: { selected: $data.currentView() === 'page2' }" class="top-nav-button col-sm-3" >
+									<div class="top-nav-glyph glyphicon glyphicon-film" aria-hidden="true"></div>
+									<div class="top-nav-text">Page 2</div>
+								</div>
+							</a>
 						</div>
 					</div>
-			<!-- ko if: isLoadingStatus() --> 
-					<img src="images/loading.gif" style="display: block; margin-top: 50px; margin-left: auto; margin-right: auto;">
-			<!-- /ko -->
-			<!-- ko if: !isLoadingStatus() --> 
-					<!--ko template: currentView --> <!--/ko -->
-			<!-- /ko -->
-				</div> <!-- #walletcontainer -->
+				</div>
+		<!-- ko if: isLoadingStatus() --> 
+				<img src="images/loading.gif" style="display: block; margin-top: 50px; margin-left: auto; margin-right: auto;">
+		<!-- /ko -->
+		<!-- ko if: !isLoadingStatus() --> 
+				<!--ko template: currentView --> <!--/ko -->
+		<!-- /ko -->
+			</div>
+
+			<div class="footer text-with-background text-centered">
 				<% include partials/footer %>
 			</div>
 		</div>
