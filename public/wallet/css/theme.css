@@ -30,10 +30,9 @@ sup {
 
 .logo {
     /* image is defined in settings.json */
-    height: 100px;
+    margin-top: 10px;
+    height: 120px;
     background-size: auto 80px;
-    font-size: large;
-    text-align: center;
 }
 
 .icon {
