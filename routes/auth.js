@@ -3,6 +3,9 @@
  */
 
 var https = require('https');
+var fs = require('fs');
+var pwgenerator = require('generate-password');
+var termstxt = "";
 
 module.exports = function(app, passport, coin) {
 	var chRoot = app.get('chRoot');
@@ -11,7 +14,11 @@ module.exports = function(app, passport, coin) {
 
 	app.get(chRoot + '/', isLoggedIn, function(req, res) {
 		if (req.user.profile.verified !== 'Y') {
-			res.redirect(chRoot + '/verify');
+			if (req.user.profile.verified.length === 6) {
+				res.redirect(chRoot + '/verify');
+			} else {
+				res.redirect(chRoot + '/verify-reset');
+			}
 		} else {
 			if (req.user.local.changeme) {
 				res.redirect(chRoot + '/password');
@@ -35,9 +42,57 @@ module.exports = function(app, passport, coin) {
 			failureFlash: true })
 	);
 
+	// Local signup
+	app.get(chRoot + '/signup', function(req, res) {
+		if (req.isAuthenticated()) {
+			res.redirect(chRoot + '/');
+		} else {
+			var pwgenerated = generatePassword();
+			fs.readFile('public/wallet/docs/terms.txt', 'utf8', function(err, data) {
+				if (!err) {
+					termstxt = data;
+					res.render('signup.ejs', { message: req.flash('signupMessage'), pwgenerated: pwgenerated, terms: termstxt });
+				} else {
+					console.log("signuo error: " + err);
+					res.redirect(chRoot + '/');
+				}
+			});
+		}
+	});
+	app.post(chRoot + '/signup', isNotLoggedIn, function (req, res, next) {
+		var recaptcha = req.body['g-recaptcha-response'];
+		console.log(recaptcha);
+		if (recaptcha !== 'na') {
+			https.get('https://www.google.com/recaptcha/api/siteverify?secret=' + coin.settings.reCaptchaSecret + '&response=' + recaptcha, function (res) {
+				var data = '';
+				res.on('data', function (chunk) {
+					data += chunk.toString();
+				});
+				res.on('end', function () {
+					var parseData = JSON.parse(data);
+					//console.log("DEBUG: parseData = " + JSON.stringify(parseData));
+					if (parseData && parseData.success === true) {
+						return next();
+					} else {
+						var pwgenerated = generatePassword();
+						res.render('signup.ejs', { message: 'ReCaptcha did not work.', pwgenerated: pwgenerated, terms: termstxt });
+					}
+				});
+			});
+		} else {
+			return next();
+		}
+	},
+	// Invoked by next() from previous middleware
+	passport.authenticate('local-signup', {
+		successRedirect: chRoot + '/verify',
+		failureRedirect: chRoot + '/signup',
+		failureFlash: true
+	}));
+
 	// Local verify email
 	app.get(chRoot + '/verify', function(req, res) {
-		if(!req.isAuthenticated()) {
+		if (!req.isAuthenticated()) {
 			res.redirect(chRoot + '/login');
 		} else {
 			if (req.user.profile.verified === 'Y') {
@@ -54,18 +109,33 @@ module.exports = function(app, passport, coin) {
 			failureFlash: true })
 	);
 
-	// Local signup
-	app.get(chRoot + '/signup', function(req, res) {
-		if(req.isAuthenticated()) {
-			res.redirect(chRoot + '/');
+	// Local change password
+	app.get(chRoot + '/password', function(req, res) {
+		if (!req.isAuthenticated()) {
+			res.redirect(chRoot + '/login');
 		} else {
-			res.render('signup.ejs', { message: req.flash('signupMessage') });
+			res.render('password.ejs', { message: req.flash('passwordMessage'), email: req.user.local.id, changeme: req.user.local.changeme }); // If logged in, allow password change
 		}
 	});
-	app.post(chRoot + '/signup', isNotLoggedIn, function (req, res, next) {
-		var resKey = req.body['g-recaptcha-response'];
-		if (resKey) {
-			https.get('https://www.google.com/recaptcha/api/siteverify?secret=' + coin.settings.reCaptchaSecret + '&response=' + resKey, function (res) {
+	app.post(chRoot + '/password', passport.authenticate('local-password', {
+		successRedirect: chRoot + '/login',
+		failureRedirect: chRoot + '/password',
+		failureFlash: true
+	}));
+
+	// Local reset password
+	app.get(chRoot + '/password-reset', function(req, res) {
+		if (req.isAuthenticated()) {
+			res.redirect(chRoot + '/password');
+		} else {
+			var pwreset = "reset";
+			res.render('password-reset.ejs', { message: req.flash('passwordResetMessage'), pwreset: pwreset }); // If not logged in, allow password reset
+		}
+	});
+	app.post(chRoot + '/password-reset', isNotLoggedIn, function (req, res, next) {
+		var recaptcha = req.body['g-recaptcha-response'];
+		if (recaptcha !== 'na') {
+			https.get('https://www.google.com/recaptcha/api/siteverify?secret=' + coin.settings.reCaptchaSecret + '&response=' + recaptcha, function (res) {
 				var data = '';
 				res.on('data', function (chunk) {
 					data += chunk.toString();
@@ -75,31 +145,34 @@ module.exports = function(app, passport, coin) {
 					//console.log("DEBUG: parseData = " + JSON.stringify(parseData));
 					if (parseData && parseData.success === true) {
 						return next();
+					} else {
+						var pwreset = "reset";
+						res.render('password-reset.ejs', { message: req.flash('passwordResetMessage'), pwreset: pwreset }); // If not logged in, allow password reset
 					}
 				});
 			});
 		} else {
-			res.redirect(chRoot + '/signup');
+			return next();
 		}
 	},
 	// Invoked by next() from previous middleware
-	passport.authenticate('local-signup', {
-		successRedirect: chRoot + '/verify',
-		failureRedirect: chRoot + '/signup',
+	passport.authenticate('local-password-reset', {
+		successRedirect: chRoot + '/verify-reset',
+		failureRedirect: chRoot + '/password-reset',
 		failureFlash: true
 	}));
 
-	// Local change password
-	app.get(chRoot + '/password', function(req, res) {
-		if(!req.isAuthenticated()) {
-			res.redirect(chRoot + '/login');
+	// Local verify reset password after successful request
+	app.get(chRoot + '/verify-reset', function(req, res) {
+		if (!req.isAuthenticated()) {
+			res.redirect(chRoot + '/password-reset');
 		} else {
-			res.render('password.ejs', { message: req.flash('passwordMessage'), email: req.user.local.id, changeme: req.user.local.changeme }); // If logged in, allow password change
+			res.render('verify-reset.ejs', { message: req.flash('verifyResetMessage'), email: req.user.local.id }); // If logged in, allow password reset
 		}
 	});
-	app.post(chRoot + '/password', passport.authenticate('local-password', {
-		successRedirect: chRoot + '/login',
-		failureRedirect: chRoot + '/password',
+	app.post(chRoot + '/verify-reset', passport.authenticate('local-verify-reset', {
+		successRedirect: chRoot + '/',
+		failureRedirect: chRoot + '/verify-reset',
 		failureFlash: true
 	}));
 
@@ -142,17 +215,21 @@ module.exports = function(app, passport, coin) {
 	});
 };
 
+function generatePassword() {
+	return pwgenerator.generate({ length: 6, numbers: true, symbols: false, strict: true });
+}
+
 function isLoggedIn(req, res, next) {
 	//console.log("DEBUG: req.isAuthenticated: " + req.isAuthenticated());
 	//console.log("DEBUG: req.session: " + JSON.stringify(req.session));
-	if(req.isAuthenticated() && req.session) {
+	if (req.isAuthenticated() && req.session) {
 		return next();
 	}
 	res.render('index.ejs');
 }
 
 function isNotLoggedIn(req, res, next) {
-	if(!req.isAuthenticated()) {
+	if (!req.isAuthenticated()) {
 		return next();
 	}
 	// Need to be logged out first

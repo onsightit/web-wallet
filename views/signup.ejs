@@ -42,13 +42,8 @@
 								<label class="control-label col-sm-offset-2" for="password">Make a copy of your password above before submitting!</label>
 							</div>
 							<div class="form-group">
-								<div class="col-sm-12">
-									<div class="g-recaptcha div-centered" data-sitekey="<%= settings.reCaptchaKey %>"></div>
-								</div>
-							</div>
-							<div class="form-group">
 								<div class="col-sm-offset-10 col-sm-2">
-									<button class="btn btn-primary btn-lg" type="submit">Signup</button>
+									<button class="btn btn-primary btn-lg g-recaptcha" type="submit" data-sitekey="<%= settings.recaptchaKey %>" data-callback="onSubmit" data-badge="bottomright" data-size="invisible">Next</button>
 								</div>
 							</div>
 						</form>

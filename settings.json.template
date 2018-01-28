@@ -129,7 +129,7 @@
   // Secret used for keyring and cookies
   "supersecret": "super secret pass phrase",
 
-  // Google reCaptcha private/public keys
-  "reCaptchaSecret":  "",
-  "reCaptchaKey": ""
+  // Google reCaptcha private/public keys (Leave as 'na' if not using.)
+  "reCaptchaSecret":  "na",
+  "reCaptchaKey": "na"
 }

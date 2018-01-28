@@ -1,0 +1,50 @@
+<!-- views/verify-reset.ejs -->
+<!doctype html>
+<html lang="en">
+	<head>
+		<title><%= settings.appTitle %> - Verify Reset</title>
+		<% include partials/meta %>
+	</head>
+	<body role="document" class="intro">
+		<div id='wrapper'>
+			<div id='page-content-wrapper'>
+				<div id="main" class="container intro-form" role="main">
+					<div class="logo" style="background: url('<%= settings.logo %>') no-repeat top;"><span></span></div>
+					<div class="slogan"><%= settings.appSlogan %></div>
+					<div class="description"><%= settings.appDescription %></div>
+					<div class="well">
+						<h1 class="text-primary"><%= settings.appTitle %> - Verify Reset</h1>
+						<!-- show any messages that come back with authentication -->
+						<% if (message != '') { %>
+							<div class="alert alert-danger"><%= message %></div>
+						<% } %>
+						<!-- VERIFY-RESET FORM -->
+						<form class="form-horizontal" role="form" action="verify-reset" method="post">
+							<div class="x-large">
+								<span class="x-large">Please check your email for your new password.</span>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input class="form-control" type="text" name="email" value="<%= email %>" placeholder="Enter the email address you registered with." readonly>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input class="form-control" type="password" name="password" placeholder="Enter the new password from your email.">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-offset-9 col-sm-3">
+									<button class="btn btn-primary btn-lg" type="submit">Login</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="footer text-with-background text-centered">
+				<p>Need an account? <a href="signup">Signup here</a>. Or, go back to the <a href="<%= settings.chRoot %>/">Home</a> page.</p>
+			</div>
+		</div>
+	</body>
+</html>
