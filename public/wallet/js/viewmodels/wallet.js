@@ -49,7 +49,7 @@ define(['knockout',
         self.walletStatus = new WalletStatus({parent: self});
 
         self.currentView = ko.observable('home');
-        self.sidebarToggled = ko.observable(false);
+        self.sidebarToggled = ko.observable(true);
         self.showStats = ko.observable(true);
 
         this.home = new Home({parent: self});

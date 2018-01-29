@@ -71,7 +71,6 @@ define(['knockout',
         });
         self.gender.subscribe(function (){self.dirtyFlag(self.ready());});
         self.country.subscribe(function (){self.dirtyFlag(self.ready());});
-        self.terms.subscribe(function (){self.dirtyFlag(self.ready());});
         self.terms.subscribe(function (){
             if (self.ready()) {
                 self.agreeToTerms();
@@ -198,7 +197,7 @@ define(['knockout',
         var self = this;
         if (self.terms()) {
             // Read file containing terms and conditions
-            $.get("/docs/terms.txt", function(data) {
+            $.get("docs/terms.txt", function(data) {
                 self.termsHTML(data);
                 }).done(function(){
                     self.userPrompt(self.terms, 'Terms and Conditions', 'Agree', 'Disagree', self.termsHTML());

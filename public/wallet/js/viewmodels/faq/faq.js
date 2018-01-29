@@ -17,7 +17,7 @@ define(['knockout',
         if (self.wallet) {
             if (!self.ready()) {
                 // Slurp in the file
-                $.get(self.wallet.settings().chRoot + "/docs/faq.txt", function(data) {
+                $.get(self.wallet.settings().chRoot + "docs/faq.txt", function(data) {
                     self.faqHTML(data);
                 });
             }
