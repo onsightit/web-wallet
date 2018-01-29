@@ -53,7 +53,7 @@ module.exports = function(app, passport, coin) {
 					termstxt = data;
 					res.render('signup.ejs', { message: req.flash('signupMessage'), pwgenerated: pwgenerated, terms: termstxt });
 				} else {
-					console.log("signuo error: " + err);
+					console.log("signup error: " + err);
 					res.redirect(chRoot + '/');
 				}
 			});
@@ -61,7 +61,9 @@ module.exports = function(app, passport, coin) {
 	});
 	app.post(chRoot + '/signup', isNotLoggedIn, function (req, res, next) {
 		var recaptcha = req.body['g-recaptcha-response'];
-		if (recaptcha !== 'na') {
+		console.log("DEBUG: recaptcha=" + recaptcha);
+		console.log("DEBUG: next=" + JSON.stringify(next));
+		if (recaptcha && recaptcha !== '') {
 			https.get('https://www.google.com/recaptcha/api/siteverify?secret=' + coin.settings.reCaptchaSecret + '&response=' + recaptcha, function (res) {
 				var data = '';
 				res.on('data', function (chunk) {
@@ -133,7 +135,7 @@ module.exports = function(app, passport, coin) {
 	});
 	app.post(chRoot + '/password-reset', isNotLoggedIn, function (req, res, next) {
 		var recaptcha = req.body['g-recaptcha-response'];
-		if (recaptcha !== 'na') {
+		if (recaptcha && recaptcha !== '') {
 			https.get('https://www.google.com/recaptcha/api/siteverify?secret=' + coin.settings.reCaptchaSecret + '&response=' + recaptcha, function (res) {
 				var data = '';
 				res.on('data', function (chunk) {

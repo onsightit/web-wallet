@@ -110,9 +110,11 @@
     "strictSSL": false
   },
 
-  // Email address to send through mail service.
+  // Email address/password to send through mail service.
   "appEmail": "info@example.com",
-
+  "appEmailPassword": "password",
+  "appEmailService": "gmail",
+  
   // Master UI login account, and Label to assign to "" wallet accounts.
   // ***  DO NOT CHANGE THE ACCOUNT NAME AFTER FIRST RUN!  ***
   "masterAccount": "MASTER_ACCOUNT",
@@ -129,7 +131,7 @@
   // Secret used for keyring and cookies
   "supersecret": "super secret pass phrase",
 
-  // Google reCaptcha private/public keys (Leave as 'na' if not using.)
-  "reCaptchaSecret":  "na",
-  "reCaptchaKey": "na"
+  // Google reCaptcha private/public keys (Leave as '' if not using.)
+  "reCaptchaSecret":  "",
+  "reCaptchaKey": ""
 }
