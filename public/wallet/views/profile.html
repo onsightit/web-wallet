@@ -42,7 +42,7 @@
 		</div>
 		<!-- ko if: terms() === false -->
 		<div class="form-group">
-			<p class="form-control-addon col-sm-offset-7 col-sm-5"><b>I Agree to the <a href="/press/terms" target="_blank">Terms &amp; Conditions</a></b> <input type="checkbox" data-bind="checked: terms"></p>
+			<p class="form-control-addon col-sm-offset-7 col-sm-5"><b>I Agree to the <a href="terms" target="_blank">Terms &amp; Conditions</a></b> <input type="checkbox" data-bind="checked: terms"></p>
 		</div>
 		<!-- /ko -->
 		<p>&nbsp;</p>
@@ -58,7 +58,7 @@
 	<div class="small">
 	<!-- LOCAL -->
 	<!-- ko if: login_type() === 'local' -->
-		<h4 class="text-primary"><span class="fa fa-database"></span> Signed in with ID: <span data-bind="text: login_id"></span> <span class="small">[<a href="/password">change password</a>]</span></h4>
+		<h4 class="text-primary"><span class="fa fa-database"></span> Signed in with ID: <span data-bind="text: login_id"></span> <span class="small">[<a href="password">change password</a>]</span></h4>
 	<!-- /ko -->
 	<!-- FACEBOOK -->
 	<!-- ko if: login_type() === 'facebook' -->

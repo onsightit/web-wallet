@@ -39,9 +39,8 @@ var bodyParser = require('body-parser');
 var favicon = require('serve-favicon');
 var uuid = require('uuid');
 var session = require('express-session');
-
 var passport = require('passport');
-var flash = require('connect-flash');
+var flash = require('express-flash');
 
 // All environments
 app.set('env', coin.settings.env || 'production');
@@ -55,7 +54,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public' + coin.settings.chRoot)));
 app.use(favicon(path.join(__dirname, coin.settings.favicon)));
 app.use(morgan('dev'));
-app.use(cookieParser());
+app.use(cookieParser(coin.settings.supersecret));
 app.use(bodyParser.urlencoded({extended: false, limit: '2mb'})); // TODO: Put this limit in settings.json
 app.use(bodyParser.json({limit: '2mb'})); // TODO: Put this limit in settings.json
 app.use(session({name: coin.settings.appTitle,
@@ -66,10 +65,10 @@ app.use(session({name: coin.settings.appTitle,
                 // Cookie expires in 30 days
                 cookie: {secure: coin.settings.ssl, maxAge: 30 * 24 * 60 * 60 * 1000, domain: coin.settings.appHost},
                 saveUninitialized: false,
-                resave: true}));
+                resave: false}));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
-app.use(flash());            // use connect-flash for flash messages stored in session (Bug: Has to come after session and before router.)
+app.use(flash());            // use express-flash for flash messages stored in session
 
 // DB Functions
 var mdb = require('./lib/database');
