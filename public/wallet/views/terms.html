@@ -1,0 +1,10 @@
+<div class="well" data-bind="with:terms">
+    <!-- TERMS -->
+    <h1 class="text-primary"><span data-bind="text: wallet.settings().appTitle"></span> Terms and Conditions</h1>
+    <!-- ko if: ready() -->
+    <pre data-bind="text: termsHTML"></pre>
+    <!-- /ko -->
+    <!-- ko if: !ready() -->
+    <p>Loading...</p>
+    <!-- /ko -->
+</div>

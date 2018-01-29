@@ -97,6 +97,12 @@ define( [
             this.get('#profile', function() {
                 wallet.currentView('profile');
             });
+            this.get('#faq', function() {
+                wallet.currentView('faq');
+            });
+            this.get('#terms', function() {
+                wallet.currentView('terms');
+            });
         }).run('#home');
     };
     return new App();

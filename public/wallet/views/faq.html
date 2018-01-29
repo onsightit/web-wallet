@@ -1,0 +1,10 @@
+<div class="well" data-bind="with:faq">
+    <!-- FAQ -->
+    <h1 class="text-primary"><span data-bind="text: wallet.settings().appTitle"></span> Frequently Asked Questions</h1>
+    <!-- ko if: ready() -->
+    <pre data-bind="text: faqHTML"></pre>
+    <!-- /ko -->
+    <!-- ko if: !ready() -->
+    <p>Loading...</p>
+    <!-- /ko -->
+</div>

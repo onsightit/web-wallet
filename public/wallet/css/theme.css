@@ -6,20 +6,31 @@ body {
     margin-bottom: 15px;
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 640px) {
     #main {
         margin-top: 25px;
         margin-bottom: 25px;
     }
 }
 
+pre {
+    max-height: 640px;
+    overflow-x: hidden;
+    background-color: #eeeeee;
+    word-break: normal !important;
+    word-wrap: normal !important;
+    white-space: pre-wrap !important;
+}
 sup {
     vertical-align: super;
     font-size: small;
 }
 
 .intro {
-    background: url("/images/background.jpg") no-repeat center fixed;
+    /* If chRoot is "" (URI = /wallet) */
+    background: url("/wallet/images/background.jpg") no-repeat center fixed;
+    /* else */
+    /*background: url("/images/background.jpg") no-repeat center fixed;*/
     background-color: #D8D8D8;
     background-size: cover;
 }
@@ -54,6 +65,32 @@ sup {
     margin-bottom: 40px;
 }
 
+.divTable{
+	display: table;
+    width: auto;
+    margin: 0 auto;
+}
+.divTableRow {
+    display: table-row;
+}
+.divTableHeading {
+	background-color: #EEE;
+	display: table-header-group;
+}
+.divTableCell, .divTableHead {
+	border: 0px solid #999999;
+    display: table-cell;
+    padding: 10px;
+}
+.divTableFoot {
+	background-color: #EEE;
+	display: table-footer-group;
+	font-weight: bold;
+}
+.divTableBody {
+	display: table-row-group;
+}
+
 .theme-dropdown .dropdown-menu {
     position: static;
     display: block;
@@ -69,6 +106,7 @@ sup {
 }
 
 #wrapper {
+    min-height: 100%;
     padding-left: 0;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
@@ -85,8 +123,8 @@ sup {
     position: absolute;
     left: 200px;
     width: 0;
-    height: 200%;
-    background-color: rgba(0,0,0,0.80);
+    min-height: 100%;
+    background-color: rgba(33,33,33,1.0);
     margin-left: -200px;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -98,14 +136,19 @@ sup {
 
 #wrapper.toggled #sidebar-wrapper {
     width: 200px;
+    min-height: 100%;
 }
 
 #page-content-wrapper {
-    background: url("/images/background.jpg") no-repeat center fixed;
+    /* If chRoot is "" (URI = /wallet) */
+    background: url("/wallet/images/background.jpg") no-repeat center fixed;
+    /* else */
+    /*background: url("/images/background.jpg") no-repeat center fixed;*/
+    background-color: #000;
     background-size: cover;
-    min-width: 800px !important;
+    min-width: 100% !important;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     position: absolute;
     overflow: hidden;
 }
@@ -114,7 +157,7 @@ sup {
     /*width: auto;*/
     position: absolute;
     margin-right: -100px;
-    height: 200%;
+    height: 100%;
 }
 
 /* Top Content Header */
@@ -351,6 +394,16 @@ sup {
 
 #wrapper.toggled .container {
     padding-right: 200px;
+    min-height: 100%;
+}
+
+#wrapper.toggled .footer {
+    padding-left: 200px;
+    margin-left: -200px;
+}
+
+#wrapper.toggled .well {
+    margin-right: 230px;
 }
 
 .floatright {
@@ -363,13 +416,22 @@ sup {
     padding: 20px;
 }
 
-.copyright {
-    text-align: center;
+.footer {
+    position: fixed;
+    bottom: 0;
+    height: 32px;
+    width: 100%;
+    margin: auto;
+    padding-top: 5px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
-    color: whitesmoke;
-    margin: 10px;
-    margin-top: 100px;
+}
+
+.copyright {
+    text-align: center;
+    color: #3e8f3e;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
 }
 .copyright a {
     color: #FFF;
@@ -379,15 +441,10 @@ a.copyright:focus {
     color: #FFF;
 }
 
-#wrapper.toggled .copyright {
-    padding-right: 200px;
-}
-
 /*** Bootstrap Overrides ***/
 
 /* Customize container from bootstrap.css */
 .container {
-    min-width: 800px !important;
     padding-left: 0px;
     padding-right: 0px;
 }
@@ -425,6 +482,21 @@ div.node-scroll{
 /* Customize jumbotron from bootstrap.css */
 .jumbotron {
     background-color: inherit;
+}
+
+.div-centered {
+    margin: auto;
+    width: 36%;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+.text-centered {
+    text-align: center;
+}
+
+.text-with-background {
+    color: #ddd;
+    background-color: rgba(22,22,22,0.8);
 }
 
 /* Customize text-primary from bootstrap.css */

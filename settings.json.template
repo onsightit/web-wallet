@@ -26,10 +26,10 @@
   //"copyRight": "Copyright (c) 2016-2017, The YourCoin developers. All rights reserved.",
 
   // Logo
-  "logo": "/images/Logo.png",
+  "logo": "images/Logo.png",
 
   // Icon
-  "icon": "/images/Icon.png",
+  "icon": "images/Icon.png",
 
   // favicon
   "favicon": "./public/wallet/favicon.ico",

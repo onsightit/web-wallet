@@ -9,7 +9,6 @@ var termstxt = "";
 
 module.exports = function(app, passport, coin) {
 	var chRoot = app.get('chRoot');
-
 	console.log("Base URL is: " + (chRoot ? chRoot : '/'));
 
 	app.get(chRoot + '/', isLoggedIn, function(req, res) {
@@ -61,8 +60,6 @@ module.exports = function(app, passport, coin) {
 	});
 	app.post(chRoot + '/signup', isNotLoggedIn, function (req, res, next) {
 		var recaptcha = req.body['g-recaptcha-response'];
-		console.log("DEBUG: recaptcha=" + recaptcha);
-		console.log("DEBUG: next=" + JSON.stringify(next));
 		if (recaptcha && recaptcha !== '') {
 			https.get('https://www.google.com/recaptcha/api/siteverify?secret=' + coin.settings.reCaptchaSecret + '&response=' + recaptcha, function (res) {
 				var data = '';
