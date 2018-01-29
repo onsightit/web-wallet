@@ -15,7 +15,7 @@ define(['knockout',
     faqType.prototype.refresh = function(timerRefresh) {
         var self = this;
         if (self.wallet) {
-            if (!self.ready()) {
+            if (self.ready()) {
                 // Slurp in the file
                 $.get(self.wallet.settings().chRoot + "/docs/faq.txt", function(data) {
                     self.faqHTML(data);

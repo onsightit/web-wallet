@@ -15,7 +15,7 @@ define(['knockout',
     termsType.prototype.refresh = function(timerRefresh) {
         var self = this;
         if (self.wallet) {
-            if (!self.ready()) {
+            if (self.ready()) {
                 // Slurp in the file
                 $.get(self.wallet.settings().chRoot + "/docs/terms.txt", function(data) {
                     self.termsHTML(data);
