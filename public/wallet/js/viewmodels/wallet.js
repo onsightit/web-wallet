@@ -169,20 +169,20 @@ define(['knockout',
     };
 
     // Called once at startup.
-    walletType.prototype.initUser = function(){
+    walletType.prototype.initUser = function() {
         var self = this;
         var getUserAccountCommand = new Command('getuseraccount', [],
                                                 self.settings().chRoot,
                                                 self.settings().env);
         $.when(getUserAccountCommand.execute())
-            .done(function(getUserAccountData){
-                if (typeof getUserAccountData.User !== 'undefined'){
+            .done(function(getUserAccountData) {
+                if (typeof getUserAccountData.User !== 'undefined') {
                     self.User(getUserAccountData.User);
                     self.role(self.User().profile.role);
                     self.gender(self.User().profile.gender);
                     // Get the user's wallet account info for this node_id
-                    var wallet = self.User().wallet.filter(function(wal){
-                        if (wal.node_id && wal.node_id === self.node_id()){
+                    var wallet = self.User().wallet.filter(function(wal) {
+                        if (wal.node_id && wal.node_id === self.node_id()) {
                             wal.addresses.sort(function(a, b){return b.amount - a.amount;}); // Sort by amount descending
                             self.account(wal.account);
                             self.addresses(wal.addresses);
@@ -209,13 +209,13 @@ define(['knockout',
     };
 
     // Refresh the universe every 'self.timeout' miliseconds.
-    walletType.prototype.pollWalletStatus = function(){
+    walletType.prototype.pollWalletStatus = function() {
         var self = this;
-        setTimeout(function(){
+        setTimeout(function() {
             // If initialization is complete and the wallet daemon is available.
-            if (!self.initComplete){
+            if (!self.initComplete) {
                 // Prevent polling forever if init never finishes.
-                if (Date.now() <= self.sessionExpires()){
+                if (Date.now() <= self.sessionExpires()) {
                         self.pollWalletStatus();
                 } else {
                     console.log("Session Expired. Polling stopped.");
@@ -223,8 +223,8 @@ define(['knockout',
                 }
             } else {
                 // Normal polling
-                if (Date.now() <= self.sessionExpires()){
-                    $.when(self.refresh(true)).done(function(){
+                if (Date.now() <= self.sessionExpires()) {
+                    $.when(self.refresh(true)).done(function() {
                         if (self.timeout < 60000){ // First timeout
                             self.timeout = 60000;
                             // NOTE: self.walletUp() is set true when the socket server sends the message.
@@ -236,8 +236,11 @@ define(['knockout',
                         }
                         // This gets re-called until the user completes their profile.
                         // TODO: Find a better way to do this!
-                        if (!self.profileComplete()){
+                        if (!self.profileComplete()) {
                             self.initUser();
+                        }
+                        if (!self.walletUp()) {
+                            self.initNode(self.settings().chRoot);
                         }
                         self.pollWalletStatus();
                     });
@@ -250,10 +253,10 @@ define(['knockout',
     };
 
     // Refresh the universe. If timerRefresh is false it's a manual refresh.
-    walletType.prototype.refresh = function(timerRefresh){
+    walletType.prototype.refresh = function(timerRefresh) {
         var self = this;
         var refreshPromise = $.when(self.walletStatus.refresh())
-            .done(function(){
+            .done(function() {
                 self.home.refresh(timerRefresh);
                 self.send.refresh(timerRefresh);
                 self.receive.refresh(timerRefresh);
@@ -261,17 +264,19 @@ define(['knockout',
                 self.explore.refresh(timerRefresh);
                 self.console.refresh(timerRefresh);
                 self.profile.refresh(timerRefresh);
-                self.faq.refresh(timerRefresh);
-                self.terms.refresh(timerRefresh);
+                if (!self.profileComplete()) {
+                    self.faq.refresh(timerRefresh);
+                    self.terms.refresh(timerRefresh);
+                }
 			});
         return refreshPromise;
     };
 
-    walletType.prototype.checkEncryptionStatus = function(){
+    walletType.prototype.checkEncryptionStatus = function() {
         var self = this;
         // Do not allow non-local wallets to be encrypted except by MASTER_ACCOUNT!
-        if (self.account() === self.settings().masterAccount && self.settings().masterCanEncrypt === true){
-            switch(self.walletStatus.unlockedUntil()){
+        if (self.account() === self.settings().masterAccount && self.settings().masterCanEncrypt === true) {
+            switch(self.walletStatus.unlockedUntil()) {
             case -1: // wallet is unencrypted
                 self.promptToEncrypt();
                 break;
@@ -284,16 +289,16 @@ define(['knockout',
         }
     };
 
-    walletType.prototype.unlockWallet = function(){
+    walletType.prototype.unlockWallet = function() {
         var self = this;
-        if (self.account() === self.settings().masterAccount){
+        if (self.account() === self.settings().masterAccount) {
             new WalletPassphrase({canSpecifyStaking: true}).userPrompt(false, 'Unlock Wallet', 'This action will unlock the wallet for sending or staking','OK')
-            .done(function(result){
+            .done(function(result) {
                 //console.log(result);
                 self.walletStatus.refresh();
                 result.passphrase = "XXXXXXXX"; // Clear password in memory
             })
-            .fail(function(error){
+            .fail(function(error) {
                 if (error) {
                     console.log(error);
                     dialog.notification(error.message);
@@ -303,17 +308,17 @@ define(['knockout',
         }
     };
 
-    walletType.prototype.lockWallet = function(){
+    walletType.prototype.lockWallet = function() {
         var self = this;
-        if (self.account() === self.settings().masterAccount){
+        if (self.account() === self.settings().masterAccount) {
             var walletLockCommand = new Command('walletlock', [],
                                                 self.settings().chRoot,
                                                 self.settings().env).execute()
-            .done(function(){
+            .done(function() {
                 dialog.notification("Wallet is now locked. To send transactions or stake you must unlock the wallet.");
                 self.walletStatus.refresh();
             })
-            .fail(function(){
+            .fail(function() {
                 dialog.notification("Wallet is already locked.");
                 self.walletStatus.refresh();
             });
@@ -321,13 +326,13 @@ define(['knockout',
         }
     };
 
-    walletType.prototype.promptToEncrypt = function(){
+    walletType.prototype.promptToEncrypt = function() {
         new WalletPassphrase().userPrompt(true, 'Encrypt Wallet', 'Encrypt','OK')
             .done(function(result){
                 console.log(result);
                 dialog.notification("Wallet successfully encrypted. Restart your coin daemon to continue.");
             })
-            .fail(function(error){
+            .fail(function(error) {
                 if (error) {
                     console.log(error);
                     dialog.notification(error.message);
@@ -335,13 +340,13 @@ define(['knockout',
             });
     };
 
-    walletType.prototype.promptToUnlockForStaking = function(){
+    walletType.prototype.promptToUnlockForStaking = function() {
         new WalletPassphrase({canSpecifyStaking: true}).userPrompt(false, 'Unlock Wallet', 'Unlock the wallet','OK')
-            .done(function(result){
+            .done(function(result) {
                 result.passphrase = "XXXXXXXX"; // Clear password in memory
                 console.log(result);
             })
-            .fail(function(error){
+            .fail(function(error) {
                 if (error) {
                     console.log(error);
                     dialog.notification(error.message);
@@ -349,11 +354,11 @@ define(['knockout',
             });
     };
 
-    walletType.prototype.formatNumber = function(value, decimalPlaces, decimalPoint, commaSeparator){
+    walletType.prototype.formatNumber = function(value, decimalPlaces, decimalPoint, commaSeparator) {
         return value.formatNumber(decimalPlaces, decimalPoint, commaSeparator);
     };
 
-    walletType.prototype.toggleSidebar = function(){
+    walletType.prototype.toggleSidebar = function() {
         this.sidebarToggled(!this.sidebarToggled());
     };
 

@@ -18,6 +18,7 @@ Object.defineProperty(Error.prototype, 'toJSON', {
 // coin Object - Localization settings and wallet daemon api calls.
 var coin = require('./lib/coinapi');
 module.exports = coin;
+var initWallet = require('./lib/init-wallet');
 
 var fs = require('fs');
 var path = require('path');
@@ -65,7 +66,7 @@ app.use(session({name: coin.settings.appTitle,
                 // Cookie expires in 30 days
                 cookie: {secure: coin.settings.ssl, maxAge: 30 * 24 * 60 * 60 * 1000, domain: coin.settings.appHost},
                 saveUninitialized: false,
-                resave: false}));
+                resave: true}));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash());            // use express-flash for flash messages stored in session
@@ -84,7 +85,7 @@ coin.settings.mdb.password = "XXXXXXXX";
 coin.settings.mdb = null; // garbage collection
 
 // Connect to Database
-function databaseConnect(){
+function databaseConnect() {
     mdb.connect(dbString, function(err) {
         if (err){
             app.set('status', coin.settings.appTitle + ' Maintenance');
@@ -98,9 +99,9 @@ databaseConnect();
 // Localizations for EJS rendering [MUST COME AFTER DB FUNCTIONS AND BEFORE AUTH ROUTES]
 for (var s in coin.settings){
     if (coin.settings.hasOwnProperty(s)){
-        if (s === "chRoot"){
+        if (s === "chRoot") {
             // Need to flip relativeness for routes/auth.js.
-            if (coin.settings[s] === ""){
+            if (coin.settings[s] === "") {
                 // We chrooted to public
                 coin.settings[s] = "/wallet";
             } else {
@@ -140,7 +141,9 @@ require('./routes/user.js')(app, coin, mdb);
 // Misc routes //
 
 // Returns the wallet's rpc node info and localization settings.
-app.get(chRoot + '/getnodeinfo', function(req,res){
+app.get(chRoot + '/getnodeinfo', function(req, res) {
+    // Re-init if wallet is down.
+    initWallet();
     var response = {
         error: null,
         result: {
@@ -211,9 +214,9 @@ function startApp(app) {
         console.log('Wallet is listening on: ' + (coin.settings.wallet.ssl ? 'https://' : 'http://') + coin.settings.wallet.rpchost + ':' + coin.settings.wallet.rpcport);
 
         // Init MASTER_ACCOUNT in wallet and database for this node_id.
-        require('./lib/init-wallet')();
+        initWallet();
 
-        var io = require('socket.io')(server, { port: port });
+        var io = require('socket.io')(server);
         //Allow Cross Domain Requests
         io.set('transports', [ 'websocket' ]);
         io.on('connection', function (socket) {
@@ -244,7 +247,7 @@ function startApp(app) {
             console.log(err);
             app.set('status', '');
             // Send continue message to all clients
-            io.sockets.emit('news', 'Wallet is connected...');
+            io.sockets.emit('news', 'Wallet is connected...'); // DEBUG: This is not working!
             io.sockets.emit('wallet', 'up');
         });
         process.on('database_error', function (err) {
@@ -314,7 +317,7 @@ function startApp(app) {
                     }
                 }
             }
-        }, 5000);
+        }, 10000);
     });
 }
 startApp(app);

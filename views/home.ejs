@@ -39,28 +39,35 @@
 		<!-- ko if: gender() === '' -->
 					<li><a href="#profile"><div data-bind="css: { selected: $data.currentView() === 'profile' }" class="sidebar-nav-button-content"><div class="fa fa-user fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Profile</span></div></div></a></li>
 		<!-- /ko -->
+
+		<!-- ko if: profileComplete() === false -->
 					<li><a href="#faq"><div data-bind="css: { selected: $data.currentView() === 'faq' }" class="sidebar-nav-button-content"><div class="fa fa-question-circle-o fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">FAQ</span></div></div></a></li>
 					<li><a href="#terms"><div data-bind="css: { selected: $data.currentView() === 'terms' }" class="sidebar-nav-button-content"><div class="fa fa-handshake-o fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Terms</span></div></div></a></li>
+		<!-- /ko -->
+
 					<li><a href="logout"><div class="sidebar-nav-button-content"><div class="fa fa-sign-out fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Logout</span></div></div></a></li>
 
-		<!-- ko if: showStats() & walletUp() -->
-					<li><span>&nbsp;</span></li>
-					<li><h4><%= settings.coinName %></h4></li>
-					<li>Balance: <span data-bind='text: walletStatus.totalFmt'></span></li>
-					<li>Available: <span data-bind='text: walletStatus.availableFmt'></span></li>
-			<!-- ko if: role() === 'Admin' -->
-					<li>Staking: <span data-bind='text: walletStatus.stakeFmt'></span></li>
-					<li>Block Height: <span data-bind="text: walletStatus.blocks"></span></li>
-					<li>Wallet Encrypted: <span data-bind="text: walletStatus.isEncrypted"></span></li>
-					<li>Currently Staking: <span data-bind="text: walletStatus.isUnlocked"></span></li>
+		<!-- ko if: showStats() -->
+			<!-- ko if: walletUp() === false -->
+					<li class="small"><span>Waiting on Wallet...</span></li>
 			<!-- /ko -->
-					<li>
+			<!-- ko if: walletUp() === true -->
+					<li class="small">Balance: <span data-bind='text: walletStatus.totalFmt'></span></li>
+					<li class="small">Available: <span data-bind='text: walletStatus.availableFmt'></span></li>
+				<!-- ko if: role() === 'Admin' -->
+					<li class="small">Staking: <span data-bind='text: walletStatus.stakeFmt'></span></li>
+					<li class="small">Block Height: <span data-bind="text: walletStatus.blocks"></span></li>
+					<li class="small">Wallet Encrypted: <span data-bind="text: walletStatus.isEncrypted"></span></li>
+					<li class="small">Currently Staking: <span data-bind="text: walletStatus.isUnlocked"></span></li>
+				<!-- /ko -->
+					<li class="small">
 						<div class="progress">
 							<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" data-bind="style: { width: walletStatus.blockProgress }">
 								Blocks: <span data-bind="text: walletStatus.blocks"></span> / <span data-bind="text:walletStatus.totalBlocks"></span> 
 							</div>
 						</div>
 					</li>
+			<!-- /ko -->
 		<!-- /ko -->
 				</ul>
 			</div>
@@ -70,9 +77,7 @@
 					<div class='top-nav container'>
 						<div class='row'>
 							<div class="button-settings"><span data-bind="click: toggleSidebar" class="glyphicon glyphicon-menu-hamburger"></span></div>
-		<!-- ko if: walletUp() -->
 							<div class="button-refresh"><span data-bind="click: refresh" class="glyphicon glyphicon-refresh"></span></div>
-		<!-- /ko -->
 							<!-- Top Navigation -->
 							<a href="#home">
 								<div data-bind="css: { selected: $data.currentView() === 'home' }" class="top-nav-button col-sm-3">

@@ -199,15 +199,11 @@ module.exports = function(app, passport, coin) {
 	);
 
 	app.get(chRoot + '/logout', function(req, res) {
-		if (req.session)
-			req.session.destroy();
 		req.logout();
 		res.redirect(chRoot + '/');
 	});
 
 	app.get(chRoot + '/maintenance', function(req, res) {
-		if (req.session)
-			req.session.destroy();
 		req.logout();
 		res.render('maintenance.ejs');
 	});

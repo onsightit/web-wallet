@@ -17,7 +17,6 @@ module.exports = function(app, coin) {
     function coinHandler(err, result) {
         var Error = null;
         if (err) {
-            //console.log("DEBUG: err=" + err);
             try {
                 Error = JSON.parse(err);
             } catch (e) {
