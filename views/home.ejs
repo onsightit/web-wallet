@@ -60,10 +60,10 @@
 					<li class="small">Wallet Encrypted: <span data-bind="text: walletStatus.isEncrypted"></span></li>
 					<li class="small">Currently Staking: <span data-bind="text: walletStatus.isUnlocked"></span></li>
 				<!-- /ko -->
-					<li class="small">
+					<li>
 						<div class="progress">
 							<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" data-bind="style: { width: walletStatus.blockProgress }">
-								Blocks: <span data-bind="text: walletStatus.blocks"></span> / <span data-bind="text:walletStatus.totalBlocks"></span> 
+								Blocks: <span data-bind="text: walletStatus.blocks"></span> / <span data-bind="text: walletStatus.totalBlocks"></span> 
 							</div>
 						</div>
 					</li>

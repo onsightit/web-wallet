@@ -308,6 +308,8 @@ function startApp(app) {
                 if (status.indexOf('Wallet') > 0){
                     // Wallet daemon down.
                     console.log(status);
+                    // Re-init if wallet is down.
+                    initWallet();
                 } else {
                     if (status.indexOf('Database') > 0){
                         // Reconnect DB

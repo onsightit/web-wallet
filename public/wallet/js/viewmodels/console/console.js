@@ -13,47 +13,49 @@ define(['knockout'], function(ko){
         self.isLoading = ko.observable(false);
     };
 
-    function parseCommand(commandText){
+    consoleType.prototype.parseCommand = function(commandText) {
+        var self = this;
         var port = (window.location.port === '' ? '' : ":" + window.location.port);
-        var url = window.location.protocol + '//' + window.location.hostname + port + '/'; // Allow CORS
+        var url = window.location.protocol + '//' + window.location.hostname + port + self.wallet.settings().chRoot + '/'; // Allow CORS
         commandText.replace(new RegExp(' ','g') );
         url = url.concat(commandText.replace(new RegExp(' ','g'), '/'));
+        console.log("DEBUG: url=" + url);
         return url;
     }
 
-    consoleType.prototype.refresh = function(timerRefresh){
+    consoleType.prototype.refresh = function(timerRefresh) {
         var self = this;
         if (self.wallet.User().profile){
             self.role(self.wallet.User().profile.role);
         }
     };
 
-    consoleType.prototype.runCommand = function(){
+    consoleType.prototype.runCommand = function() {
         var self = this;
         if (self.role() === "Admin"){
             self.isLoading(true);
             $.ajax({
                 async: true,
                 method: 'GET',
-                url: parseCommand(self.commandText()),
+                url: self.parseCommand(self.commandText()),
                 dataType: 'json'
-            }).done(function(data){
+            }).done(function(data) {
                 var result = data.error ? data.error.error.message : data.result;
                 if( toString.call(result) === "[object String]"){
                     self.commandOutput(result);
                 } else {
-                    if( result !== undefined){
+                    if( result !== undefined) {
                         self.commandOutput(JSON.stringify(result, null, 4));
                     } else {
                         self.commandOutput(JSON.stringify(data, null, 4));
                     }
                 }
-            }).fail(function(jqXHR, textStatus, errorThrown){
+            }).fail(function(jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR);
                 console.log(textStatus);
                 console.log(errorThrown);
                 self.commandOutput(errorThrown);
-            }).always(function(){
+            }).always(function() {
                 self.isLoading(false);
             });
         } else {
@@ -61,9 +63,9 @@ define(['knockout'], function(ko){
         }
     };
 
-    consoleType.prototype.runDecode = function(){
+    consoleType.prototype.runDecode = function() {
         var self = this;
-        if (self.role() === "Admin"){
+        if (self.role() === "Admin") {
             self.isLoading(true);
             self.decodeOutput(atob(self.decodeText()));
             self.isLoading(false);
