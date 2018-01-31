@@ -1,54 +1,52 @@
-<div class="container" data-bind="with:console">
+<div class="well" data-bind="with:console">
+
     <!-- ko if: isLoading --><p>Loading...</p><!-- /ko -->
 
     <!-- CONSOLE -->
-    <div class="well">
-        <h1 class="text-primary"><span class="fa fa-terminal"></span> <span data-bind="text: wallet.settings().coinName"></span> Console</h1>
-        <!-- ko if: role() === 'Admin' -->
-        <div class="row">
-            <div class="col-sm-10">
-                <form class="form-horizontal" role="form">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control input-sm" placeholder="Enter Console command here..." data-bind="textInput: commandText">
-                            <span class="input-group-btn">
-                                <button class="btn btn-primary btn-sm" type="submit" data-bind="click: runCommand">Run</button>
-                            </span>
-                        </div><!-- /input-group -->
-                    </div><!-- /.form-group -->
-                </form>
-            </div><!-- /.col-sm-10 -->
-        </div><!-- /.row-flo -->
-        <div class="row console-out">
-            <div class="col-sm-10">
-            <pre class="pre-scrollable " data-bind="text: commandOutput" />
-            </div>
+    <h1 class="text-primary"><span class="fa fa-terminal"></span> <span data-bind="text: wallet.settings().coinName"></span> Console</h1>
+    <!-- ko if: role() === 'Admin' -->
+    <div class="row">
+        <div class="col-sm-10">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-sm" placeholder="Enter Console command here..." data-bind="textInput: commandText">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary btn-sm" type="submit" data-bind="click: runCommand">Run</button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div><!-- /.form-group -->
+            </form>
+        </div><!-- /.col-sm-10 -->
+    </div><!-- /.row-flo -->
+    <div class="row console-out">
+        <div class="col-sm-10">
+        <pre class="pre-scrollable " data-bind="text: commandOutput" />
         </div>
-        <!-- /ko -->
     </div>
+    <!-- /ko -->
     <p>&nbsp;</p>
-    <div class="well">
-        <h1 class="text-primary"><span class="fa fa-terminal"></span> Decode Base64 Text</h1>
-        <!-- ko if: role() === 'Admin' -->
-        <div class="row">
-            <div class="col-sm-10">
-                <form class="form-horizontal" role="form">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control input-sm" placeholder="Enter Base64 text here..." data-bind="textInput: decodeText">
-                            <span class="input-group-btn">
-                                <button class="btn btn-primary btn-sm" type="submit" data-bind="click: runDecode">Run</button>
-                            </span>
-                        </div><!-- /input-group -->
-                    </div><!-- /.form-group -->
-                </form>
-            </div><!-- /.col-sm-10 -->
-        </div><!-- /.row-flo -->
-        <div class="row console-out">
-            <div class="col-sm-10">
-            <pre class="pre-scrollable " data-bind="text: decodeOutput" />
-            </div>
+    <h1 class="text-primary"><span class="fa fa-terminal"></span> Decode Base64 Text</h1>
+    <!-- ko if: role() === 'Admin' -->
+    <div class="row">
+        <div class="col-sm-10">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-sm" placeholder="Enter Base64 text here..." data-bind="textInput: decodeText">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary btn-sm" type="submit" data-bind="click: runDecode">Run</button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div><!-- /.form-group -->
+            </form>
+        </div><!-- /.col-sm-10 -->
+    </div><!-- /.row-flo -->
+    <div class="row console-out">
+        <div class="col-sm-10">
+        <pre class="pre-scrollable " data-bind="text: decodeOutput" />
         </div>
-        <!-- /ko -->
     </div>
+    <!-- /ko -->
+
 </div>

@@ -1,11 +1,10 @@
-<div id="history-container" class="container" data-bind="with:explore">
+<div class="well" data-bind="with:explore">
 
     <!-- EXPLORE -->
-    <div class="well">
-        <h1 class="text-primary"><span class="fa fa-search"></span> Explore the <span data-bind="text: wallet.settings().coinName"></span> Blockchain</h1>
-		<!-- ko if: role() === 'Admin' -->
-		<iframe name="explorer" data-bind="attr: { src: explorerURL }" frameBorder="0" height=640 width=100%>Browser is not compatible.</iframe>
-		<!-- /ko -->
-	    <h3 align="center" data-bind="text: statusMessage"></h3>
-	</div>
+	<h1 class="text-primary"><span class="fa fa-search"></span> Explore the <span data-bind="text: wallet.settings().coinName"></span> Blockchain</h1>
+	<!-- ko if: role() === 'Admin' -->
+	<iframe name="explorer" data-bind="attr: { src: explorerURL }" frameBorder="0" height=640 width=100%>Browser is not compatible.</iframe>
+	<!-- /ko -->
+	<h3 align="center" data-bind="text: statusMessage"></h3>
+
 </div>
