@@ -29,17 +29,7 @@
 				<!-- /ko -->
 			<!-- /ko -->
 		<!-- /ko -->
-
-		<!-- ko if: gender() === 'Female' -->
 					<li><a href="#profile"><div data-bind="css: { selected: $data.currentView() === 'profile' }" class="sidebar-nav-button-content"><div class="fa fa-user fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Profile</span></div></div></a></li>
-		<!-- /ko -->
-		<!-- ko if: gender() === 'Male' -->
-					<li><a href="#profile"><div data-bind="css: { selected: $data.currentView() === 'profile' }" class="sidebar-nav-button-content"><div class="fa fa-user fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Profile</span></div></div></a></li>
-		<!-- /ko -->
-		<!-- ko if: gender() === '' -->
-					<li><a href="#profile"><div data-bind="css: { selected: $data.currentView() === 'profile' }" class="sidebar-nav-button-content"><div class="fa fa-user fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Profile</span></div></div></a></li>
-		<!-- /ko -->
-
 		<!-- ko if: profileComplete() === false -->
 					<li><a href="#faq"><div data-bind="css: { selected: $data.currentView() === 'faq' }" class="sidebar-nav-button-content"><div class="fa fa-question-circle-o fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">FAQ</span></div></div></a></li>
 					<li><a href="#terms"><div data-bind="css: { selected: $data.currentView() === 'terms' }" class="sidebar-nav-button-content"><div class="fa fa-handshake-o fa-2x" aria-hidden="true"><span class="sidebar-nav-button-content">Terms</span></div></div></a></li>
