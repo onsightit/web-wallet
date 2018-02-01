@@ -1,20 +1,33 @@
 <div class="well" data-bind="with:home">
 
     <!-- HOME -->
-    <h1 class="text-primary">Welcome to the <span data-bind="text: wallet.settings().appTitle"></span></h1>
+    <h1 class="text-primary"><span data-bind="text: wallet.settings().appTitle"></span></h1>
     <div class="slogan" data-bind="text: wallet.settings().appSlogan"></div>
     <div class="description" data-bind="text: wallet.settings().appDescription"></div>
     <h3 align="center" data-bind="text:statusMessage"></h3>
 
-    <!-- ko if: ready() -->
-    <ul>
-        <li>[ Welcome! ]</li>
-    </ul>
-    <p>&nbsp;</p>
-    <!-- /ko -->
-
     <!-- ko if: !ready() -->
     <p>Loading...</p>
+    <!-- /ko -->
+    <!-- ko if: ready() -->
+    <ul>
+		<!-- ko if: wallet.showStats() -->
+			<!-- ko if: wallet.walletUp() === false -->
+        <li class="small"><span>Waiting on Wallet...</span></li>
+			<!-- /ko -->
+			<!-- ko if: wallet.walletUp() === true -->
+		<li class="small">Balance: <span data-bind='text: wallet.walletStatus.totalFmt'></span></li>
+		<li class="small">Available: <span data-bind='text: wallet.walletStatus.availableFmt'></span></li>
+				<!-- ko if: wallet.role() === 'Admin' -->
+		<li class="small">Staking: <span data-bind='text: wallet.walletStatus.stakeFmt'></span></li>
+		<li class="small">Block Height: <span data-bind="text: wallet.walletStatus.blocks"></span></li>
+		<li class="small">Wallet Encrypted: <span data-bind="text: wallet.walletStatus.isEncrypted"></span></li>
+		<li class="small">Currently Staking: <span data-bind="text: wallet.walletStatus.isUnlocked"></span></li>
+				<!-- /ko -->
+			<!-- /ko -->
+		<!-- /ko -->
+	</ul>
+    <p>&nbsp;</p>
     <!-- /ko -->
 
 </div>
