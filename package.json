@@ -91,7 +91,7 @@
     "socket.io": "^2.2.0",
     "through": "^2.3.8",
     "uuid": "^2.0.3",
-    "validator": "^6.3.0",
+    "validator": "^13.7.0",
     "vary": "^1.1.1",
     "xss": "^0.1.21",
     "yallist": "^3.0.2"
