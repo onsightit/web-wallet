@@ -34,7 +34,7 @@
     "min_height": 600
   },
   "dependencies": {
-    "async": "^2.6.0",
+    "async": "^3.2.2",
     "atob": "^2.0.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
